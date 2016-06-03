@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+            <div id="status">
+                <p>Three JS</p>
+            </div>
+            <div id="scene">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.js"></script>
+    <script>
+        var domScene = $('#scene');
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+        camera.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.Math.degToRad( -30 ));
+        camera.translateZ(5);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize( 1280, 1024 );
+        $(domScene).append( renderer.domElement );
+
+        var geometry = new THREE.BoxGeometry( 4, 0.1, 4 );
+        var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        var gameBoard = new THREE.Mesh( geometry, material );
+        var backgroundColor = new THREE.Color( 0xffffff );
+        renderer.setClearColor(backgroundColor);
+        scene.add( gameBoard );
+
+        var yRot = 0.0;
+        var yRotDelta = 0;
+
+        var render = function () {
+            requestAnimationFrame( render );
+
+            var prevYRot = yRot;
+
+            var newYRot = yRot - (prevYRot / 50);
+            if (Math.abs(newYRot) < 0.05) newYRot = 0;
+            yRot = newYRot;
+
+            gameBoard.rotation.y += THREE.Math.degToRad(yRot);
+
+            renderer.render(scene, camera);
+        };
+
+        var moveLeft = function(e) {
+            yRot = e.deltaX / 100;
+        };
+
+        var moveRight = function(e) {
+            yRot = e.deltaX / 100;
+        };
+
+        var bindSwipe = function() {
+            if (domScene && domScene[0] !== undefined) {
+                var swipe = new Hammer(domScene[0]);
+
+                swipe.on('swipeleft', function(e) {
+                    moveLeft(e);
+                });
+                swipe.on('swiperight', function(e) {
+                    moveRight(e);
+                });
+                swipe.on('tap', function() {
+                   yRot = 0;
+                });
+            }
+        };
+
+        $(document).ready(function() {
+            bindSwipe();
+        });
+
+        render();
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+
+        #scene canvas { width: 100%!important; height: auto!important; }
+
+        body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
+        h1, h2 { line-height: 1.2; margin: 0 0 .5em; }
+        h1 { font-size: 36px; }
+        h2 { font-size: 21px; margin-bottom: 1em; }
+        p { margin: 0 0 1em 0; }
+        a { color: #0000F0; }
+        a:hover { text-decoration: none; }
+        code { background: #F5F5F5; max-width: 100px; padding: 2px 6px; word-wrap: break-word; }
+        #wrapper { background: #FFF; margin: 1em auto; max-width: 800px; width: 95%; }
+        #container { padding: 2em; }
+        #welcome, #status { margin-bottom: 2em; }
+        #welcome h1 span { display: block; font-size: 75%; }
+        #icon-status, #icon-book { float: left; height: 64px; margin-right: 1em; margin-top: -4px; width: 64px; }
+        #icon-book { display: none; }
+
+        @media (min-width: 768px) {
+            #wrapper { width: 80%; margin: 2em auto; }
+            #icon-book { display: inline-block; }
+            #status a, #next a { display: block; }
+
+            @-webkit-keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+            @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+            .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
+        }
+    </style>
+{% endblock %}
