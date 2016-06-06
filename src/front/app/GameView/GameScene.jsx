@@ -3,60 +3,37 @@
 var React = require('react');
 var THREE = require('three');
 var ReactTHREE = require('react-three');
+var Hammer = require('react-hammerjs');
 
 var Renderer = ReactTHREE.Renderer;
 var Scene = ReactTHREE.Scene;
-var THREEScene = ReactTHREE.THREEScene;
 
 var GameBoard = require('./GameBoard');
 var GameCamera = require('./GameCamera');
+var GameControls = require('./GameControls');
 
 
 class GameScene extends React.Component {
     constructor(props) {
         super(props);
-
-        this.gameboardProps = {position:new THREE.Vector3(0,0,0), quaternion:new THREE.Quaternion()};
-
         this.state = {
-            time: 1.0,
             width: window.innerWidth,
-            height: window.innerHeight,
-            gameobjects: [<GameBoard {...this.gameboardProps} />]
+            height: window.innerHeight
         };
-
-        this.state.camera = <GameCamera ref="gameCamera"/>;
-
-        this.animate = () => {
-            this.setState({
-                time: this.state.time + 0.05
-            });
-
-            this.frameId = requestAnimationFrame(this.animate)
-        }
+        this.gameObjects = [];
+        this.gameObjects.push(<GameBoard ref="gameBoard" />);
+        this.gameObjects.push(<GameCamera ref="gameCamera"/>);
     }
 
     componentDidMount() {
-        var camera = this.refs['gameCamera'].getThreeJsObject();
+        this.camera = this.refs['gameCamera'].getThreeJsObject();
+        this.camera.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.Math.degToRad( -30 ));
+        this.camera.translateZ( 5 );
 
-        camera.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.Math.degToRad( -30 ));
-        camera.translateZ( 5 );
-
-        //this.refs['gameCamera'].getThreeJsObject().rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.Math.degToRad( 30 ));
-        console.log(this.refs['gameCamera'].getThreeJsObject().position);
-
-        this.animate()
         window.addEventListener( 'resize', this.onWindowResize.bind(this), false )
-        window.addEventListener( 'click', this.onClickCallback.bind(this), false)
-    }
-
-    onClickCallback() {
-        this.refs['gameCamera'].getThreeJsObject().lookAt(new THREE.Vector3( 0, 0, 0));
-        this.refs['gameCamera'].getThreeJsObject().rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.Math.degToRad( 35 ));
     }
 
     componentWillUnmount() {
-        cancelAnimationFrame(this.frameId)
         window.removeEventListener('resize', this.onWindowResize)
     }
 
@@ -66,14 +43,36 @@ class GameScene extends React.Component {
             height: window.innerHeight
         })
     }
+    
+    addObjectToScene(object) {
+        this.gameObjects.push(object);
+    }
+
+    handleSwipe(e) {
+        this.refs.gameBoard.handleSwipe(e);
+    }
+
+    handleTap(e) {
+        this.refs.gameBoard.handleTap(e);
+    }
+
+    getRef(id) {
+        console.log('Getting ref', this.refs[id]);
+        return this.refs[id];
+    }
 
     render() {
-        return <Renderer background={0xffffff} width={this.state.width} height={this.state.height} pixelRatio={window.devicePixelRatio} >
-            <Scene width={this.state.width} height={this.state.height} camera="maincamera">
-                {this.state.gameobjects}
-                {this.state.camera}
-            </Scene>
-        </Renderer>
+        return <div className="game-container">
+            <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)}>
+                <Renderer background={0xffffff} width={this.state.width} height={this.state.height} pixelRatio={window.devicePixelRatio} >
+                    <Scene width={this.state.width} height={this.state.height} camera="maincamera">
+                        {this.gameObjects}
+                    </Scene>
+                </Renderer>
+            </Hammer>
+            <GameControls gameboard={this.getRef.bind(this)} />
+        </div>
+
     }
 }
 
