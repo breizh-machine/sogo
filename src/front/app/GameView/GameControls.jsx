@@ -6,7 +6,7 @@ var ReactTHREE = require('react-three');
 
 var Mesh = ReactTHREE.Mesh;
 var topgeometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-var topmaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+var topmaterial = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
 
 var GameControls = React.createClass({
     displayName: 'GameControls',
@@ -16,14 +16,13 @@ var GameControls = React.createClass({
         };
     },
     handleClick: function() {
-        console.log('Handling click', this.props);
-        this.gameboard.addChild(<Mesh position={new THREE.Vector3(Math.random(),0.1 * this.state.counter,Math.random())} geometry={topgeometry} material={topmaterial} />);
+        this.gameboard.addChild(<Mesh widthSegments={0.01}
+                                      heightSegments={0.01}
+                                      castShadow receiveShadow position={new THREE.Vector3(Math.random(),0.1 * this.state.counter,Math.random())} geometry={topgeometry} material={topmaterial} />);
         this.setState({ counter: this.state.counter + 1 });
     },
     componentDidMount: function() {
-        console.log('Props', this.props);
         this.gameboard = this.props.gameboard('gameBoard');
-        console.log('got gameboard', this.gameboard);
     },
     render: function() {
         return  <div className="game-controls">
