@@ -72,10 +72,10 @@ swiftmailer:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: back\UserBundle\Entity\User
+    user_class: Scubs\CoreDomainBundle\Entity\User
     from_email:
       address:        noreply@bm.com
-      sender_name:    Sogo
+      sender_name:    Scubs
     service:
       mailer: fos_user.mailer.twig_swift
     registration:
@@ -84,3 +84,15 @@ fos_user:
     resetting:
       email:
           template: email/password_resetting.email.twig
+
+fos_rest:
+    view:
+        view_response_listener: force
+    format_listener:
+      rules:
+        priorities: ['json', 'html', '*/*']
+        fallback_format: json
+        prefer_extension: true
+
+sensio_framework_extra:
+    view:    { annotations: false }

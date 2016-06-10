@@ -16,9 +16,14 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
+            new SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle(),
+            new SimpleBus\SymfonyBridge\SimpleBusEventBusBundle(),
+            new SimpleBus\SymfonyBridge\DoctrineOrmBridgeBundle(),
 
-            new back\AppBundle\AppBundle(),
-            new back\UserBundle\UserBundle(),
+            new Scubs\ApiBundle\ScubsApiBundle(),
+            new Scubs\CoreDomainBundle\ScubsCoreDomainBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

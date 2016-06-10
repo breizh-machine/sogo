@@ -1,6 +1,9 @@
 app:
-    resource: "@AppBundle/Controller/"
+    resource: "@ScubsCoreDomainBundle/Controller/"
     type:     annotation
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+scubs_api:
+    resource: "@ScubsApiBundle/Resources/config/routing.yml"

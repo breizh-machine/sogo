@@ -1,0 +1,5 @@
+scubs_api.cube_all:
+    path:  /cubes.{_format}
+    defaults: { _controller: ScubsApiBundle:Cube:all, _format: ~ }
+    requirements:
+        _method: GET

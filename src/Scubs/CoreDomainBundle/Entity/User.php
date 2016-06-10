@@ -1,9 +1,9 @@
 <?php
 
-namespace back\UserBundle\Entity;
+namespace Scubs\CoreDomainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use back\UserBundle\Model\User as BaseUser;
+use Scubs\CoreDomain\User\User as BaseUser;
 
 /**
  * @ORM\Entity

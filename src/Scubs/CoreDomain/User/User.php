@@ -1,6 +1,6 @@
 <?php
 
-namespace back\UserBundle\Model;
+namespace Scubs\CoreDomain\User;
 
 use FOS\UserBundle\Model\User as BaseUser;
 
