@@ -29,7 +29,7 @@ class CubeControllerTest extends WebTestCase
         $response = $client->getResponse();
         $this->assertJsonResponse($response, 200);
         $content = $response->getContent();
-        //$this->assertEquals($expected[$i], $content);
-        dump($content);
+        $parsedContent = json_decode($content);
+        $this->assertEquals(2, count($parsedContent->cubes));
     }
 }
