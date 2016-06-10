@@ -1,0 +1,15 @@
+Scubs\CoreDomain\Cube\Cube:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            inline: true
+        texture:
+            expose: true
+            serialized_name: texture
+        rarity:
+            expose: true
+            serialized_name: rarity
+        name:
+            expose: true
+            serialized_name: name

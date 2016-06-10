@@ -96,3 +96,10 @@ fos_rest:
 
 sensio_framework_extra:
     view:    { annotations: false }
+
+jms_serializer:
+    metadata:
+      directories:
+          CoreDomain:
+              namespace_prefix: "Scubs\\CoreDomain"
+              path: "@ScubsApiBundle/Resources/config/serializer/"

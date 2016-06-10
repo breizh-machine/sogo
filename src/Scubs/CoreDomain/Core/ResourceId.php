@@ -10,7 +10,7 @@ class ResourceId {
 
     public function __construct($value)
     {
-        $this->value = $this->value ? (string) $value : $this->generateUuid();
+        $this->value = $value ? (string) $value : $this->generateUuid();
     }
 
     public function getValue()
