@@ -18,6 +18,11 @@ class ResourceId {
         return $this->value;
     }
 
+    public function equals(ResourceId $externalId)
+    {
+        return $externalId->getValue() == $this->value;
+    }
+
     private function generateUuid() {
         return Uuid::uuid4()->toString();
     }
