@@ -2,27 +2,12 @@
 
 namespace Tests\Scubs\ApiBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Routing\Router;
-
-class CubeControllerTest extends WebTestCase
+class CubeControllerTest extends BaseRestTestController
 {
-    protected function assertJsonResponse($response, $statusCode = 200) {
-        $this->assertEquals(
-            $statusCode, $response->getStatusCode(),
-            $response->getContent()
-        );
-        $this->assertTrue(
-            $response->headers->contains('Content-Type', 'application/json'),
-            $response->headers
-        );
-    }
-
     public function testAllAction()
     {
-        $client = static::createClient();
-        $container = $client->getContainer();
-        $router = $container->get('router');
+        $client = $this->getClient();
+        $router = $this->getRouter();
 
         $route = $router->generate('scubs_api.cube_all', ['_format' => 'json']);
         $client->request('GET', $route, ['ACCEPT' => 'application/json']);
