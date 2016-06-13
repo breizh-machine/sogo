@@ -6,9 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Scubs\CoreDomain\Core\Resource;
 use Scubs\CoreDomain\Turn\Turn;
 use Scubs\CoreDomain\Turn\TurnId;
-use Scubs\CoreDomain\Player\Player;
+use Scubs\CoreDomain\Player\ScubPlayer;
 use Scubs\CoreDomain\Reward\Reward;
-use Scubs\CoreDomain\Reward\RewardId;
 
 class Game extends Resource
 {
@@ -22,7 +21,7 @@ class Game extends Resource
     private $winner;
     private $reward;
 
-    public function __construct(GameId $gameId, Player $local)
+    public function __construct(GameId $gameId, ScubPlayer $local)
     {
         parent::__construct($gameId);
         $this->startDate = new \DateTime();
@@ -68,7 +67,7 @@ class Game extends Resource
      * @return $this
      * @throws GameLogicException
      */
-    public function play(Player $player, $x, $y, $z)
+    public function play(ScubPlayer $player, $x, $y, $z)
     {
         //Check the game is started
         if (!$this->isGameStarted()) {
@@ -79,7 +78,7 @@ class Game extends Resource
             throw new GameLogicException(GameLogicException::$GAME_ENDED_MESS, GameLogicException::$GAME_ENDED);
         }
         //Check that the player is allowed to play
-        if (!$this->isPlayerTurn($player)) {
+        if (!$this->isScubPlayerTurn($player)) {
             throw new GameLogicException(GameLogicException::$NOT_PLAYER_TURN_MESS, GameLogicException::$NOT_PLAYER_TURN);
         }
         
@@ -158,7 +157,7 @@ class Game extends Resource
         return $this->endDate !== null;
     }
 
-    public function isPlayerTurn(Player $player)
+    public function isScubPlayerTurn(ScubPlayer $player)
     {
         $lastTurn = GameUtils::getLastTurn($this->turns);
         if ($lastTurn !== null) {

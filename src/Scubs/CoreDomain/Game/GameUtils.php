@@ -43,7 +43,6 @@ class GameUtils
     }
     
     public static function getPlayablePositions($gridSize, Turn $turn, Turn $neighbor) {
-        //[2, 0, 0] [3, 1, 0]
         $forwardVector = [$turn->getX() - $neighbor->getX(), $turn->getY() - $neighbor->getY(), $turn->getZ() - $neighbor->getZ()];
 
         $playablePositions = new ArrayCollection();

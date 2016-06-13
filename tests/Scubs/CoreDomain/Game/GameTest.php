@@ -5,20 +5,20 @@ namespace Test\Scubs\CoreDomain\Game;
 use Scubs\CoreDomain\Game\Game;
 use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Game\GameLogicException;
-use Scubs\CoreDomain\Player\Player;
-use Scubs\CoreDomain\Player\PlayerId;
+use Scubs\CoreDomain\User\User as ScubPlayer;
 use Scubs\CoreDomain\Reward\Reward;
 use Scubs\CoreDomain\Reward\RewardId;
 use Scubs\CoreDomain\Cube\Cube;
 use Scubs\CoreDomain\Cube\CubeId;
+use Scubs\CoreDomain\Core\ResourceId;
 
 class GameTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testAssignReward()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
         $game->inviteVisitor($visitor);
         $cube = new Cube(new CubeId(), 'text', 0, 'name');
@@ -53,8 +53,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
     
     public function testInviteVisitor()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
 
         try {
@@ -68,8 +68,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testPlay()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
 
         try {
@@ -107,8 +107,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testIsGameWon()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
         $game->inviteVisitor($visitor);
 
@@ -131,8 +131,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testGetWinningTurns()
     {
 
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
         $game->inviteVisitor($visitor);
 
@@ -154,8 +154,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckIsPlayablePosition()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
         $game->inviteVisitor($visitor);
 
@@ -181,8 +181,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testIsGameStarted()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
         $this->assertFalse($game->isGameStarted());
         $game->inviteVisitor($visitor);
@@ -191,8 +191,8 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testIsGameEnded()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
         $game->inviteVisitor($visitor);
         $this->assertFalse($game->isGameEnded());
@@ -212,14 +212,14 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     public function testIsPlayerTurn()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local);
         $game->inviteVisitor($visitor);
-        $this->assertTrue($game->isPlayerTurn($local));
+        $this->assertTrue($game->isScubPlayerTurn($local));
         $game->play($local, 0, 0, 0);
-        $this->assertFalse($game->isPlayerTurn($local));
-        $this->assertTrue($game->isPlayerTurn($visitor));
+        $this->assertFalse($game->isScubPlayerTurn($local));
+        $this->assertTrue($game->isScubPlayerTurn($visitor));
     }
 
 

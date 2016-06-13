@@ -4,10 +4,10 @@ namespace Test\Scubs\CoreDomain\Game;
 
 use Scubs\CoreDomain\Turn\Turn;
 use Scubs\CoreDomain\Turn\TurnId;
-use Scubs\CoreDomain\Player\Player;
-use Scubs\CoreDomain\Player\PlayerId;
+use Scubs\CoreDomain\User\User as ScubPlayer;
 use Scubs\CoreDomain\Game\GameUtils;
 use Doctrine\Common\Collections\ArrayCollection;
+use Scubs\CoreDomain\Core\ResourceId;
 
 class GameUtilsTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,8 +15,8 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testIsWinningDirection()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $turns = new ArrayCollection();
         $t1 = new Turn(new TurnId(), $local, 0, 0, 0);
         $t2 = new Turn(new TurnId(), $local, 0, 1, 0);
@@ -39,8 +39,8 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWinningTurnsFromLine()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $turns = new ArrayCollection();
         $t1 = new Turn(new TurnId(), $local, 0, 0, 0);
         $t2 = new Turn(new TurnId(), $local, 0, 1, 0);
@@ -65,7 +65,7 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLastTurn()
     {
-        $local = new Player(new PlayerId('LOCAL'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
         $t1 = new Turn(new TurnId(), $local, 1, 1, 2);
         $t2 = new Turn(new TurnId(), $local, 1, 2, 1);
         $t3 = new Turn(new TurnId(), $local, 1, 2, 2);
@@ -81,7 +81,7 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPlayablePositions()
     {
-        $local = new Player(new PlayerId('LOCAL'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
         $t1 = new Turn(new TurnId(), $local, 1, 1, 2);
         $t2 = new Turn(new TurnId(), $local, 1, 2, 1);
         $playablePositions = GameUtils::getPlayablePositions($this->gridSize, $t1, $t2);
@@ -115,8 +115,8 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTurnNeighborhood()
     {
-        $local = new Player(new PlayerId('LOCAL'));
-        $visitor = new Player(new PlayerId('VISITOR'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $turns = new ArrayCollection();
         $t1 = new Turn(new TurnId(), $local, 1, 1, 1);
         $t2 = new Turn(new TurnId(), $local, 1, 0, 1);
@@ -152,7 +152,7 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTurnAtPosition()
     {
-        $local = new Player(new PlayerId('LOCAL'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
         $turns = new ArrayCollection();
         $t1 = new Turn(new TurnId(), $local, 1, 0, 1);
         $t2 = new Turn(new TurnId(), $local, 1, 1, 1);
@@ -173,7 +173,7 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTurnsAtPosition()
     {
-        $local = new Player(new PlayerId('LOCAL'));
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
         $turns = new ArrayCollection();
         $t1 = new Turn(new TurnId(), $local, 1, 0, 1);
         $t2 = new Turn(new TurnId(), $local, 1, 1, 1);

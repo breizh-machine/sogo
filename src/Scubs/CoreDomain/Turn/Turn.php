@@ -3,6 +3,7 @@
 namespace Scubs\CoreDomain\Turn;
 
 use Scubs\CoreDomain\Core\Resource;
+use Scubs\CoreDomain\Player\ScubPlayer;
 
 class Turn extends Resource
 {
@@ -12,7 +13,7 @@ class Turn extends Resource
     private $y;
     private $z;
 
-    public function __construct(TurnId $turnId, $player, $x, $y, $z)
+    public function __construct(TurnId $turnId, ScubPlayer $player, $x, $y, $z)
     {
         parent::__construct($turnId);
         $this->player = $player;
@@ -23,7 +24,7 @@ class Turn extends Resource
     }
 
     /**
-     * @return mixed
+     * @return ScubPlayer
      */
     public function getPlayer()
     {
