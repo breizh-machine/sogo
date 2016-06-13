@@ -7,6 +7,8 @@ use Scubs\CoreDomain\Core\Resource;
 use Scubs\CoreDomain\Turn\Turn;
 use Scubs\CoreDomain\Turn\TurnId;
 use Scubs\CoreDomain\Player\Player;
+use Scubs\CoreDomain\Reward\Reward;
+use Scubs\CoreDomain\Reward\RewardId;
 
 class Game extends Resource
 {
@@ -18,6 +20,7 @@ class Game extends Resource
     private $local;
     private $visitor;
     private $winner;
+    private $reward;
 
     public function __construct(GameId $gameId, Player $local)
     {
@@ -28,6 +31,19 @@ class Game extends Resource
         $this->visitor = null;
         $this->turns = new ArrayCollection();
         $this->winner = null;
+        $this->reward = null;
+    }
+
+    public function assignReward(Reward $reward)
+    {
+        if ($this->reward !== null) {
+            throw new GameLogicException(GameLogicException::$REWARD_ALREADY_ASSIGNED_MESS, GameLogicException::$REWARD_ALREADY_ASSIGNED);
+        }
+        if (!$this->isGameWon()) {
+            throw new GameLogicException(GameLogicException::$GAME_NOT_ENDED_FOR_REWARD_MESS, GameLogicException::$GAME_NOT_ENDED_FOR_REWARD);
+        }
+        $this->reward = $reward;
+        return $this;
     }
 
     /**
@@ -202,10 +218,10 @@ class Game extends Resource
     }
 
     /**
-     * @param null $winner
+     * @return null
      */
-    public function setWinner($winner)
+    public function getReward()
     {
-        $this->winner = $winner;
+        return $this->reward;
     }
 }

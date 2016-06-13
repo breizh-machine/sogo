@@ -15,6 +15,6 @@ class CubeControllerTest extends BaseRestTestController
         $this->assertJsonResponse($response, 200);
         $content = $response->getContent();
         $parsedContent = json_decode($content);
-        $this->assertEquals(2, count($parsedContent));
+        $this->assertTrue(count($parsedContent) > 0);
     }
 }

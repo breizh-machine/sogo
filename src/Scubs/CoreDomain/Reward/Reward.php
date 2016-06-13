@@ -10,11 +10,11 @@ class Reward extends Resource
     private $cube;
     private $startDate;
 
-    public function __construct(RewardId $id, Cube $cube, \DateTime $startDate)
+    public function __construct(RewardId $id, Cube $cube)
     {
         parent::__construct($id);
         $this->cube = $cube;
-        $this->startDate = $startDate;
+        $this->startDate = new \DateTime();
     }
 
     /**

@@ -7,11 +7,50 @@ use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Game\GameLogicException;
 use Scubs\CoreDomain\Player\Player;
 use Scubs\CoreDomain\Player\PlayerId;
-use Scubs\CoreDomain\Game\GameUtils;
+use Scubs\CoreDomain\Reward\Reward;
+use Scubs\CoreDomain\Reward\RewardId;
+use Scubs\CoreDomain\Cube\Cube;
+use Scubs\CoreDomain\Cube\CubeId;
 
 class GameTest extends \PHPUnit_Framework_TestCase
 {
 
+    public function testAssignReward()
+    {
+        $local = new Player(new PlayerId('LOCAL'));
+        $visitor = new Player(new PlayerId('VISITOR'));
+        $game = new Game(new GameId(), $local);
+        $game->inviteVisitor($visitor);
+        $cube = new Cube(new CubeId(), 'text', 0, 'name');
+        $reward = new Reward(new RewardId(), $cube);
+        
+        try {
+            $game->assignReward($reward);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() === GameLogicException::$GAME_NOT_ENDED_FOR_REWARD);
+        }
+
+        $game->play($local, 0, 0, 0);
+        $game->play($visitor, 1, 0, 0);
+        $game->play($local, 1, 1, 0);
+        $game->play($visitor, 2, 0, 0);
+        $game->play($local, 3, 0, 0);
+        $game->play($visitor, 2, 1, 0);
+        $game->play($local, 2, 2, 0);
+        $game->play($visitor, 3, 1, 0);
+        $game->play($local, 3, 2, 0);
+        $game->play($visitor, 0, 1, 0);
+        $game->play($local, 3, 3, 0);
+
+        $game->assignReward($reward);
+        $this->assertTrue($game->getReward()->equals($reward));
+        try {
+            $game->assignReward($reward);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() === GameLogicException::$REWARD_ALREADY_ASSIGNED);
+        }
+    }
+    
     public function testInviteVisitor()
     {
         $local = new Player(new PlayerId('LOCAL'));

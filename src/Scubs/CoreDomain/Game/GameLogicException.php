@@ -18,4 +18,8 @@ class GameLogicException extends \Exception
     public static $GAME_NOT_STARTED_MESS = 'The game is not started yet';
     public static $SAME_VISITOR_AND_LOCAL = 8006;
     public static $SAME_VISITOR_AND_LOCAL_MESS = 'Same visitor and local in the game';
+    public static $GAME_NOT_ENDED_FOR_REWARD = 8007;
+    public static $GAME_NOT_ENDED_FOR_REWARD_MESS = 'Game must be ended to have a reward';
+    public static $REWARD_ALREADY_ASSIGNED = 8008;
+    public static $REWARD_ALREADY_ASSIGNED_MESS = 'Reward already assigned to this game';
 }
