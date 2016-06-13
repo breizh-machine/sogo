@@ -33,10 +33,13 @@ class Game extends Resource
     /**
      * @param $visitor
      * @return $this
+     * @throws GameLogicException
      */
     public function inviteVisitor($visitor)
     {
-        //TODO check $local != $visitor
+        if ($this->local->equals($visitor)) {
+            throw new GameLogicException(GameLogicException::$SAME_VISITOR_AND_LOCAL_MESS, GameLogicException::$SAME_VISITOR_AND_LOCAL);
+        }
         $this->visitor = $visitor;
         return $this;
     }
@@ -47,20 +50,21 @@ class Game extends Resource
      * @param $y
      * @param $z
      * @return $this
+     * @throws GameLogicException
      */
     public function play(Player $player, $x, $y, $z)
     {
         //Check the game is started
         if (!$this->isGameStarted()) {
-            //TODO
+            throw new GameLogicException(GameLogicException::$GAME_NOT_STARTED_MESS, GameLogicException::$GAME_NOT_STARTED);
         }
         //Check that the game is not ended
         if ($this->isGameEnded()) {
-            //TODO
+            throw new GameLogicException(GameLogicException::$GAME_ENDED_MESS, GameLogicException::$GAME_ENDED);
         }
         //Check that the player is allowed to play
         if (!$this->isPlayerTurn($player)) {
-            //TODO
+            throw new GameLogicException(GameLogicException::$NOT_PLAYER_TURN_MESS, GameLogicException::$NOT_PLAYER_TURN);
         }
         
         //Check that the position can be played
@@ -110,38 +114,35 @@ class Game extends Resource
     }
 
 
-    private function checkIsPlayablePosition($x, $y, $z)
+    public function checkIsPlayablePosition($x, $y, $z)
     {
         if (GameUtils::isOutOfBoundPosition(self::$GRID_SIZE, $x, $y, $z))
         {
-            //TODO
-            throw new GameLogicException('', GameLogicException::$UNPLAYABLE_POSITION);
+            throw new GameLogicException(GameLogicException::$UNPLAYABLE_POSITION_MESS, GameLogicException::$UNPLAYABLE_POSITION);
         }
         $turnsAtXzPosition = GameUtils::getTurnsAtPosition($this->turns, self::$GRID_SIZE, $x, $z);
         if ($turnsAtXzPosition->get($y) !== null)
         {
-            //TODO
-            throw new GameLogicException('', GameLogicException::$ALREADY_PLAYED_POSITION);
+            throw new GameLogicException(GameLogicException::$ALREADY_PLAYED_POSITION_MESS, GameLogicException::$ALREADY_PLAYED_POSITION);
         } else if ($y > 0 && GameUtils::getTurnAtPosition($this->turns, self::$GRID_SIZE, $x, $y - 1, $z) == null) {
-            //TODO
-            throw new GameLogicException('', GameLogicException::$UNPLAYABLE_POSITION);
+            throw new GameLogicException(GameLogicException::$UNPLAYABLE_POSITION_MESS, GameLogicException::$UNPLAYABLE_POSITION);
         }
         return true;
     }
 
 
-    private function isGameStarted()
+    public function isGameStarted()
     {
         return $this->visitor !== null;
 
     }
 
-    private function isGameEnded()
+    public function isGameEnded()
     {
         return $this->endDate !== null;
     }
 
-    private function isPlayerTurn(Player $player)
+    public function isPlayerTurn(Player $player)
     {
         $lastTurn = GameUtils::getLastTurn($this->turns);
         if ($lastTurn !== null) {
@@ -190,5 +191,21 @@ class Game extends Resource
     public function getVisitor()
     {
         return $this->visitor;
+    }
+
+    /**
+     * @return null
+     */
+    public function getWinner()
+    {
+        return $this->winner;
+    }
+
+    /**
+     * @param null $winner
+     */
+    public function setWinner($winner)
+    {
+        $this->winner = $winner;
     }
 }

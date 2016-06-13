@@ -27,15 +27,15 @@ class GameUtils
 
     public static function getLastTurn(ArrayCollection $turns)
     {
-        $minTimeStamp = null;
+        $maxTimeStamp = null;
         $index = 0;
         foreach ($turns as $key => $turn)
         {
             $currentTimestamp = $turn->getStartDate()->getTimestamp();
-            if ($minTimeStamp === null) {
-                $minTimeStamp = $currentTimestamp;
-            } else if ($currentTimestamp < $minTimeStamp) {
-                $minTimeStamp = $currentTimestamp;
+            if ($maxTimeStamp === null) {
+                $maxTimeStamp = $currentTimestamp;
+            } else if ($currentTimestamp >= $maxTimeStamp) {
+                $maxTimeStamp = $currentTimestamp;
                 $index = $key;
             }
         }
@@ -67,7 +67,7 @@ class GameUtils
                 for ($indZ = $zStart - 1; $indZ <= $zStart + 1; $indZ++) {
                     if (!self::isOutOfBoundPosition($gridSize, $indX, $indY, $indZ)) {
                         $neighbor = self::getTurnAtPosition($turns, $gridSize, $indX, $indY, $indZ);
-                        if ($neighbor !== null && $neighbor->getPlayer()->equals($turn->getPlayer())) {
+                        if ($neighbor !== null && !$neighbor->equals($turn) && $neighbor->getPlayer()->equals($turn->getPlayer())) {
                             $neighborhood->add($neighbor);
                         }
                     }
