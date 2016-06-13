@@ -1,0 +1,6 @@
+Scubs\CoreDomain\Core\Resource:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            inline: true

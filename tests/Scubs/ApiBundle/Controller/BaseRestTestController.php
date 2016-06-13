@@ -34,15 +34,4 @@ class BaseRestTestController extends WebTestCase
     {
         return $this->router;
     }
-
-    public function testAllAction()
-    {
-        $route = $router->generate('scubs_api.cube_all', ['_format' => 'json']);
-        $client->request('GET', $route, ['ACCEPT' => 'application/json']);
-        $response = $client->getResponse();
-        $this->assertJsonResponse($response, 200);
-        $content = $response->getContent();
-        $parsedContent = json_decode($content);
-        $this->assertEquals(2, count($parsedContent->cubes));
-    }
 }

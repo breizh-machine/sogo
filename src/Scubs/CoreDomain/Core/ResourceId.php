@@ -8,7 +8,7 @@ class ResourceId {
 
     protected $value;
 
-    public function __construct($value)
+    public function __construct($value = null)
     {
         $this->value = $value ? (string) $value : $this->generateUuid();
     }

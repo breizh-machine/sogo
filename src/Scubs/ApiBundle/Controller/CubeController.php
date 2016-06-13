@@ -4,6 +4,8 @@ namespace Scubs\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\RestBundle\View;
+use Scubs\ApiBundle\Query\CubesQuery;
 
 class CubeController extends Controller
 {
@@ -12,8 +14,8 @@ class CubeController extends Controller
      */
     public function allAction()
     {
-        $cubes = $this->get('cube_repository')->findAll();
-
-        return ['cubes' => $cubes];
+        $query = new CubesQuery();
+        $handler = $this->get('scubs.api.handler.query.cubes');
+        return $handler->handle($query);
     }
 }
