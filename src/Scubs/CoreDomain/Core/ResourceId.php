@@ -26,4 +26,9 @@ class ResourceId {
     private function generateUuid() {
         return Uuid::uuid4()->toString();
     }
+
+    public function toString()
+    {
+        return $this->value;
+    }
 }

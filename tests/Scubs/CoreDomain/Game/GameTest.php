@@ -109,7 +109,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 50);
         $game->inviteVisitor($visitor);
 
         $game->play($local, 0, 0, 0);
@@ -126,6 +126,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game->play($visitor, 0, 1, 0);
         $game->play($local, 3, 3, 0);
         $this->assertTrue($game->isGameWon());
+        $this->assertTrue($local->getCredits() === 200);
     }
 
     public function testGetWinningTurns()

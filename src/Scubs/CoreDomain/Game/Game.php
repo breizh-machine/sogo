@@ -20,8 +20,9 @@ class Game extends Resource
     private $visitor;
     private $winner;
     private $reward;
+    private $bet;
 
-    public function __construct(GameId $gameId, ScubPlayer $local)
+    public function __construct(GameId $gameId, ScubPlayer $local, $bet = 20)
     {
         parent::__construct($gameId);
         $this->startDate = new \DateTime();
@@ -31,6 +32,7 @@ class Game extends Resource
         $this->turns = new ArrayCollection();
         $this->winner = null;
         $this->reward = null;
+        $this->bet = $bet;
     }
 
     public function assignReward(Reward $reward)
@@ -42,6 +44,7 @@ class Game extends Resource
             throw new GameLogicException(GameLogicException::$GAME_NOT_ENDED_FOR_REWARD_MESS, GameLogicException::$GAME_NOT_ENDED_FOR_REWARD);
         }
         $this->reward = $reward;
+        $this->reward->assignToGame($this->getId());
         return $this;
     }
 
@@ -94,6 +97,11 @@ class Game extends Resource
         {
             $this->winner = $winningTurns->get(0)->getPlayer();
             $this->endDate = new \DateTime();
+            if ($this->winner->equals($this->local)) {
+                $this->local->wonBet($this->bet);
+            } else {
+                $this->visitor->wonBet($this->bet);
+            }
         }
 
         return $this;
@@ -222,5 +230,13 @@ class Game extends Resource
     public function getReward()
     {
         return $this->reward;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBet()
+    {
+        return $this->bet;
     }
 }

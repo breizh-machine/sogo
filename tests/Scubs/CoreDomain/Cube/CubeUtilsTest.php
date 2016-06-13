@@ -6,7 +6,7 @@ use Scubs\CoreDomain\Cube\CubeUtils;
 
 class CubeUtilsTest extends \PHPUnit_Framework_TestCase
 {
-    private $nbRepetitions = 100000;
+    private $nbRepetitions = 1000;
 
     public function testPickRandomRarity()
     {
@@ -19,7 +19,5 @@ class CubeUtilsTest extends \PHPUnit_Framework_TestCase
         foreach ($stats as $ind => $stat) {
             $stats[$ind] = $stat / $this->nbRepetitions;
         }
-        var_dump($stats);
     }
-
 }

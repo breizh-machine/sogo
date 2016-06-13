@@ -22,4 +22,9 @@ class GameLogicException extends \Exception
     public static $GAME_NOT_ENDED_FOR_REWARD_MESS = 'Game must be ended to have a reward';
     public static $REWARD_ALREADY_ASSIGNED = 8008;
     public static $REWARD_ALREADY_ASSIGNED_MESS = 'Reward already assigned to this game';
+    public static $REWARD_ALREADY_ASSIGNED_TO_GAME = 8009;
+    public static $REWARD_ALREADY_ASSIGNED_TO_GAME_MESS = 'Reward already assigned to this game';
+    public static $INSUFFICIENT_CREDITS_TO_BET = 8010;
+    public static $INSUFFICIENT_CREDITS_TO_BET_MESS = 'Player does not have enough credit to bet';
+
 }
