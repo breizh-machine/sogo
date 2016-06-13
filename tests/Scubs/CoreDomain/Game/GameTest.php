@@ -15,11 +15,24 @@ use Scubs\CoreDomain\Core\ResourceId;
 class GameTest extends \PHPUnit_Framework_TestCase
 {
 
+    public function testAssignVisitorCube()
+    {
+        $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $game = new Game(new GameId(), $local, 20, new CubeId('Cube1'));
+        try {
+            $game->assignVisitorCube(new CubeId('Cube1'));
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$SAME_CUBES_IN_GAME);
+        }
+        $game->assignVisitorCube(new CubeId('Cube2'));
+        $this->assertTrue($game->getVisitorCubeId()->equals(new CubeId('Cube2')));
+    }
+
     public function testAssignReward()
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
         $game->inviteVisitor($visitor);
         $cube = new Cube(new CubeId(), 'text', 0, 'name');
         $reward = new Reward(new RewardId(), $cube);
@@ -55,7 +68,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
 
         try {
             $game->inviteVisitor($local);
@@ -70,7 +83,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
 
         try {
             $game->play($local, 0, 0, 0);
@@ -109,7 +122,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local, 50);
+        $game = new Game(new GameId(), $local, 50, new CubeId());
         $game->inviteVisitor($visitor);
 
         $game->play($local, 0, 0, 0);
@@ -134,7 +147,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
         $game->inviteVisitor($visitor);
 
         $game->play($local, 0, 0, 0);
@@ -157,7 +170,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
         $game->inviteVisitor($visitor);
 
         try {
@@ -184,7 +197,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
         $this->assertFalse($game->isGameStarted());
         $game->inviteVisitor($visitor);
         $this->assertTrue($game->isGameStarted());
@@ -194,7 +207,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
         $game->inviteVisitor($visitor);
         $this->assertFalse($game->isGameEnded());
         $game->play($local, 0, 0, 0);
@@ -215,7 +228,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
         $game->inviteVisitor($visitor);
         $this->assertTrue($game->isScubPlayerTurn($local));
         $game->play($local, 0, 0, 0);

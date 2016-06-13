@@ -8,6 +8,7 @@ use Scubs\CoreDomain\Turn\Turn;
 use Scubs\CoreDomain\Turn\TurnId;
 use Scubs\CoreDomain\Player\ScubPlayer;
 use Scubs\CoreDomain\Reward\Reward;
+use Scubs\CoreDomain\Cube\CubeId;
 
 class Game extends Resource
 {
@@ -21,8 +22,11 @@ class Game extends Resource
     private $winner;
     private $reward;
     private $bet;
+    private $localCubeId;
+    private $visitorCubeId;
+    private $visitorJoined;
 
-    public function __construct(GameId $gameId, ScubPlayer $local, $bet = 20)
+    public function __construct(GameId $gameId, ScubPlayer $local, $bet, CubeId $localCubeId)
     {
         parent::__construct($gameId);
         $this->startDate = new \DateTime();
@@ -33,8 +37,18 @@ class Game extends Resource
         $this->winner = null;
         $this->reward = null;
         $this->bet = $bet;
+        $this->localCubeId = $localCubeId;
+        $this->visitorJoined = false;
     }
 
+    public function assignVisitorCube(CubeId $visitorCubeId)
+    {
+        if ($this->localCubeId->equals($visitorCubeId)) {
+            throw new GameLogicException(GameLogicException::$SAME_CUBES_IN_GAME_MESS, GameLogicException::$SAME_CUBES_IN_GAME);
+        }
+        $this->visitorCubeId = $visitorCubeId;
+    }
+    
     public function assignReward(Reward $reward)
     {
         if ($this->reward !== null) {
@@ -59,6 +73,12 @@ class Game extends Resource
             throw new GameLogicException(GameLogicException::$SAME_VISITOR_AND_LOCAL_MESS, GameLogicException::$SAME_VISITOR_AND_LOCAL);
         }
         $this->visitor = $visitor;
+        return $this;
+    }
+
+    public function visitorJoined()
+    {
+        $this->visitorJoined = true;
         return $this;
     }
 
@@ -239,4 +259,29 @@ class Game extends Resource
     {
         return $this->bet;
     }
+
+    /**
+     * @return CubeId
+     */
+    public function getLocalCubeId()
+    {
+        return $this->localCubeId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVisitorCubeId()
+    {
+        return $this->visitorCubeId;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVisitorJoined()
+    {
+        return $this->visitorJoined;
+    }
+
 }

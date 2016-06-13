@@ -17,7 +17,7 @@ class RewardTest extends \PHPUnit_Framework_TestCase
     public function testAssignToGame()
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
-        $game = new Game(new GameId(), $local);
+        $game = new Game(new GameId(), $local, 20, new CubeId());
         $cube = new Cube(new CubeId(), 'text', 0, 'name');
         $reward = new Reward(new RewardId(), $cube);
 

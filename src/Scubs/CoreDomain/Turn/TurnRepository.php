@@ -2,6 +2,8 @@
 
 namespace Scubs\CoreDomain\Turn;
 
-interface TurnRepository
+use Scubs\CoreDomain\Core\ResourceRepository;
+
+interface TurnRepository extends ResourceRepository
 {
 }

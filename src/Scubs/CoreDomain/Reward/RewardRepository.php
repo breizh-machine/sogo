@@ -2,6 +2,8 @@
 
 namespace Scubs\CoreDomain\Reward;
 
-interface RewardRepository
+use Scubs\CoreDomain\Core\ResourceRepository;
+
+interface RewardRepository extends ResourceRepository
 {
 }

@@ -2,7 +2,9 @@
 
 namespace Scubs\CoreDomain\Cube;
 
-interface CubeRepository
+use Scubs\CoreDomain\Core\ResourceRepository;
+
+interface CubeRepository extends ResourceRepository
 {
     public function getCubesByRarity($rarity);
 }

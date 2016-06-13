@@ -2,6 +2,8 @@
 
 namespace Scubs\CoreDomain\Game;
 
-interface GameRepository
+use Scubs\CoreDomain\Core\ResourceRepository;
+
+interface GameRepository extends ResourceRepository
 {
 }

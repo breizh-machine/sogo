@@ -26,5 +26,7 @@ class GameLogicException extends \Exception
     public static $REWARD_ALREADY_ASSIGNED_TO_GAME_MESS = 'Reward already assigned to this game';
     public static $INSUFFICIENT_CREDITS_TO_BET = 8010;
     public static $INSUFFICIENT_CREDITS_TO_BET_MESS = 'Player does not have enough credit to bet';
+    public static $SAME_CUBES_IN_GAME = 8011;
+    public static $SAME_CUBES_IN_GAME_MESS = 'Visitor and local must have different cubes in game';
 
 }
