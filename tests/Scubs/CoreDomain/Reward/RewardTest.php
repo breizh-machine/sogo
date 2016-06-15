@@ -17,13 +17,13 @@ class RewardTest extends \PHPUnit_Framework_TestCase
     public function testAssignToGame()
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
-        $game = new Game(new GameId(), $local, 20, new CubeId());
-        $cube = $cube = new Cube(new CubeId(), 'text', 'text', 0, 'name');
+        $cube = new Cube(new CubeId(), 'text', 'text', 0, 'name');
+        $game = new Game(new GameId(), $local, 20, $cube);
         $reward = new Reward(new RewardId(), $cube);
 
-        $reward->assignToGame($game->getId());
+        $reward->assignToGame($game);
         try {
-            $reward->assignToGame($game->getId());
+            $reward->assignToGame($game);
         } catch (\Exception $e) {
             $this->assertTrue($e->getCode() === GameLogicException::$REWARD_ALREADY_ASSIGNED_TO_GAME);
         }

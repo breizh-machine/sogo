@@ -7,29 +7,37 @@ use Scubs\CoreDomain\Cube\CubeId;
 
 class OrmCubeRepositoryTest extends BaseOrmRepository
 {
-    public function testAdd()
+    private $cubeRepository;
+
+    public function setUp()
     {
         $this->init('cube_repository.doctrine_orm');
+        $this->cubeRepository = $this->repositories['cube_repository.doctrine_orm'];
+    }
+
+    public function testAdd()
+    {
+
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
-        $this->repository->add($cube);
+        $this->cubeRepository->add($cube);
 
         $cube2 = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
-        $this->repository->beginTransaction();
-        $this->repository->add($cube2);
-        $this->repository->commit();
+        $this->cubeRepository->beginTransaction();
+        $this->cubeRepository->add($cube2);
+        $this->cubeRepository->commit();
 
-        $this->repository->remove($cube);
-        $this->repository->remove($cube2);
+        $this->cubeRepository->remove($cube);
+        $this->cubeRepository->remove($cube2);
     }
 
     public function testFind()
     {
         $this->init('cube_repository.doctrine_orm');
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
-        $this->repository->add($cube);
-        $cubeRetrieved = $this->repository->find($cube->getId());
+        $this->cubeRepository->add($cube);
+        $cubeRetrieved = $this->cubeRepository->find($cube->getId());
         $this->assertTrue($cubeRetrieved->equals($cube));
-        $this->repository->remove($cube);
+        $this->cubeRepository->remove($cube);
     }
 
     public function testFindAll()
@@ -37,23 +45,23 @@ class OrmCubeRepositoryTest extends BaseOrmRepository
         $this->init('cube_repository.doctrine_orm');
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
         $cube2 = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
-        $countAll = count($this->repository->findAll());
-        $this->repository->add($cube);
-        $this->repository->add($cube2);
-        $all = $this->repository->findAll();
+        $countAll = count($this->cubeRepository->findAll());
+        $this->cubeRepository->add($cube);
+        $this->cubeRepository->add($cube2);
+        $all = $this->cubeRepository->findAll();
         $this->assertTrue(count($all) == $countAll + 2);
-        $this->repository->remove($cube);
-        $this->repository->remove($cube2);
+        $this->cubeRepository->remove($cube);
+        $this->cubeRepository->remove($cube2);
     }
 
     public function testRemove()
     {
         $this->init('cube_repository.doctrine_orm');
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
-        $this->repository->add($cube);
-        $this->repository->remove($cube);
-        $this->assertTrue(!$this->repository->exists($cube));
-        $this->repository->remove($cube);
+        $this->cubeRepository->add($cube);
+        $this->cubeRepository->remove($cube);
+        $this->assertTrue(!$this->cubeRepository->exists($cube));
+        $this->cubeRepository->remove($cube);
     }
 
     public function testGetCubesByRarity()
@@ -62,14 +70,14 @@ class OrmCubeRepositoryTest extends BaseOrmRepository
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
         $cube2 = new Cube(new CubeId(), 'test', 'thumbnail', 1, 'description');
         $cube3 = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
-        $this->repository->add($cube);
-        $this->repository->add($cube2);
-        $this->repository->add($cube3);
-        $this->assertTrue(count($this->repository->getCubesByRarity(0)) == 2);
-        $this->assertTrue(count($this->repository->getCubesByRarity(1)) == 1);
-        $this->assertTrue(count($this->repository->getCubesByRarity(3)) == 0);
-        $this->repository->remove($cube);
-        $this->repository->remove($cube2);
-        $this->repository->remove($cube3);
+        $this->cubeRepository->add($cube);
+        $this->cubeRepository->add($cube2);
+        $this->cubeRepository->add($cube3);
+        $this->assertTrue(count($this->cubeRepository->getCubesByRarity(0)) == 2);
+        $this->assertTrue(count($this->cubeRepository->getCubesByRarity(1)) == 1);
+        $this->assertTrue(count($this->cubeRepository->getCubesByRarity(3)) == 0);
+        $this->cubeRepository->remove($cube);
+        $this->cubeRepository->remove($cube2);
+        $this->cubeRepository->remove($cube3);
     }
 }

@@ -12,23 +12,26 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BaseOrmRepository extends WebTestCase
 {
-    protected $repository;
+    protected $repositories;
+    private $container;
     private $client;
 
     protected function init($repositoryName)
     {
         if (!$this->client) {
             $this->client = static::createClient();
-            $container = $this->client->getContainer();
-            $this->repository = $container->get($repositoryName);
+            $this->container = $this->client->getContainer();
+        }
+        if (!isset($this->repositories[$repositoryName])) {
+            $this->repositories[$repositoryName] = $this->container->get($repositoryName);
         }
     }
 
-    protected function cleanRepository()
+    protected function cleanRepository($repositoryName)
     {
-        $resources = $this->repository->findAll();
+        $resources = $this->repositories[$repositoryName]->findAll();
         foreach ($resources as $resource){
-            $this->repository->remove($resource);
+            $this->repositories[$repositoryName]->remove($resource);
         }
     }
 }

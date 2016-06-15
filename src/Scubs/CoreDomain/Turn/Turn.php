@@ -7,11 +7,11 @@ use Scubs\CoreDomain\Player\ScubPlayer;
 
 class Turn extends Resource
 {
-    private $player;
-    private $startDate;
-    private $x;
-    private $y;
-    private $z;
+    protected $player;
+    protected $startDate;
+    protected $x;
+    protected $y;
+    protected $z;
 
     public function __construct(TurnId $turnId, ScubPlayer $player, $x, $y, $z)
     {

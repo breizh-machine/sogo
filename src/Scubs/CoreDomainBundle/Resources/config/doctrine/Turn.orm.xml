@@ -3,19 +3,16 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Scubs\CoreDomainBundle\Entity\Reward" table="reward">
+    <entity name="Scubs\CoreDomainBundle\Entity\Turn" table="turn">
         <id name="id" type="string" column="id">
             <generator strategy="NONE"/>
         </id>
         <field name="startDate" column="start_date" type="datetime"/>
-        <one-to-one field="game" target-entity="Scubs\CoreDomainBundle\Entity\Game">
-            <join-column name="game_id" referenced-column-name="id" nullable="true"/>
-        </one-to-one>
-        <many-to-one field="cube" target-entity="Scubs\CoreDomainBundle\Entity\Cube">
-            <cascade>
-                <cascade-persist />
-            </cascade>
-            <join-column name="cube_id" referenced-column-name="id" on-delete="SET NULL"/>
+        <field name="x" type="float"/>
+        <field name="y" type="float"/>
+        <field name="z" type="float"/>
+        <many-to-one field="player" target-entity="Scubs\CoreDomainBundle\Entity\User">
+            <join-column name="player_id" referenced-column-name="id" on-delete="SET NULL"/>
         </many-to-one>
     </entity>
 </doctrine-mapping>

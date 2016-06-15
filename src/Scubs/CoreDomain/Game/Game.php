@@ -7,26 +7,25 @@ use Scubs\CoreDomain\Core\Resource;
 use Scubs\CoreDomain\Turn\Turn;
 use Scubs\CoreDomain\Turn\TurnId;
 use Scubs\CoreDomain\Player\ScubPlayer;
-use Scubs\CoreDomain\Reward\Reward;
-use Scubs\CoreDomain\Cube\CubeId;
+use Scubs\CoreDomain\Cube\Cube;
 
 class Game extends Resource
 {
     private static $GRID_SIZE = 4;
 
-    private $turns;
-    private $startDate;
-    private $endDate;
-    private $local;
-    private $visitor;
-    private $winner;
-    private $reward;
-    private $bet;
-    private $localCubeId;
-    private $visitorCubeId;
-    private $visitorJoined;
+    protected $turns;
+    protected $startDate;
+    protected $endDate;
+    protected $local;
+    protected $visitor;
+    protected $winner;
+    protected $bet;
+    protected $localCube;
+    protected $visitorCube;
+    protected $visitorJoined;
+    protected $visitorDeclined;
 
-    public function __construct(GameId $gameId, ScubPlayer $local, $bet, CubeId $localCubeId)
+    public function __construct(GameId $gameId, ScubPlayer $local, $bet, Cube $localCube)
     {
         parent::__construct($gameId);
         $this->startDate = new \DateTime();
@@ -35,31 +34,26 @@ class Game extends Resource
         $this->visitor = null;
         $this->turns = new ArrayCollection();
         $this->winner = null;
-        $this->reward = null;
         $this->bet = $bet;
-        $this->localCubeId = $localCubeId;
+        $this->localCube = $localCube;
         $this->visitorJoined = false;
+        $this->visitorDeclined = false;
+        $this->local->bet($this->bet);
     }
 
-    public function assignVisitorCube(CubeId $visitorCubeId)
+    public function visitorDeclined()
     {
-        if ($this->localCubeId->equals($visitorCubeId)) {
+        $this->visitorDeclined = true;
+        $this->local->refund($this->bet);
+        return $this;
+    }
+
+    public function assignVisitorCube(Cube $visitorCube)
+    {
+        if ($this->localCube->equals($visitorCube)) {
             throw new GameLogicException(GameLogicException::$SAME_CUBES_IN_GAME_MESS, GameLogicException::$SAME_CUBES_IN_GAME);
         }
-        $this->visitorCubeId = $visitorCubeId;
-    }
-    
-    public function assignReward(Reward $reward)
-    {
-        if ($this->reward !== null) {
-            throw new GameLogicException(GameLogicException::$REWARD_ALREADY_ASSIGNED_MESS, GameLogicException::$REWARD_ALREADY_ASSIGNED);
-        }
-        if (!$this->isGameWon()) {
-            throw new GameLogicException(GameLogicException::$GAME_NOT_ENDED_FOR_REWARD_MESS, GameLogicException::$GAME_NOT_ENDED_FOR_REWARD);
-        }
-        $this->reward = $reward;
-        $this->reward->assignToGame($this->getId());
-        return $this;
+        $this->visitorCube = $visitorCube;
     }
 
     /**
@@ -261,27 +255,35 @@ class Game extends Resource
     }
 
     /**
-     * @return CubeId
-     */
-    public function getLocalCubeId()
-    {
-        return $this->localCubeId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getVisitorCubeId()
-    {
-        return $this->visitorCubeId;
-    }
-
-    /**
      * @return boolean
      */
     public function isVisitorJoined()
     {
         return $this->visitorJoined;
+    }
+
+    /**
+     * @return Cube
+     */
+    public function getLocalCube()
+    {
+        return $this->localCube;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVisitorCube()
+    {
+        return $this->visitorCube;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVisitorDeclined()
+    {
+        return $this->visitorDeclined;
     }
 
 }

@@ -9,14 +9,29 @@ use Scubs\CoreDomainBundle\Entity\Reward;
 
 class OrmRewardRepositoryTest extends BaseOrmRepository
 {
-    public function testAdd()
+    private $cubeRepository;
+    private $rewardRepository;
+
+    public function setUp()
     {
+        $this->init('cube_repository.doctrine_orm');
         $this->init('reward_repository.doctrine_orm');
+        $this->cubeRepository = $this->repositories['cube_repository.doctrine_orm'];
+        $this->rewardRepository = $this->repositories['reward_repository.doctrine_orm'];
+    }
+
+    public function testCrud()
+    {
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
-        $reward = new Reward(new RewardId(), $cube);
+        $cube2 = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
+        $reward = new Reward(new RewardId('initial'), $cube);
         $reward2 = new Reward(new RewardId(), $cube);
-        $this->repository->add($reward);
-        $this->repository->add($reward2);
-        $this->assertTrue($this->repository->findAll() > 0);
+        $this->rewardRepository->add($reward);
+        $this->rewardRepository->add($reward2);
+        $this->assertTrue(count($this->rewardRepository->findAll()) == 2);
+        $this->rewardRepository->remove($reward);
+        $this->assertTrue(count($this->rewardRepository->findAll()) == 1);
+        $this->rewardRepository->remove($reward2);
+        $this->cubeRepository->remove($cube);
     }
 }

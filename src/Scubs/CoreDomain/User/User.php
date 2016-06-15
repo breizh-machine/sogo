@@ -48,6 +48,12 @@ class User extends BaseUser implements ScubPlayer
         return $this;
     }
 
+    public function refund($bet)
+    {
+        $this->credits += $bet;
+        return $this;
+    }
+
     public function equals(ScubPlayer $player)
     {
         return $this->id == $player->getId()->getValue();
