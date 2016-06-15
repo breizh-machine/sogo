@@ -2,21 +2,22 @@
 
 namespace Scubs\CoreDomainBundle\Repository\Doctrine;
 
-use Doctrine\ORM\EntityRepository;
-
 use Scubs\CoreDomain\Core\Resource as BaseResource;
 use Scubs\CoreDomain\Core\ResourceId;
 use Scubs\CoreDomain\Core\ResourceRepository;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class OrmResourceRepository implements ResourceRepository
 {
     private $resourceClass;
     private $resourceIdClass;
+    private $registry;
     private $entityRepository;
 
-    public function __construct(EntityRepository $entityRepository, $resourceClass, $resourceIdClass)
+    public function __construct(Registry $registry, $resourceClass, $resourceIdClass)
     {
-        $this->entityRepository = $entityRepository;
+        $this->entityRepository = $registry->getRepository($resourceClass);
+        $this->registry = $registry;
         $this->resourceClass = $resourceClass;
         $this->resourceIdClass = $resourceIdClass;
     }
@@ -35,20 +36,30 @@ class OrmResourceRepository implements ResourceRepository
     public function add(BaseResource $resource)
     {
         $this->checkResourceClass($resource);
-        $this->entityRepository->getEntityManager()->persist($resource);
-        $this->entityRepository->getEntityManager()->commit();
+        $this->registry->getManager()->persist($resource);
+        $this->registry->getManager()->flush();
     }
 
     public function remove(BaseResource $resourceToRemove)
     {
         $this->checkResourceClass($resourceToRemove);
-        $this->entityRepository->getEntityManager()->remove($resourceToRemove);
-        $this->entityRepository->getEntityManager()->commit();
+        $this->registry->getManager()->remove($resourceToRemove);
+        $this->registry->getManager()->flush();
     }
 
     public function exists(BaseResource $resource)
     {
         return $this->find($resource->getId()) !== null;
+    }
+
+    public function beginTransaction()
+    {
+        $this->registry->getConnection()->beginTransaction();
+    }
+
+    public function commit()
+    {
+        $this->registry->getManager()->commit();
     }
 
     private function checkResourceClass(BaseResource $r)

@@ -6,6 +6,7 @@
     <parameters>
         <parameter key="cube_repository.in_memory.class">Scubs\CoreDomainBundle\Repository\InMemoryCubeRepository</parameter>
         <parameter key="cube_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmCubeRepository</parameter>
+        <parameter key="resource_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmResourceRepository</parameter>
     </parameters>
 
     <services>
@@ -14,15 +15,9 @@
 
         <!-- Concrete Implementations -->
         <service id="cube_repository.in_memory" public="false" class="%cube_repository.in_memory.class%" />
-
-        <service id="cube_repository.doctrine_orm" public="false" class="%cube_repository.doctrine_orm.class%">
-            <argument type="service">
-                <service id="doctrine_cube_repository" class="Doctrine\ORM\EntityRepository">
-                    <factory service="doctrine.orm.default_entity_manager" method="getRepository"/>
-                    <argument>Scubs\CoreDomainBundle\Entity\Cube</argument>
-                </service>
-            </argument>
-            <argument>Scubs\CoreDomain\Cube\Cube</argument>
+        <service id="cube_repository.doctrine_orm" public="true" class="%cube_repository.doctrine_orm.class%">
+            <argument type="service" id="doctrine" />
+            <argument>Scubs\CoreDomainBundle\Entity\Cube</argument>
             <argument>Scubs\CoreDomain\Cube\CubeId</argument>
         </service>
 

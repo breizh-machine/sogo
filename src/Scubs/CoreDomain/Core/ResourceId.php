@@ -27,7 +27,7 @@ class ResourceId {
         return Uuid::uuid4()->toString();
     }
 
-    public function toString()
+    public function __toString()
     {
         return $this->value;
     }
