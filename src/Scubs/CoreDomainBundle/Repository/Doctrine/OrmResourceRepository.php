@@ -62,6 +62,11 @@ class OrmResourceRepository implements ResourceRepository
         $this->registry->getManager()->commit();
     }
 
+    protected function getManager()
+    {
+        return $this->registry->getManager();
+    }
+
     private function checkResourceClass(BaseResource $r)
     {
         if (!($r instanceof $this->resourceClass)) {

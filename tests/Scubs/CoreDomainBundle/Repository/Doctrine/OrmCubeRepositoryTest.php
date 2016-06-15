@@ -55,4 +55,21 @@ class OrmCubeRepositoryTest extends BaseOrmRepository
         $this->assertTrue(!$this->repository->exists($cube));
         $this->repository->remove($cube);
     }
+
+    public function testGetCubesByRarity()
+    {
+        $this->init('cube_repository.doctrine_orm');
+        $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
+        $cube2 = new Cube(new CubeId(), 'test', 'thumbnail', 1, 'description');
+        $cube3 = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
+        $this->repository->add($cube);
+        $this->repository->add($cube2);
+        $this->repository->add($cube3);
+        $this->assertTrue(count($this->repository->getCubesByRarity(0)) == 2);
+        $this->assertTrue(count($this->repository->getCubesByRarity(1)) == 1);
+        $this->assertTrue(count($this->repository->getCubesByRarity(3)) == 0);
+        $this->repository->remove($cube);
+        $this->repository->remove($cube2);
+        $this->repository->remove($cube3);
+    }
 }
