@@ -12,6 +12,7 @@
         <!-- Concrete Implementations -->
         <service id="scubs.api.handler.query.cubes" class="%scubs.api.handler.query.cubes.class%">
             <argument type="service" id="cube_repository" />
+            <argument type="service" id="assets.packages" />
         </service>
     </services>
 </container>

@@ -33,6 +33,11 @@ framework:
     assets:
       base_urls: ["%assets_base_url%"]
 
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
 
 # Twig Configuration
 twig:
