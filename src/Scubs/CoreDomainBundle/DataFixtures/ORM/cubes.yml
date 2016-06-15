@@ -1,0 +1,15 @@
+Scubs\CoreDomainBundle\Entity\Cube:
+  green_grenat_cube:
+    __construct: false
+    id: 'b89012a4-d066-4237-933c-c67bc622a963'
+    texture: 'green-grenat.jpg'
+    thumbnail: 'green-grenat-preview.jpg'
+    rarity: 0
+    description: 'green_grenat_cube_name'
+  blue_stone_cube:
+    __construct: false
+    id: '8bc905c1-40f3-4df6-a9c1-bd45232eb278'
+    texture: 'blue-stone.jpg'
+    thumbnail: 'blue-stone-preview.jpg'
+    rarity: 0
+    description: 'blue_stone_cube_name'
