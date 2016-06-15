@@ -12,9 +12,8 @@
         <many-to-one field="cube" target-entity="Scubs\CoreDomainBundle\Entity\Cube">
             <cascade>
                 <cascade-persist />
-                <cascade-detach />
             </cascade>
-            <join-column name="cube_id" referenced-column-name="id"/>
+            <join-column name="cube_id" referenced-column-name="id" on-delete="SET NULL"/>
         </many-to-one>
     </entity>
 </doctrine-mapping>

@@ -17,7 +17,6 @@ class OrmRewardRepositoryTest extends BaseOrmRepository
         $reward2 = new Reward(new RewardId(), $cube);
         $this->repository->add($reward);
         $this->repository->add($reward2);
-        $this->repository->remove($reward);
         $this->assertTrue($this->repository->findAll() > 0);
     }
 }
