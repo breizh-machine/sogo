@@ -6,12 +6,13 @@
     <parameters>
         <parameter key="cube_repository.in_memory.class">Scubs\CoreDomainBundle\Repository\InMemoryCubeRepository</parameter>
         <parameter key="cube_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmCubeRepository</parameter>
-        <parameter key="resource_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmResourceRepository</parameter>
+        <parameter key="reward_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmRewardRepository</parameter>
     </parameters>
 
     <services>
         <!-- Exposed Services -->
         <service id="cube_repository" alias="cube_repository.doctrine_orm" />
+        <service id="reward_repository" alias="reward_repository.doctrine_orm" />
 
         <!-- Concrete Implementations -->
         <service id="cube_repository.in_memory" public="false" class="%cube_repository.in_memory.class%" />
@@ -19,6 +20,13 @@
             <argument type="service" id="doctrine" />
             <argument>Scubs\CoreDomainBundle\Entity\Cube</argument>
             <argument>Scubs\CoreDomain\Cube\CubeId</argument>
+        </service>
+
+
+        <service id="reward_repository.doctrine_orm" public="true" class="%reward_repository.doctrine_orm.class%">
+            <argument type="service" id="doctrine" />
+            <argument>Scubs\CoreDomainBundle\Entity\Reward</argument>
+            <argument>Scubs\CoreDomain\Reward\RewardId</argument>
         </service>
 
     </services>

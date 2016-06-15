@@ -9,9 +9,9 @@ use Scubs\CoreDomain\Game\GameLogicException;
 
 class Reward extends Resource
 {
-    private $cube;
-    private $startDate;
-    private $gameId;
+    protected $cube;
+    protected $startDate;
+    protected $gameId;
 
     public function __construct(RewardId $id, Cube $cube)
     {
