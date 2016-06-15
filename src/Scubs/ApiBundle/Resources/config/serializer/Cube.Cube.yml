@@ -7,9 +7,12 @@ Scubs\CoreDomain\Cube\Cube:
         texture:
             expose: true
             serialized_name: texture
+        thumbnail:
+            expose: true
+            serialized_name: thumbnail
         rarity:
             expose: true
             serialized_name: rarity
-        name:
+        description:
             expose: true
             serialized_name: name

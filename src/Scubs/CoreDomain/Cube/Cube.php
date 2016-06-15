@@ -6,17 +6,17 @@ use Scubs\CoreDomain\Core\Resource;
 
 class Cube extends Resource {
 
-    private $texture;
-    private $thumbnail;
-    private $rarity;
-    private $name;
+    protected $texture;
+    protected $thumbnail;
+    protected $rarity;
+    protected $description;
 
-    public function __construct(CubeId $id, $texture, $rarity, $name, $thumbnail)
+    public function __construct(CubeId $id, $texture, $thumbnail, $rarity, $description)
     {
         parent::__construct($id);
         $this->texture = $texture;
         $this->rarity  = $rarity;
-        $this->name  = $name;
+        $this->description  = $description;
         $this->thumbnail  = $thumbnail;
     }
 
@@ -39,9 +39,9 @@ class Cube extends Resource {
     /**
      * @return mixed
      */
-    public function getName()
+    public function getDescription()
     {
-        return $this->name;
+        return $this->description;
     }
 
     /**

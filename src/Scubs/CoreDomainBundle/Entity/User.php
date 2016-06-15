@@ -4,22 +4,14 @@ namespace Scubs\CoreDomainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scubs\CoreDomain\User\User as BaseUser;
+use Scubs\CoreDomain\Core\ResourceId;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="fos_user")
- */
 class User extends BaseUser
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     protected $id;
-
-    public function __construct()
+    
+    public function __construct(ResourceId $playerId, $credits = null)
     {
-        parent::__construct();
+        parent::__construct($playerId, $credits);
     }
 }

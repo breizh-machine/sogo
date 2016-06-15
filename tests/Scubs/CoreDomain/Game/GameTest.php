@@ -34,7 +34,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $game = new Game(new GameId(), $local, 20, new CubeId());
         $game->inviteVisitor($visitor);
-        $cube = new Cube(new CubeId(), 'text', 0, 'name');
+        $cube = new Cube(new CubeId(), 'text', 'text', 0, 'name');
         $reward = new Reward(new RewardId(), $cube);
         
         try {

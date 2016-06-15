@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Scubs\CoreDomainBundle\Entity\Cube" table="cube">
+        <id name="id" type="string" column="id">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="texture" type="string" length="255"/>
+        <field name="thumbnail" type="string" length="255"/>
+        <field name="description" type="string" length="255"/>
+        <field name="rarity" type="integer" />
+    </entity>
+</doctrine-mapping>

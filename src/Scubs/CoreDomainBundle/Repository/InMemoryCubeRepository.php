@@ -13,28 +13,28 @@ class InMemoryCubeRepository extends InMemoryResourceRepository  implements Cube
     {
         parent::__construct('Scubs\CoreDomain\Cube\Cube', 'Scubs\CoreDomain\Cube\CubeId');
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_BLUE', 0, 'blue_cube_name'
+            new CubeId(), 'green-grenat.jpg', 'green-grenat-preview.jpg', 0, 'green_grenat_cube_name'
         ));
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_GREEN', 0, 'green_cube_name'
+            new CubeId(), 'blue-stone.jpg', 'blue-stone-preview.jpg', 0, 'blue_stone_cube_name'
         ));
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_GREEN', 0, 'yellow_cube_name'
+            new CubeId(), 'SIMPLE_GREEN', 'SIMPLE_GREEN', 0, 'yellow_cube_name'
         ));
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_GREEN', 1, 'uncommon_cube_name'
+            new CubeId(), 'SIMPLE_GREEN', 'SIMPLE_GREEN', 1, 'uncommon_cube_name'
         ));
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_GREEN', 1, 'uncommon_cube_name2'
+            new CubeId(), 'SIMPLE_GREEN', 'SIMPLE_GREEN', 1, 'uncommon_cube_name2'
         ));
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_GREEN', 2, 'rare_cube_name1'
+            new CubeId(), 'SIMPLE_GREEN', 'SIMPLE_GREEN', 2, 'rare_cube_name1'
         ));
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_GREEN', 3, 'very_rare_cube_name2'
+            new CubeId(), 'SIMPLE_GREEN', 'SIMPLE_GREEN', 3, 'very_rare_cube_name2'
         ));
         $this->resources->add(new Cube(
-            new CubeId(), 'SIMPLE_GREEN', 4, 'uniq_cube_name'
+            new CubeId(), 'SIMPLE_GREEN', 'SIMPLE_GREEN', 4, 'uniq_cube_name'
         ));
     }
 
