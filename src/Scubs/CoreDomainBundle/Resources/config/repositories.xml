@@ -7,12 +7,16 @@
         <parameter key="cube_repository.in_memory.class">Scubs\CoreDomainBundle\Repository\InMemoryCubeRepository</parameter>
         <parameter key="cube_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmCubeRepository</parameter>
         <parameter key="reward_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmRewardRepository</parameter>
+        <parameter key="turn_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmTurnRepository</parameter>
+        <parameter key="game_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmGameRepository</parameter>
     </parameters>
 
     <services>
         <!-- Exposed Services -->
         <service id="cube_repository" alias="cube_repository.doctrine_orm" />
         <service id="reward_repository" alias="reward_repository.doctrine_orm" />
+        <service id="turn_repository" alias="turn_repository.doctrine_orm" />
+        <service id="game_repository" alias="game_repository.doctrine_orm" />
 
         <!-- Concrete Implementations -->
         <service id="cube_repository.in_memory" public="false" class="%cube_repository.in_memory.class%" />
@@ -22,12 +26,22 @@
             <argument>Scubs\CoreDomain\Cube\CubeId</argument>
         </service>
 
-
         <service id="reward_repository.doctrine_orm" public="true" class="%reward_repository.doctrine_orm.class%">
             <argument type="service" id="doctrine" />
             <argument>Scubs\CoreDomainBundle\Entity\Reward</argument>
             <argument>Scubs\CoreDomain\Reward\RewardId</argument>
         </service>
 
+        <service id="turn_repository.doctrine_orm" public="true" class="%turn_repository.doctrine_orm.class%">
+            <argument type="service" id="doctrine" />
+            <argument>Scubs\CoreDomainBundle\Entity\Turn</argument>
+            <argument>Scubs\CoreDomain\Turn\TurnId</argument>
+        </service>
+
+        <service id="game_repository.doctrine_orm" public="true" class="%game_repository.doctrine_orm.class%">
+            <argument type="service" id="doctrine" />
+            <argument>Scubs\CoreDomainBundle\Entity\Game</argument>
+            <argument>Scubs\CoreDomain\Game\GameId</argument>
+        </service>
     </services>
 </container>

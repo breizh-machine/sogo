@@ -4,16 +4,17 @@ namespace Scubs\CoreDomain\Game;
 
 use Scubs\CoreDomain\Turn\Turn;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class GameUtils
 {
-    public static function isWinningDirection(ArrayCollection $turns, $gridSize, Turn $turn, ArrayCollection $line)
+    public static function isWinningDirection(Collection $turns, $gridSize, Turn $turn, Collection $line)
     {
         $turns = self::getWinningTurnsFromLine($turns, $gridSize, $turn, $line);
         return $turns->count() === $gridSize;
     }
 
-    public static function getWinningTurnsFromLine(ArrayCollection $turns, $gridSize, Turn $turn, ArrayCollection $line)
+    public static function getWinningTurnsFromLine(Collection $turns, $gridSize, Turn $turn, Collection $line)
     {
         $winningTurns = new ArrayCollection();
         foreach ($line as $position) {
@@ -25,7 +26,7 @@ class GameUtils
         return $winningTurns;
     }
 
-    public static function getLastTurn(ArrayCollection $turns)
+    public static function getLastTurn(Collection $turns)
     {
         $maxTimeStamp = null;
         $index = 0;
@@ -55,7 +56,7 @@ class GameUtils
         return $playablePositions;
     }
 
-    public static function getTurnNeighborhood(ArrayCollection $turns, $gridSize, Turn $turn)
+    public static function getTurnNeighborhood(Collection $turns, $gridSize, Turn $turn)
     {
         $neighborhood = new ArrayCollection();
         $xStart = $turn->getX();

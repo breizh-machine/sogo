@@ -12,6 +12,7 @@ class Turn extends Resource
     protected $x;
     protected $y;
     protected $z;
+    protected $game;
 
     public function __construct(TurnId $turnId, ScubPlayer $player, $x, $y, $z)
     {

@@ -13,7 +13,7 @@
         <field name="visitorJoined" column="visitor_joined" type="boolean" />
         <field name="visitorDeclined" column="visitor_declined" type="boolean" />
 
-        <one-to-many field="turns" target-entity="Scubs\CoreDomainBundle\Entity\Turn" mapped-by="turn">
+        <one-to-many field="turns" target-entity="Scubs\CoreDomainBundle\Entity\Turn" mapped-by="game">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
@@ -23,6 +23,10 @@
         <many-to-one field="visitor" target-entity="Scubs\CoreDomainBundle\Entity\User"/>
         <many-to-one field="winner" target-entity="Scubs\CoreDomainBundle\Entity\User" />
 
+        <many-to-one field="localCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube" />
+        <many-to-one field="visitorCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube" />
+
+        <!--
         <many-to-many field="localCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube">
             <join-table name="games_local_cube">
                 <join-columns>
@@ -44,6 +48,7 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
+        -->
 
     </entity>
 </doctrine-mapping>

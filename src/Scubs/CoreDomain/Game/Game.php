@@ -77,14 +77,11 @@ class Game extends Resource
     }
 
     /**
-     * @param $player
-     * @param $x
-     * @param $y
-     * @param $z
+     * @param Turn $turn
      * @return $this
      * @throws GameLogicException
      */
-    public function play(ScubPlayer $player, $x, $y, $z)
+    public function play(Turn $turn)
     {
         //Check the game is started
         if (!$this->isGameStarted()) {
@@ -95,15 +92,15 @@ class Game extends Resource
             throw new GameLogicException(GameLogicException::$GAME_ENDED_MESS, GameLogicException::$GAME_ENDED);
         }
         //Check that the player is allowed to play
-        if (!$this->isScubPlayerTurn($player)) {
+        if (!$this->isScubPlayerTurn($turn->getPlayer())) {
             throw new GameLogicException(GameLogicException::$NOT_PLAYER_TURN_MESS, GameLogicException::$NOT_PLAYER_TURN);
         }
         
         //Check that the position can be played
-        $this->checkIsPlayablePosition($x, $y, $z);
+        $this->checkIsPlayablePosition($turn->getX(), $turn->getY(), $turn->getZ());
 
         //Create the turn
-        $this->turns->add(new Turn(new TurnId(), $player, $x, $y, $z));
+        $this->turns->add($turn);
 
         //If game is won, update winner and endDate
         $winningTurns = $this->getWinningTurns();

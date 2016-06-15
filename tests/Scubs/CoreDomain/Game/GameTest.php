@@ -9,6 +9,8 @@ use Scubs\CoreDomain\User\User as ScubPlayer;
 use Scubs\CoreDomain\Cube\Cube;
 use Scubs\CoreDomain\Cube\CubeId;
 use Scubs\CoreDomain\Core\ResourceId;
+use Scubs\CoreDomain\Turn\Turn;
+use Scubs\CoreDomain\Turn\TurnId;
 
 class GameTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,31 +71,31 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new Game(new GameId(), $local, 20, $cube);
 
         try {
-            $game->play($local, 0, 0, 0);
+            $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
         } catch (GameLogicException $e) {
             $this->assertTrue($e->getCode() === GameLogicException::$GAME_NOT_STARTED);
         }
 
         $game->inviteVisitor($visitor);
         try {
-            $game->play($visitor, 0, 0, 0);
+            $game->play(new Turn(new TurnId(), $visitor, 0, 0, 0));
         } catch (GameLogicException $e) {
             $this->assertTrue($e->getCode() === GameLogicException::$NOT_PLAYER_TURN);
         }
-        $game->play($local, 0, 0, 0);
-        $game->play($visitor, 1, 0, 0);
-        $game->play($local, 1, 1, 0);
-        $game->play($visitor, 2, 0, 0);
-        $game->play($local, 3, 0, 0);
-        $game->play($visitor, 2, 1, 0);
-        $game->play($local, 2, 2, 0);
-        $game->play($visitor, 3, 1, 0);
-        $game->play($local, 3, 2, 0);
-        $game->play($visitor, 0, 1, 0);
-        $game->play($local, 3, 3, 0);
+        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 2, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 3, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 0, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 3, 0));
 
         try {
-            $game->play($visitor, 0, 0, 3);
+            $game->play(new Turn(new TurnId(), $visitor, 0, 0, 3));
         } catch (GameLogicException $e) {
             $this->assertTrue($e->getCode() === GameLogicException::$GAME_ENDED);
         }
@@ -110,19 +112,19 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new Game(new GameId(), $local, 50, $cube);
         $game->inviteVisitor($visitor);
 
-        $game->play($local, 0, 0, 0);
-        $game->play($visitor, 1, 0, 0);
-        $game->play($local, 1, 1, 0);
-        $game->play($visitor, 2, 0, 0);
-        $game->play($local, 3, 0, 0);
-        $game->play($visitor, 2, 1, 0);
+        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 1, 0));
         $this->assertFalse($game->isGameWon());
 
-        $game->play($local, 2, 2, 0);
-        $game->play($visitor, 3, 1, 0);
-        $game->play($local, 3, 2, 0);
-        $game->play($visitor, 0, 1, 0);
-        $game->play($local, 3, 3, 0);
+        $game->play(new Turn(new TurnId(), $local, 2, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 3, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 0, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 3, 0));
         $this->assertTrue($game->isGameWon());
         $this->assertTrue($local->getCredits() === 150);
     }
@@ -138,19 +140,19 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new Game(new GameId(), $local, 20, $cube);
         $game->inviteVisitor($visitor);
 
-        $game->play($local, 0, 0, 0);
-        $game->play($visitor, 1, 0, 0);
-        $game->play($local, 1, 1, 0);
-        $game->play($visitor, 2, 0, 0);
-        $game->play($local, 3, 0, 0);
-        $game->play($visitor, 2, 1, 0);
+        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 1, 0));
         $this->assertTrue($game->getWinningTurns() === null);
 
-        $game->play($local, 2, 2, 0);
-        $game->play($visitor, 3, 1, 0);
-        $game->play($local, 3, 2, 0);
-        $game->play($visitor, 0, 1, 0);
-        $game->play($local, 3, 3, 0);
+        $game->play(new Turn(new TurnId(), $local, 2, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 3, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 0, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 3, 0));
         $this->assertFalse($game->getWinningTurns() === null);
     }
 
@@ -164,20 +166,20 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game->inviteVisitor($visitor);
 
         try {
-            $game->play($local, 0, 1, 0);
+            $game->play(new Turn(new TurnId(), $local, 0, 1, 0));
         } catch (GameLogicException $e) {
             $this->assertTrue($e->getCode() === GameLogicException::$UNPLAYABLE_POSITION);
         }
 
         try {
-            $game->play($local, 0, -1, 0);
+            $game->play(new Turn(new TurnId(), $local, 0, -1, 0));
         } catch (GameLogicException $e) {
             $this->assertTrue($e->getCode() === GameLogicException::$UNPLAYABLE_POSITION);
         }
 
-        $game->play($local, 0, 0, 0);
+        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
         try {
-            $game->play($visitor, 0, 0, 0);
+            $game->play(new Turn(new TurnId(), $visitor, 0, 0, 0));
         } catch (GameLogicException $e) {
             $this->assertTrue($e->getCode() === GameLogicException::$ALREADY_PLAYED_POSITION);
         }
@@ -204,17 +206,17 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new Game(new GameId(), $local, 20, $cube);
         $game->inviteVisitor($visitor);
         $this->assertFalse($game->isGameEnded());
-        $game->play($local, 0, 0, 0);
-        $game->play($visitor, 1, 0, 0);
-        $game->play($local, 1, 1, 0);
-        $game->play($visitor, 2, 0, 0);
-        $game->play($local, 3, 0, 0);
-        $game->play($visitor, 2, 1, 0);
-        $game->play($local, 2, 2, 0);
-        $game->play($visitor, 3, 1, 0);
-        $game->play($local, 3, 2, 0);
-        $game->play($visitor, 0, 1, 0);
-        $game->play($local, 3, 3, 0);
+        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 2, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 3, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 0, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 3, 0));
         $this->assertTrue($game->isGameEnded());
     }
 
@@ -227,7 +229,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game = new Game(new GameId(), $local, 20, $cube);
         $game->inviteVisitor($visitor);
         $this->assertTrue($game->isScubPlayerTurn($local));
-        $game->play($local, 0, 0, 0);
+        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
         $this->assertFalse($game->isScubPlayerTurn($local));
         $this->assertTrue($game->isScubPlayerTurn($visitor));
     }

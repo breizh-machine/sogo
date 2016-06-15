@@ -11,6 +11,9 @@
         <field name="x" type="float"/>
         <field name="y" type="float"/>
         <field name="z" type="float"/>
+        <many-to-one field="game" target-entity="Scubs\CoreDomainBundle\Entity\Game" inversed-by="turns">
+            <join-column name="game_id" referenced-column-name="id" on-delete="SET NULL"/>
+        </many-to-one>
         <many-to-one field="player" target-entity="Scubs\CoreDomainBundle\Entity\User">
             <join-column name="player_id" referenced-column-name="id" on-delete="SET NULL"/>
         </many-to-one>
