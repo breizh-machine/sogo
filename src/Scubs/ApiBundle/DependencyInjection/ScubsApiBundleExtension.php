@@ -16,5 +16,6 @@ class ScubsApiBundleExtension extends Extension
             new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('handler/query.xml');
+        $loader->load('viewRenderer.xml');
     }
 }
