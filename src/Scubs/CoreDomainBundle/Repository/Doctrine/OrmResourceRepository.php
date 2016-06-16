@@ -28,7 +28,7 @@ class OrmResourceRepository implements ResourceRepository
         return $this->entityRepository->find($resourceId->getValue());
     }
 
-    public function findAll()
+    public function findAll($number = null, $offset = null)
     {
         return $this->entityRepository->findAll();
     }
