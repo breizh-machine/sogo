@@ -22,33 +22,7 @@
         <many-to-one field="local" target-entity="Scubs\CoreDomainBundle\Entity\User" />
         <many-to-one field="visitor" target-entity="Scubs\CoreDomainBundle\Entity\User"/>
         <many-to-one field="winner" target-entity="Scubs\CoreDomainBundle\Entity\User" />
-
-        <many-to-one field="localCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube" />
         <many-to-one field="visitorCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube" />
-
-        <!--
-        <many-to-many field="localCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube">
-            <join-table name="games_local_cube">
-                <join-columns>
-                    <join-column name="game_id" referenced-column-name="id" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="cube_id" referenced-column-name="id" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-
-        <many-to-many field="visitorCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube">
-            <join-table name="games_visitor_cube">
-                <join-columns>
-                    <join-column name="game_id" referenced-column-name="id" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="cube_id" referenced-column-name="id" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-        -->
-
+        <many-to-one field="localCube" target-entity="Scubs\CoreDomainBundle\Entity\Cube" />
     </entity>
 </doctrine-mapping>

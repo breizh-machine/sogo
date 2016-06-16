@@ -74,10 +74,11 @@ class OrmGameRepositoryTest extends BaseOrmRepository
             $this->gameRepository->add($game);
         }
 
+        $this->assertTrue($game->getVisitorCube()->equals($visitorCube));
+
         $this->gameRepository->remove($game);
         $this->cubeRepository->remove($localCube);
         $this->cubeRepository->remove($visitorCube);
-        //$this->gameRepository->remove($game);
         $this->userManager->deleteUser($visitor);
         $this->userManager->deleteUser($local);
     }
