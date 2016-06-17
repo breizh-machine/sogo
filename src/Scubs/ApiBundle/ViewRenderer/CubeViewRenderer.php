@@ -4,6 +4,7 @@ namespace Scubs\ApiBundle\ViewRenderer;
 
 use Symfony\Component\Asset\Packages;
 use Scubs\ApiBundle\View\CubeView;
+use Scubs\CoreDomain\Cube\Cube;
 
 class CubeViewRenderer implements ViewRenderer
 {
@@ -16,7 +17,7 @@ class CubeViewRenderer implements ViewRenderer
         $this->cubeImagesBasePath = 'bundles/scubscoredomain/cube/images';
     }
 
-    public function renderView($data)
+    public function renderView(Cube $data)
     {
         $cubeView = new CubeView();
         $cubeView->id = (string) $data->getId();

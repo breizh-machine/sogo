@@ -186,6 +186,11 @@ class Game extends Resource
         }
     }
 
+    public function getLastTurn()
+    {
+        return GameUtils::getLastTurn($this->turns);
+    }
+
     
     /**
      * @return mixed
