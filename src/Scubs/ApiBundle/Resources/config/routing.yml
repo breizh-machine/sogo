@@ -1,18 +1,18 @@
 scubs_api.cube_all:
     path:  /cubes.{_format}
-    defaults: { _controller: ScubsApiBundle:Cube:all, _format: json }
+    defaults: { _controller: ScubsApiBundle:Cube:all, _format: ~ }
     requirements:
         _method: GET
 
 scubs_api.game_all:
     path:  /user/{userId}/games.{_format}
-    defaults: { _controller: ScubsApiBundle:Game:all, _format: json }
+    defaults: { _controller: ScubsApiBundle:Game:all, _format: ~ }
     requirements:
         _method: GET
 
 scubs_api.game:
     path:  /user/{userId}/games/{gameId}.{_format}
-    defaults: { _controller: ScubsApiBundle:Game:game, _format: json }
+    defaults: { _controller: ScubsApiBundle:Game:game, _format: ~ }
     requirements:
         _method: GET
 

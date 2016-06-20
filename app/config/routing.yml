@@ -7,5 +7,4 @@ fos_user:
 
 scubs_api:
     resource: "@ScubsApiBundle/Resources/config/routing.yml"
-    defaults: {_format: json}
     prefix:   /api/
