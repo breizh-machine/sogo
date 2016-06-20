@@ -2,10 +2,13 @@
 
 namespace Scubs\ApiBundle\Handler\Query;
 
+use Scubs\ApiBundle\Query\GamesQuery;
 use Scubs\ApiBundle\Query\Query;
 use Scubs\ApiBundle\ViewRenderer\GameViewRenderer;
 use Scubs\CoreDomain\Game\GameRepository;
 use Scubs\CoreDomainBundle\Security\Core\User\UserProvider;
+use Scubs\CoreDomain\Game\GameId;
+use Scubs\ApiBundle\Query\GameQuery;
 
 class GamesQueryHandler implements QueryHandler
 {
@@ -26,9 +29,17 @@ class GamesQueryHandler implements QueryHandler
 
         //TODO - Handle pagination
         $authenticatedUser = $this->userProvider->loadUserById($query->userId);
-        $games = $this->gameRepository->findAllByUserIdOrderedByDate($query->userId);
 
-        return $this->gameViewRenderer->renderView($games, $authenticatedUser);
+        if ($query instanceof GamesQuery) {
+            $games = $this->gameRepository->findAllByUserIdOrderedByDate($query->userId);
+            return $this->gameViewRenderer->renderView($games, $authenticatedUser);
+        } else if ($query instanceof GameQuery) {
+            $game = $this->gameRepository->find(new GameId($query->gameId));
+            $view = $this->gameViewRenderer->renderView($game, $authenticatedUser);
+            return $view;
+        } else {
+            //TODO
+        }
     }
     
     public function validate(Query $query)

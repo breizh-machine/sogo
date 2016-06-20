@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="scubs.api.handler.command.game" class="Scubs\ApiBundle\Handler\Command\CreateGameCommandHandler">
+            <argument type="service" id="game_repository" />
+            <argument type="service" id="cube_repository" />
+            <argument type="service" id="scubs.security.user_provider.username" />
+            <argument type="service" id="router" />
+        </service>
+    </services>
+</container>

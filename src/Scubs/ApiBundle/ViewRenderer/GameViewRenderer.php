@@ -20,7 +20,7 @@ class GameViewRenderer implements ViewRenderer
                 $renderedData->add($this->renderGameListItemView($game, $authenticatedPlayer));
             }
         } else {
-            $renderedData = $this->renderGameView($gameData, $authenticatedPlayer);
+            $renderedData = $this->renderGameListItemView($gameData, $authenticatedPlayer);
         }
         return $renderedData;
     }
@@ -30,8 +30,9 @@ class GameViewRenderer implements ViewRenderer
         $view = new GameListItemView();
         $opponent = $game->getLocal()->equals($authenticatedPlayer) ? $game->getVisitor() : $game->getLocal();
 
-        $view->opponentProfilePicture = $opponent->getProfilePicture();
-        $view->opponentName = $opponent->getUsername();
+        $view->id = $game->getId();
+        $view->opponentProfilePicture = $opponent !== null ? $opponent->getProfilePicture() : '';
+        $view->opponentName = $opponent !== null ? $opponent->getUsername() : '';
         $view->hasVisitorJoined = $game->isVisitorJoined();
         $view->hasVisitorDeclined = $game->isVisitorDeclined();
         $view->won = $game->getWinner() !== null && $game->getWinner()->equals($authenticatedPlayer);
@@ -39,8 +40,8 @@ class GameViewRenderer implements ViewRenderer
         $view->bet = $game->getBet();
         $view->cubeWonThumbnail = $view->won ? $game->getReward()->getCube()->getThumbnail() : null;
         $view->nbTurnsPlayed = count($game->getTurns());
-        $view->lastTurnPlayedDate = $game->getLastTurn()->getStartDate()->format('d m Y');
-        $view->gameStartDate = $game->getLastTurn()->getStartDate()->format('d m Y');
+        $view->lastTurnPlayedDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format('d m Y') : '';
+        $view->gameStartDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format('d m Y') : '';
 
         return $view;
     }

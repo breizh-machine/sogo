@@ -4,6 +4,7 @@ namespace Scubs\ApiBundle\View;
 
 class GameListItemView
 {
+    public $id;
     public $opponentProfilePicture;
     public $opponentName;
     public $hasVisitorJoined;
