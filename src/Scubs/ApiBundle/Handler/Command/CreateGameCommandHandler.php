@@ -47,5 +47,15 @@ class CreateGameCommandHandler implements MessageBus
     private function validate($message)
     {
         //TODO
+        //Check that the user has the cube he wants to play with
+
+        //Check that the user has enough credits to bet
+
+        //Check that the local and the guest have'nt already a game running
+
+        //Check that the guest exists
+
+        //Check that the guest is different than the local
+
     }
 }
