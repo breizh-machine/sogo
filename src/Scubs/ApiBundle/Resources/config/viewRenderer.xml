@@ -12,5 +12,11 @@
         <service id="scubs.api.view_renderer.cube" class="%scubs.api.view_renderer.cube.class%">
             <argument type="service" id="assets.packages" />
         </service>
+
+
+        <service id="scubs.api.view_renderer.game" class="%scubs.api.view_renderer.cube.class%">
+            <argument type="service" id="assets.packages" />
+        </service>
+
     </services>
 </container>

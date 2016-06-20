@@ -21,7 +21,7 @@
         <!-- Concrete Implementations -->
         <service id="cube_repository.in_memory" public="false" class="%cube_repository.in_memory.class%" />
         <service id="cube_repository.doctrine_orm" public="true" class="%cube_repository.doctrine_orm.class%">
-            <argument type="service" id="doctrine" />
+            <argument type="service" id="fos_user.user_provider.username" />
             <argument>Scubs\CoreDomainBundle\Entity\Cube</argument>
             <argument>Scubs\CoreDomain\Cube\CubeId</argument>
         </service>

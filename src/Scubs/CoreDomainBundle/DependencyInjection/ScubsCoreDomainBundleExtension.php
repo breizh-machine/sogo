@@ -16,5 +16,6 @@ class ScubsCoreDomainBundleExtension extends Extension
             new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('repositories.xml');
+        $loader->load('security.xml');
     }
 }

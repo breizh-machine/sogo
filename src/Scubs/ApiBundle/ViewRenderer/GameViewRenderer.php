@@ -10,6 +10,9 @@ use Scubs\CoreDomain\Player\ScubPlayer;
 
 class GameViewRenderer implements ViewRenderer
 {
+    
+    
+    
     public function renderView($gameData, ScubPlayer $player)
     {
         $renderedData = null;
