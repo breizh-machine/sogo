@@ -12,7 +12,7 @@ class OrmGameRepository extends OrmResourceRepository implements GameRepository
         SELECT g
         FROM ScubsCoreDomainBundle:Game g
         WHERE g.local = :user_id OR g.visitor = :user_id
-        ORDER BY g.start_date'
+        ORDER BY g.startDate'
         )->setParameter('user_id', $userId);
 
         return $query->getResult();
