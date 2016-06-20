@@ -117,10 +117,11 @@ class OrmGameRepositoryTest extends BaseOrmRepository
             $game = new Game(new GameId('agame'), $local, 25, $localCube);
             $game->inviteVisitor($visitor);
             $game->assignVisitorCube($visitorCube);
+            $this->gameRepository->add($game);
             $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
             $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
             $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
-            $this->gameRepository->add($game);
+            $this->gameRepository->update($game);
         }
 
         $thirdPlayer = new ScubPlayer(new ResourceId('third'));

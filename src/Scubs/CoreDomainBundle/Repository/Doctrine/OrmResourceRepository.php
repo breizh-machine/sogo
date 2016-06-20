@@ -40,6 +40,11 @@ class OrmResourceRepository implements ResourceRepository
         $this->registry->getManager()->flush();
     }
 
+    public function update(BaseResource $resource)
+    {
+        $this->add($resource);
+    }
+
     public function remove(BaseResource $resourceToRemove)
     {
         $this->checkResourceClass($resourceToRemove);

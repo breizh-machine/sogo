@@ -32,7 +32,6 @@ class OrmCubeRepositoryTest extends BaseOrmRepository
 
     public function testFind()
     {
-        $this->init('cube_repository.doctrine_orm');
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
         $this->cubeRepository->add($cube);
         $cubeRetrieved = $this->cubeRepository->find($cube->getId());
@@ -42,7 +41,6 @@ class OrmCubeRepositoryTest extends BaseOrmRepository
 
     public function testFindAll()
     {
-        $this->init('cube_repository.doctrine_orm');
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
         $cube2 = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
         $countAll = count($this->cubeRepository->findAll());
@@ -56,11 +54,21 @@ class OrmCubeRepositoryTest extends BaseOrmRepository
 
     public function testRemove()
     {
-        $this->init('cube_repository.doctrine_orm');
         $cube = new Cube(new CubeId(), 'test', 'thumbnail', 0, 'description');
         $this->cubeRepository->add($cube);
         $this->cubeRepository->remove($cube);
         $this->assertTrue(!$this->cubeRepository->exists($cube));
+        $this->cubeRepository->remove($cube);
+    }
+
+    public function testUpdate()
+    {
+        $cube = new Cube(new CubeId('cube'), 'test', 'thumbnail', 0, 'description');
+        $this->cubeRepository->add($cube);
+        $cube = $this->cubeRepository->find(new CubeId('cube'));
+        $this->cubeRepository->update($cube);
+        $allCubes = $this->cubeRepository->findAll();
+        $this->assertTrue(count($allCubes) == 1);
         $this->cubeRepository->remove($cube);
     }
 
