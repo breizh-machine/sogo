@@ -24,6 +24,7 @@ class GamesQueryHandler implements QueryHandler
     {
         $this->validate($query);
 
+        //TODO - Handle pagination
         $authenticatedUser = $this->userProvider->loadUserById($query->userId);
         $games = $this->gameRepository->findAllByUserIdOrderedByDate($query->userId);
 

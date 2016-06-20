@@ -12,9 +12,12 @@ class User extends BaseUser implements ScubPlayer
     protected $credits;
     public static $INITIAL_CREDITS = 100;
 
-    public function __construct(ResourceId $playerId, $credits = null)
+    public function __construct(ResourceId $playerId = null, $credits = null)
     {
         parent::__construct();
+        if ($playerId == null) {
+            $playerId = new ResourceId();
+        }
         $this->id = $playerId->getValue();
         $this->credits = $credits ? $credits : self::$INITIAL_CREDITS;
     }

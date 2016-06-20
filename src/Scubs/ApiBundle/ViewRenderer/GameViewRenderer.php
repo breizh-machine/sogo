@@ -10,19 +10,17 @@ use Scubs\CoreDomain\Player\ScubPlayer;
 
 class GameViewRenderer implements ViewRenderer
 {
-    
-    
-    
-    public function renderView($gameData, ScubPlayer $player)
+
+    public function renderView($gameData, ScubPlayer $authenticatedPlayer)
     {
         $renderedData = null;
         if ($gameData instanceof Collection || is_array($gameData)) {
             $renderedData = new ArrayCollection();
             foreach ($gameData as $game) {
-                $renderedData->add($this->renderGameListItemView($game, $player));
+                $renderedData->add($this->renderGameListItemView($game, $authenticatedPlayer));
             }
         } else {
-            $renderedData = $this->renderGameView($gameData, $player);
+            $renderedData = $this->renderGameView($gameData, $authenticatedPlayer);
         }
         return $renderedData;
     }

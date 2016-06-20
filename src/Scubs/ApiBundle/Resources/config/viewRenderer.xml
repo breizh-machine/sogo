@@ -13,10 +13,6 @@
             <argument type="service" id="assets.packages" />
         </service>
 
-
-        <service id="scubs.api.view_renderer.game" class="%scubs.api.view_renderer.cube.class%">
-            <argument type="service" id="assets.packages" />
-        </service>
-
+        <service id="scubs.api.view_renderer.game" class="Scubs\ApiBundle\ViewRenderer\GameViewRenderer" />
     </services>
 </container>

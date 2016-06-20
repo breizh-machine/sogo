@@ -10,7 +10,7 @@ class User extends BaseUser
 {
     protected $id;
     
-    public function __construct(ResourceId $playerId, $credits = null)
+    public function __construct(ResourceId $playerId = null, $credits = null)
     {
         parent::__construct($playerId, $credits);
     }

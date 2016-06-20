@@ -2,7 +2,9 @@
 
 namespace Scubs\ApiBundle\Query;
 
-class GamesQuery extends Query
+use Scubs\ApiBundle\Query\Query as BaseQuery;
+
+class GamesQuery extends BaseQuery
 {
     public $userId;
     public $offset;
