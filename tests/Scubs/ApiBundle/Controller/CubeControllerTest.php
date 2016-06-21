@@ -10,7 +10,6 @@ class CubeControllerTest extends BaseRestTestController
         $router = $this->getRouter();
 
         $route = $router->generate('scubs_api.cube_all', ['_format' => 'json']);
-        var_dump($route);
         $client->request('GET', $route, ['ACCEPT' => 'application/json']);
         $response = $client->getResponse();
         $this->assertJsonResponse($response, 200);
