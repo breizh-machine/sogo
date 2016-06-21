@@ -51,7 +51,6 @@ class CreateGameCommandHandler implements MessageBus
     private function validate($message)
     {
         $local = $this->userProvider->loadUserById($message->local);
-
         //Check that the local is defined
         if ($local === null) {
             throw new GameLogicException(GameLogicException::$NO_LOCAL_MESS, GameLogicException::$NO_LOCAL);
