@@ -12,4 +12,17 @@ use Scubs\CoreDomain\Reward\RewardRepository;
 
 class OrmRewardRepository extends OrmResourceRepository implements RewardRepository
 {
+    public function findRewardByCubeAndUser($userId, $cubeId)
+    {
+        $query = $this->getManager()->createQuery('
+        SELECT r
+        FROM ScubsCoreDomainBundle:Reward r
+        JOIN r.game g
+        WHERE r.cube = :cube_id AND g.winner = :user_id'
+        )
+            ->setParameter('cube_id', $cubeId)
+            ->setParameter('user_id', $userId);
+
+        return $query->getResult();
+    }
 }
