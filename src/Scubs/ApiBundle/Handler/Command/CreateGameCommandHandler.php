@@ -56,15 +56,20 @@ class CreateGameCommandHandler implements MessageBus
         if ($local === null) {
             throw new GameLogicException(GameLogicException::$NO_LOCAL_MESS, GameLogicException::$NO_LOCAL);
         }
-        
-        //Check that the user has the cube he wants to play with
-        if (count($this->rewardRepository->findRewardByCubeAndUser($message->local, $message->localCubeId)) < 1) {
-            throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);
+
+        //Check that bet is positive
+        if ($message->bet <= 0) {
+            throw new GameLogicException(GameLogicException::$BET_IS_NULL_OR_NEGATIVE_MESS, GameLogicException::$BET_IS_NULL_OR_NEGATIVE);
         }
 
         //Check that the user has enough credits to bet
         if ($local->getCredits() < $message->bet) {
             throw new GameLogicException(GameLogicException::$INSUFFICIENT_CREDITS_TO_BET_MESS, GameLogicException::$INSUFFICIENT_CREDITS_TO_BET);
+        }
+        
+        //Check that the user has the cube he wants to play with
+        if (count($this->rewardRepository->findRewardByCubeAndUser($message->local, $message->localCubeId)) < 1) {
+            throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);
         }
 
         //Check that the guest is different than the local

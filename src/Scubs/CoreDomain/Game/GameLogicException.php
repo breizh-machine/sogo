@@ -35,6 +35,10 @@ class GameLogicException extends \Exception
     public static $LOCAL_AND_VISITOR_ALREADY_PLAYING = 8014;
     public static $LOCAL_AND_VISITOR_ALREADY_PLAYING_MESS = 'Local and visitor cannot have more than one game running';
     public static $VISITOR_NOT_FOUND = 8015;
-    public static $VISITOR_NOT_FOUND_MESS = 'Canot find visitor';
+    public static $VISITOR_NOT_FOUND_MESS = 'Cannot find visitor';
+    public static $BET_IS_NULL_OR_NEGATIVE = 8016;
+    public static $BET_IS_NULL_OR_NEGATIVE_MESS = 'Bet must be superior to zero';
+
+
 
 }

@@ -133,7 +133,6 @@ class OrmGameRepositoryTest extends BaseOrmRepository
         $this->userManager->deleteUser($visitor);
         $this->userManager->deleteUser($local);
         $this->userManager->deleteUser($thirdPlayer);
-
     }
 
     public function testCrud()
