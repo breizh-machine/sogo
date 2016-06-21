@@ -28,5 +28,13 @@ class GameLogicException extends \Exception
     public static $INSUFFICIENT_CREDITS_TO_BET_MESS = 'Player does not have enough credit to bet';
     public static $SAME_CUBES_IN_GAME = 8011;
     public static $SAME_CUBES_IN_GAME_MESS = 'Visitor and local must have different cubes in game';
+    public static $NO_LOCAL = 8012;
+    public static $NO_LOCAL_MESS = 'No local player defined';
+    public static $LOCAL_CUBE_NOT_OWNED = 8013;
+    public static $LOCAL_CUBE_NOT_OWNED_MESS = 'Local does not have the cube he wants to play with';
+    public static $LOCAL_AND_VISITOR_ALREADY_PLAYING = 8014;
+    public static $LOCAL_AND_VISITOR_ALREADY_PLAYING_MESS = 'Local and visitor cannot have more than one game running';
+    public static $VISITOR_NOT_FOUND = 8015;
+    public static $VISITOR_NOT_FOUND_MESS = 'Canot find visitor';
 
 }

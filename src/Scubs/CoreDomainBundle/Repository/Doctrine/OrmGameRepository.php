@@ -17,4 +17,18 @@ class OrmGameRepository extends OrmResourceRepository implements GameRepository
 
         return $query->getResult();
     }
+
+
+    public function findAllEndedByPlayerCouple($player1, $player2)
+    {
+        $query = $this->getManager()->createQuery('
+        SELECT g
+        FROM ScubsCoreDomainBundle:Game g
+        WHERE (g.winner = :po_id OR g.winner = :pt_id) AND ((g.local = :po_id AND g.visitor = :pt_id) OR (g.local = :pt_id AND g.visitor = :po_id))'
+        )
+            ->setParameter('po_id', $player1)
+            ->setParameter('pt_id', $player2);
+
+        return $query->getResult();
+    }
 }

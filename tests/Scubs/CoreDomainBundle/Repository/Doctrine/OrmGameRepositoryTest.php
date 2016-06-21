@@ -78,6 +78,64 @@ class OrmGameRepositoryTest extends BaseOrmRepository
         return $visitorCube;
     }
 
+    private function getGame($gameId, $local, $visitor, $localCube, $visitorCube, $bet, $won = true)
+    {
+        $game = new Game(new GameId($gameId), $local, $bet, $localCube);
+        $game->inviteVisitor($visitor);
+        $game->assignVisitorCube($visitorCube);
+        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 0, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 0, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 2, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 2, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 3, 1, 0));
+        $game->play(new Turn(new TurnId(), $local, 3, 2, 0));
+        $game->play(new Turn(new TurnId(), $visitor, 0, 1, 0));
+        if ($won) {
+            $game->play(new Turn(new TurnId(), $local, 3, 3, 0));
+        }
+        $this->gameRepository->add($game);
+        return $game;
+    }
+
+    public function testFindAllEndedByPlayerCouple()
+    {
+        $local = $this->setLocal();
+        $visitor = $this->setVisitor();
+        $localCube = $this->setLocalCube();
+        $visitorCube = $this->setVisitorCube();
+        $thirdPlayer = new ScubPlayer(new ResourceId('third'));
+        $thirdPlayer->setPlainPassword('third');
+        $thirdPlayer->setEmail('third@gmail.com');
+        $thirdPlayer->setUsername('third');
+        $thirdPlayer->setEnabled(true);
+        $this->userManager->updateUser($thirdPlayer);
+
+        $game = $this->getGame('agame', $local, $visitor, $localCube, $visitorCube, 25);
+        $game2 = $this->getGame('agame2', $thirdPlayer, $visitor, $localCube, $visitorCube, 25);
+        $game3 = $this->getGame('agame3', $thirdPlayer, $visitor, $localCube, $visitorCube, 25);
+        $game4 = $this->getGame('agame4', $thirdPlayer, $visitor, $localCube, $visitorCube, 25, false);
+
+        $this->assertTrue(count($this->gameRepository->findAllEndedByPlayerCouple((string) $local->getId(), (string) $visitor->getId())) == 1);
+        $this->assertTrue(count($this->gameRepository->findAllEndedByPlayerCouple((string) $visitor->getId(), (string) $local->getId())) == 1);
+        $this->assertTrue(count($this->gameRepository->findAllEndedByPlayerCouple((string) $local->getId(), (string) $thirdPlayer->getId())) == 0);
+        $this->assertTrue(count($this->gameRepository->findAllEndedByPlayerCouple((string) $thirdPlayer->getId(), (string) $visitor->getId())) == 2);
+        $this->assertTrue(count($this->gameRepository->findAllEndedByPlayerCouple((string) $visitor->getId(), (string) $thirdPlayer->getId())) == 2);
+
+        $this->gameRepository->remove($game);
+        $this->gameRepository->remove($game2);
+        $this->gameRepository->remove($game3);
+        $this->gameRepository->remove($game4);
+        $this->cubeRepository->remove($localCube);
+        $this->cubeRepository->remove($visitorCube);
+        $this->userManager->deleteUser($visitor);
+        $this->userManager->deleteUser($local);
+        $this->userManager->deleteUser($thirdPlayer);
+
+    }
+
     public function testCrud()
     {
         $local = $this->setLocal();

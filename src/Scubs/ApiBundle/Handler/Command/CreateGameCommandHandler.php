@@ -3,6 +3,8 @@
 namespace Scubs\ApiBundle\Handler\Command;
 
 use Scubs\CoreDomain\Cube\CubeRepository;
+use Scubs\CoreDomain\Game\GameLogicException;
+use Scubs\CoreDomain\Reward\RewardRepository;
 use Scubs\CoreDomainBundle\Entity\Game;
 use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Game\GameRepository;
@@ -17,12 +19,14 @@ class CreateGameCommandHandler implements MessageBus
     private $cubeRepository;
     private $userProvider;
     private $router;
+    private $rewardRepository;
     
-    public function __construct(GameRepository $gameRepository, CubeRepository $cubeRepository, UserProvider $userProvider, Router $router)
+    public function __construct(GameRepository $gameRepository, CubeRepository $cubeRepository, UserProvider $userProvider, Router $router, RewardRepository $rewardRepository)
     {
         $this->gameRepository = $gameRepository;
         $this->cubeRepository = $cubeRepository;
         $this->userProvider = $userProvider;
+        $this->rewardRepository = $rewardRepository;
         $this->router = $router;
     }
 
@@ -46,16 +50,36 @@ class CreateGameCommandHandler implements MessageBus
 
     private function validate($message)
     {
-        //TODO
+        $local = $this->userProvider->loadUserById($message->local);
+
+        //Check that the local is defined
+        if ($local === null) {
+            throw new GameLogicException(GameLogicException::$NO_LOCAL_MESS, GameLogicException::$NO_LOCAL);
+        }
+        
         //Check that the user has the cube he wants to play with
+        if (count($this->rewardRepository->findRewardByCubeAndUser($message->local, $message->localCubeId)) < 1) {
+            throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);
+        }
 
         //Check that the user has enough credits to bet
-
-        //Check that the local and the guest have'nt already a game running
-
-        //Check that the guest exists
+        if ($local->getCredits() < $message->bet) {
+            throw new GameLogicException(GameLogicException::$INSUFFICIENT_CREDITS_TO_BET_MESS, GameLogicException::$INSUFFICIENT_CREDITS_TO_BET);
+        }
 
         //Check that the guest is different than the local
+        if ($message->guest && $message->guest == $message->local) {
+            throw new GameLogicException(GameLogicException::$SAME_VISITOR_AND_LOCAL_MESS, GameLogicException::$SAME_VISITOR_AND_LOCAL);
+        }
 
+        //Check that the local and the guest have'nt already a game running
+        if ($message->guest && count($this->gameRepository->findAllEndedByPlayerCouple($message->local, $message->guest)) > 0 ) {
+            throw new GameLogicException(GameLogicException::$LOCAL_AND_VISITOR_ALREADY_PLAYING_MESS, GameLogicException::$LOCAL_AND_VISITOR_ALREADY_PLAYING);
+        }
+
+        //Check that the guest exists
+        if ($message->guest && $this->userProvider->loadUserById($message->guest) == null) {
+            throw new GameLogicException(GameLogicException::$VISITOR_NOT_FOUND_MESS, GameLogicException::$VISITOR_NOT_FOUND);
+        }
     }
 }

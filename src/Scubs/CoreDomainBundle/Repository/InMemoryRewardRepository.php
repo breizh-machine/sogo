@@ -25,4 +25,8 @@ class InMemoryRewardRepository extends InMemoryResourceRepository implements Rew
             new RewardId('62A0CEB4-0403-4AA6-A6CD-1EE808AD4D23'), $this->cubes[1], new \DateTime()
         ));
     }
+
+    public function findRewardByCubeAndUser($userId, $cubeId) {
+        return [];
+    }
 }
