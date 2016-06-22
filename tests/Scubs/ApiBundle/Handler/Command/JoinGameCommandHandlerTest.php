@@ -8,7 +8,6 @@ use Scubs\ApiBundle\Command\JoinGameCommand;
 
 class JoinGameCommandHandlerTest extends BaseOrmRepository
 {
-
     protected $handler;
 
     public function setUp()
@@ -34,6 +33,32 @@ class JoinGameCommandHandlerTest extends BaseOrmRepository
 
         $this->assertTrue($game->isGameStarted());
 
+        $this->gameRepository->remove($game);
+        $this->cubeRepository->remove($localCube);
+        $this->cubeRepository->remove($visitorCube);
+        $this->userManager->deleteUser($visitor);
+        $this->userManager->deleteUser($local);
+    }
+
+    public function testJoinAfterEndedGame()
+    {
+        $command = new JoinGameCommand();
+        $visitor = $this->setVisitor();
+        $local = $this->setLocal();
+        $visitorCube = $this->setVisitorCube();
+        $localCube = $this->setLocalCube();
+        $game = $this->getNotJoinedGame('id', $local, $visitor, $localCube, 25);
+        $gameWon = $this->getGame('won', $local, $visitor, $localCube, $visitorCube, 25);
+
+        $command->gameId = (string) $game->getId();
+        $command->visitorId = (string) $visitor->getId();
+        $command->visitorCubeId = (string) $visitorCube->getId();
+
+        $this->handler->handle($command);
+
+        $this->assertTrue($game->isGameStarted());
+
+        $this->gameRepository->remove($gameWon);
         $this->gameRepository->remove($game);
         $this->cubeRepository->remove($localCube);
         $this->cubeRepository->remove($visitorCube);
