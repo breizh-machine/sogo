@@ -39,7 +39,8 @@ class CreateGameCommandHandler implements MessageBus
         $localCube = $this->cubeRepository->find(new CubeId($message->localCubeId));
         $game = new Game(new GameId(), $local, $message->bet, $localCube);
         if ($message->guest) {
-            $game->inviteVisitor($message->guest);
+            $guest = $this->userProvider->loadUserById($message->guest);
+            $game->inviteVisitor($guest);
         }
         $this->gameRepository->add($game);
         $message->response->headers->set('Location', $this->router->generate('scubs_api.game', [
@@ -51,6 +52,8 @@ class CreateGameCommandHandler implements MessageBus
     private function validate($message)
     {
         $local = $this->userProvider->loadUserById($message->local);
+        $localCube = $this->cubeRepository->find(new CubeId($message->localCubeId));
+
         //Check that the local is defined
         if ($local === null) {
             throw new GameLogicException(GameLogicException::$NO_LOCAL_MESS, GameLogicException::$NO_LOCAL);
@@ -67,7 +70,7 @@ class CreateGameCommandHandler implements MessageBus
         }
         
         //Check that the user has the cube he wants to play with
-        if (count($this->rewardRepository->findRewardByCubeAndUser($message->local, $message->localCubeId)) < 1) {
+        if (!$localCube->isNative() && count($this->rewardRepository->findRewardByCubeAndUser($message->local, $message->localCubeId)) < 1) {
             throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);
         }
 

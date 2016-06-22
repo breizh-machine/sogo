@@ -10,14 +10,24 @@ class Cube extends Resource {
     protected $thumbnail;
     protected $rarity;
     protected $description;
+    protected $native;
 
-    public function __construct(CubeId $id, $texture, $thumbnail, $rarity, $description)
+    public function __construct(CubeId $id, $texture, $thumbnail, $rarity, $description, $native = false)
     {
         parent::__construct($id);
         $this->texture = $texture;
         $this->rarity  = $rarity;
         $this->description  = $description;
         $this->thumbnail  = $thumbnail;
+        $this->native = (Boolean) $native;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isNative()
+    {
+        return (Boolean) $this->native;
     }
 
     /**

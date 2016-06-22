@@ -11,5 +11,6 @@
         <field name="thumbnail" type="string" length="255"/>
         <field name="description" type="string" length="255"/>
         <field name="rarity" type="integer" />
+        <field name="native" type="boolean" />
     </entity>
 </doctrine-mapping>

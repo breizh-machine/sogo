@@ -61,24 +61,21 @@ class BaseOrmRepository extends WebTestCase
         return $visitor;
     }
 
+    protected function setCube($id, $texture, $thumbnail, $rarity, $description, $native)
+    {
+        $cube = new Cube(new CubeId($id), $texture, $thumbnail, $rarity, $description, $native);
+        $this->cubeRepository->add($cube);
+        return $cube;
+    }
+
     protected function setLocalCube()
     {
-        $localCube = $this->cubeRepository->find(new CubeId('cube1'));
-        if (!$localCube) {
-            $localCube = new Cube(new CubeId('cube1'), 'test', 'test', 1, 'test');
-            $this->cubeRepository->add($localCube);
-        }
-        return $localCube;
+        return $this->setCube('local', 'test', 0, 'test', 'test',  true);
     }
 
     protected function setVisitorCube()
     {
-        $visitorCube = $this->cubeRepository->find(new CubeId('cube2'));
-        if (!$visitorCube) {
-            $visitorCube = new Cube(new CubeId('cube2'), 'test', 'test', 1, 'test');
-            $this->cubeRepository->add($visitorCube);
-        }
-        return $visitorCube;
+        return $this->setCube('visitor', 'test', 0, 'test', 'test',  true);
     }
 
     protected function getGame($gameId, $local, $visitor, $localCube, $visitorCube, $bet, $won = true)
