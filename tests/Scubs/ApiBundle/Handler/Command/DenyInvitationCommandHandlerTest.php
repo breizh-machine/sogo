@@ -2,7 +2,6 @@
 
 namespace Tests\Scubs\ApiBundle\Handler\Command;
 
-use Scubs\CoreDomain\Game\Game;
 use Scubs\CoreDomain\Game\GameLogicException;
 use Tests\Scubs\CoreDomainBundle\Repository\Doctrine\BaseOrmRepository;
 use Scubs\ApiBundle\Command\DenyInvitationCommand;
