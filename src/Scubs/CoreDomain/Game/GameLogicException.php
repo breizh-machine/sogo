@@ -38,6 +38,8 @@ class GameLogicException extends \Exception
     public static $VISITOR_NOT_FOUND_MESS = 'Cannot find visitor';
     public static $BET_IS_NULL_OR_NEGATIVE = 8016;
     public static $BET_IS_NULL_OR_NEGATIVE_MESS = 'Bet must be superior to zero';
+    public static $NO_VISITOR_FOUND = 8017;
+    public static $NO_VISITOR_FOUND_MESS = 'Visitor does not exist';
 
 
 

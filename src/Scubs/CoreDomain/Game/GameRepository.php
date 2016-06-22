@@ -9,4 +9,6 @@ interface GameRepository extends ResourceRepository
     public function findAllByUserIdOrderedByDate($userId);
 
     public function findAllEndedByPlayerCouple($player1, $player2);
+
+    public function findAllNotEndedByPlayerCouple($player1, $player2);
 }

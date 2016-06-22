@@ -51,6 +51,42 @@ class OrmGameRepositoryTest extends BaseOrmRepository
         $this->userManager->deleteUser($thirdPlayer);
     }
 
+
+    public function testFindAllNotEndedByPlayerCouple()
+    {
+        $local = $this->setLocal();
+        $visitor = $this->setVisitor();
+        $localCube = $this->setLocalCube();
+        $visitorCube = $this->setVisitorCube();
+        $thirdPlayer = new ScubPlayer(new ResourceId('third'));
+        $thirdPlayer->setPlainPassword('third');
+        $thirdPlayer->setEmail('third@gmail.com');
+        $thirdPlayer->setUsername('third');
+        $thirdPlayer->setEnabled(true);
+        $this->userManager->updateUser($thirdPlayer);
+
+        $game = $this->getGame('agame', $local, $visitor, $localCube, $visitorCube, 25);
+        $game2 = $this->getGame('agame2', $thirdPlayer, $visitor, $localCube, $visitorCube, 25);
+        $game3 = $this->getGame('agame3', $thirdPlayer, $visitor, $localCube, $visitorCube, 25);
+        $game4 = $this->getGame('agame4', $thirdPlayer, $visitor, $localCube, $visitorCube, 25, false);
+
+        $this->assertTrue(count($this->gameRepository->findAllNotEndedByPlayerCouple((string)$local->getId(), (string)$visitor->getId())) == 0);
+        $this->assertTrue(count($this->gameRepository->findAllNotEndedByPlayerCouple((string)$visitor->getId(), (string)$local->getId())) == 0);
+        $this->assertTrue(count($this->gameRepository->findAllNotEndedByPlayerCouple((string)$local->getId(), (string)$thirdPlayer->getId())) == 0);
+        $this->assertTrue(count($this->gameRepository->findAllNotEndedByPlayerCouple((string)$thirdPlayer->getId(), (string)$visitor->getId())) == 1);
+        $this->assertTrue(count($this->gameRepository->findAllNotEndedByPlayerCouple((string)$visitor->getId(), (string)$thirdPlayer->getId())) == 1);
+
+        $this->gameRepository->remove($game);
+        $this->gameRepository->remove($game2);
+        $this->gameRepository->remove($game3);
+        $this->gameRepository->remove($game4);
+        $this->cubeRepository->remove($localCube);
+        $this->cubeRepository->remove($visitorCube);
+        $this->userManager->deleteUser($visitor);
+        $this->userManager->deleteUser($local);
+        $this->userManager->deleteUser($thirdPlayer);
+    }
+
     public function testCrud()
     {
         $local = $this->setLocal();

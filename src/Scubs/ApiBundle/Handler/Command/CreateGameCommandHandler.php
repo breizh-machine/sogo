@@ -69,6 +69,11 @@ class CreateGameCommandHandler implements MessageBus
             throw new GameLogicException(GameLogicException::$INSUFFICIENT_CREDITS_TO_BET_MESS, GameLogicException::$INSUFFICIENT_CREDITS_TO_BET);
         }
         
+        //If guest is set, check guest exists
+        if ($message->guest && $this->userProvider->loadUserById($message->guest) === null) {
+            throw new GameLogicException(GameLogicException::$NO_VISITOR_FOUND_MESS, GameLogicException::$NO_VISITOR_FOUND);
+        }
+        
         //Check that the user has the cube he wants to play with
         if (!$localCube->isNative() && count($this->rewardRepository->findRewardByCubeAndUser($message->local, $message->localCubeId)) < 1) {
             throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);
@@ -80,13 +85,8 @@ class CreateGameCommandHandler implements MessageBus
         }
 
         //Check that the local and the guest have'nt already a game running
-        if ($message->guest && count($this->gameRepository->findAllEndedByPlayerCouple($message->local, $message->guest)) > 0 ) {
+        if ($message->guest && count($this->gameRepository->findAllNotEndedByPlayerCouple($message->local, $message->guest)) > 0 ) {
             throw new GameLogicException(GameLogicException::$LOCAL_AND_VISITOR_ALREADY_PLAYING_MESS, GameLogicException::$LOCAL_AND_VISITOR_ALREADY_PLAYING);
-        }
-
-        //Check that the guest exists
-        if ($message->guest && $this->userProvider->loadUserById($message->guest) == null) {
-            throw new GameLogicException(GameLogicException::$VISITOR_NOT_FOUND_MESS, GameLogicException::$VISITOR_NOT_FOUND);
         }
     }
 }
