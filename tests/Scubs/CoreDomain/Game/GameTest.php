@@ -21,22 +21,29 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $initialCredits = $local->getCredits();
         $cube = new Cube(new CubeId(), 'test', 'test', 1, 'test');
-        $visitorCube = new Cube(new CubeId('visitor'), 'test', 'test', 1, 'test');
         $game = new Game(new GameId(), $local, 20, $cube);
         $game->inviteVisitor($visitor);
         $this->assertTrue($local->getCredits() == $initialCredits - 20);
         $game->visitorDeclined();
         $this->assertTrue($local->getCredits() == $initialCredits);
         $this->assertTrue($game->isVisitorDeclined());
+        try {
+            $game->isVisitorDeclined();
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$VISITOR_ALREADY_DECLINED);
+        }
     }
 
     public function testVisitorJoined()
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
+        $visitor = new ScubPlayer(new ResourceId('VISITOR'));
+        $initialVisitorCredits = $visitor->getCredits();
 
         $visitorCube = new Cube(new CubeId('visitorCube'), 'test', 'test', 1, 'test');
         $cube = new Cube(new CubeId(), 'test', 'test', 1, 'test');
         $game = new Game(new GameId(), $local, 20, $cube);
+        $game->inviteVisitor($visitor);
         try {
             $game->visitorJoined($cube);
         } catch (GameLogicException $e) {
@@ -44,6 +51,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         }
         $game->visitorJoined($visitorCube);
         $this->assertTrue($game->getVisitorCube()->equals($visitorCube));
+        $this->assertTrue($initialVisitorCredits == ($game->getVisitor()->getCredits() + 20));
     }
     
     public function testInviteVisitor()

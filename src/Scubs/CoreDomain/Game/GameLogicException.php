@@ -48,6 +48,14 @@ class GameLogicException extends \Exception
     public static $NO_VISITOR_CUBE_FOUND_MESS = 'No visitor cube found';
     public static $NO_LOCAL_CUBE_FOUND = 8021;
     public static $NO_LOCAL_CUBE_FOUND_MESS = 'No visitor cube found';
+    public static $VISITOR_ALREADY_DECLINED = 8022;
+    public static $VISITOR_ALREADY_DECLINED_MESS = 'Visitor already declined game';
+    public static $VISITOR_NOT_IN_GAME = 8023;
+    public static $VISITOR_NOT_IN_GAME_MESS = 'Visitor is not part of this game';
+    public static $GAME_ALREADY_STARTED = 8024;
+    public static $GAME_ALREADY_STARTED_MESS = 'Visitor is not part of this game';
+
+
 
 
 

@@ -5,7 +5,6 @@ namespace Scubs\ApiBundle\Handler\Command;
 use Scubs\CoreDomain\Cube\CubeRepository;
 use Scubs\CoreDomain\Game\GameLogicException;
 use Scubs\CoreDomain\Reward\RewardRepository;
-use Scubs\CoreDomainBundle\Entity\Game;
 use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Game\GameRepository;
 use Scubs\CoreDomainBundle\Security\Core\User\UserProvider;
@@ -40,6 +39,7 @@ class JoinGameCommandHandler implements MessageBus
             $game->inviteVisitor($visitor);
         }
         $game->visitorJoined($visitorCube);
+        $this->userProvider->updateUser($visitor);
 
         $this->gameRepository->update($game);
 
@@ -65,7 +65,7 @@ class JoinGameCommandHandler implements MessageBus
         if ($visitor->getCredits() < $game->getBet()) {
             throw new GameLogicException(GameLogicException::$INSUFFICIENT_CREDITS_TO_BET_MESS, GameLogicException::$INSUFFICIENT_CREDITS_TO_BET);
         }
-        
+
         //Check that the visitor is different than the local
         if ($game->getLocal()->equals($visitor)) {
             throw new GameLogicException(GameLogicException::$SAME_VISITOR_AND_LOCAL_MESS, GameLogicException::$SAME_VISITOR_AND_LOCAL);

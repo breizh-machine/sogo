@@ -18,5 +18,11 @@
             <argument type="service" id="scubs.security.user_provider.username" />
             <argument type="service" id="reward_repository" />
         </service>
+
+        <service id="scubs.api.handler.command.game.deny" class="Scubs\ApiBundle\Handler\Command\DenyInvitationCommandHandler">
+            <argument type="service" id="game_repository" />
+            <argument type="service" id="cube_repository" />
+            <argument type="service" id="scubs.security.user_provider.username" />
+        </service>
     </services>
 </container>

@@ -43,6 +43,9 @@ class Game extends Resource
 
     public function visitorDeclined()
     {
+        if ($this->visitorDeclined) {
+            throw new GameLogicException(GameLogicException::$VISITOR_ALREADY_DECLINED_MESS, GameLogicException::$VISITOR_ALREADY_DECLINED);
+        }
         $this->visitorDeclined = true;
         $this->local->refund($this->bet);
         return $this;
@@ -74,6 +77,7 @@ class Game extends Resource
     {
         $this->assignVisitorCube($visitorCube);
         $this->visitorJoined = true;
+        $this->visitor->bet($this->bet);
         return $this;
     }
 
