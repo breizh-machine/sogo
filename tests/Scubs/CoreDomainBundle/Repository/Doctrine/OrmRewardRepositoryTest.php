@@ -7,62 +7,16 @@ use Scubs\CoreDomainBundle\Entity\Cube;
 use Scubs\CoreDomain\Cube\CubeId;
 use Scubs\CoreDomainBundle\Entity\Reward;
 use Scubs\CoreDomain\Game\GameId;
-use Scubs\CoreDomain\Core\ResourceId;
 use Scubs\CoreDomainBundle\Entity\Game;
 use Scubs\CoreDomainBundle\Entity\Turn;
-use Scubs\CoreDomainBundle\Entity\User as ScubPlayer;
 use Scubs\CoreDomain\Turn\TurnId;
 
 class OrmRewardRepositoryTest extends BaseOrmRepository
 {
-    private $cubeRepository;
-    private $rewardRepository;
-    private $turnRepository;
-    private $gameRepository;
-    private $userManager;
-
     public function setUp()
     {
-        $this->init('cube_repository.doctrine_orm');
-        $this->init('reward_repository.doctrine_orm');
-        $this->init('turn_repository.doctrine_orm');
-        $this->init('game_repository.doctrine_orm');
-        $this->init('fos_user.user_manager');
-        $this->cubeRepository = $this->repositories['cube_repository.doctrine_orm'];
-        $this->rewardRepository = $this->repositories['reward_repository.doctrine_orm'];
-        $this->turnRepository = $this->repositories['turn_repository.doctrine_orm'];
-        $this->gameRepository = $this->repositories['game_repository.doctrine_orm'];
-        $this->userManager = $this->repositories['fos_user.user_manager'];
+        $this->init();
     }
-
-    private function setLocal()
-    {
-        $local = $this->userManager->findUserBy(['id' => 'LOCAL']);
-        if (!$local) {
-            $local = new ScubPlayer(new ResourceId('LOCAL'));
-            $local->setPlainPassword('local');
-            $local->setEmail('email@gmail.com');
-            $local->setUsername('local');
-            $local->setEnabled(true);
-            $this->userManager->updateUser($local);
-        }
-        return $local;
-    }
-
-    private function setVisitor()
-    {
-        $visitor = $this->userManager->findUserBy(['id' => 'VISITOR']);
-        if (!$visitor) {
-            $visitor = new ScubPlayer(new ResourceId('VISITOR'));
-            $visitor->setPlainPassword('visitor');
-            $visitor->setEmail('visitor@gmail.com');
-            $visitor->setUsername('visitor');
-            $visitor->setEnabled(true);
-            $this->userManager->updateUser($visitor);
-        }
-        return $visitor;
-    }
-
 
     public function testCrud()
     {

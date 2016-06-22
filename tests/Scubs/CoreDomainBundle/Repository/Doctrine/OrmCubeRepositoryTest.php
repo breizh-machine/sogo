@@ -7,12 +7,9 @@ use Scubs\CoreDomain\Cube\CubeId;
 
 class OrmCubeRepositoryTest extends BaseOrmRepository
 {
-    private $cubeRepository;
-
     public function setUp()
     {
-        $this->init('cube_repository.doctrine_orm');
-        $this->cubeRepository = $this->repositories['cube_repository.doctrine_orm'];
+        $this->init();
     }
 
     public function testAdd()

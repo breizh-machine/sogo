@@ -9,6 +9,7 @@
             <argument type="service" id="cube_repository" />
             <argument type="service" id="scubs.security.user_provider.username" />
             <argument type="service" id="router" />
+            <argument type="service" id="reward_repository" />
         </service>
     </services>
 </container>
