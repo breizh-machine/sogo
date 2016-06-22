@@ -55,17 +55,17 @@ class JoinGameCommandHandler implements MessageBus
         if ($visitor === null) {
             throw new GameLogicException(GameLogicException::$NO_VISITOR_FOUND_MESS, GameLogicException::$NO_VISITOR_FOUND);
         }
-        
-        //Check that the user has enough credits to bet
-        if ($visitor->getCredits() < $game->getBet()) {
-            throw new GameLogicException(GameLogicException::$INSUFFICIENT_CREDITS_TO_BET_MESS, GameLogicException::$INSUFFICIENT_CREDITS_TO_BET);
-        }
 
         //Check that the game exists
         if ($game === null) {
             throw new GameLogicException(GameLogicException::$GAME_NOT_FOUND_MESS, GameLogicException::$GAME_NOT_FOUND);
         }
 
+        //Check that the user has enough credits to bet
+        if ($visitor->getCredits() < $game->getBet()) {
+            throw new GameLogicException(GameLogicException::$INSUFFICIENT_CREDITS_TO_BET_MESS, GameLogicException::$INSUFFICIENT_CREDITS_TO_BET);
+        }
+        
         //Check that the visitor is different than the local
         if ($game->getLocal()->equals($visitor)) {
             throw new GameLogicException(GameLogicException::$SAME_VISITOR_AND_LOCAL_MESS, GameLogicException::$SAME_VISITOR_AND_LOCAL);
