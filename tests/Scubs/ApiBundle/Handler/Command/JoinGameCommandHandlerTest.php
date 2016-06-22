@@ -263,4 +263,33 @@ class JoinGameCommandHandlerTest extends BaseOrmRepository
         }
         $this->assertTrue(false);
     }
+    
+    public function testVisitorNotAllowedToJoin()
+    {
+        $command = new JoinGameCommand();
+        $visitor = $this->setVisitor();
+        $local = $this->setLocal();
+        $thirdPlayer = $this->setThirdPlayer();
+        $visitorCube = $this->setVisitorCube();
+        $localCube = $this->setLocalCube();
+        $game = $this->getNotJoinedGame('id', $local, $visitor, $localCube, 25, true);
+
+        $command->gameId = (string) $game->getId();
+        $command->visitorId = (string) $thirdPlayer->getId();
+        $command->visitorCubeId = (string) $visitorCube->getId();
+
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$VISITOR_NOT_ALLOWED_TO_JOIN);
+            $this->gameRepository->remove($game);
+            $this->cubeRepository->remove($localCube);
+            $this->cubeRepository->remove($visitorCube);
+            $this->userManager->deleteUser($visitor);
+            $this->userManager->deleteUser($local);
+            $this->userManager->deleteUser($thirdPlayer);
+            return;
+        }
+        $this->assertTrue(false);
+    }
 }

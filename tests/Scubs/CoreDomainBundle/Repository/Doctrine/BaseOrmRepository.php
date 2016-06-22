@@ -61,6 +61,20 @@ class BaseOrmRepository extends WebTestCase
         return $visitor;
     }
 
+    protected function setThirdPlayer()
+    {
+        $visitor = $this->userManager->findUserBy(['id' => 'THIRD']);
+        if (!$visitor) {
+            $visitor = new ScubPlayer(new ResourceId('THIRD'));
+            $visitor->setPlainPassword('THIRD');
+            $visitor->setEmail('THIRD@gmail.com');
+            $visitor->setUsername('THIRD');
+            $visitor->setEnabled(true);
+            $this->userManager->updateUser($visitor);
+        }
+        return $visitor;
+    }
+
     protected function setCube($id, $texture, $thumbnail, $rarity, $description, $native)
     {
         $cube = new Cube(new CubeId($id), $texture, $thumbnail, $rarity, $description, $native);

@@ -70,6 +70,11 @@ class JoinGameCommandHandler implements MessageBus
         if ($game->getLocal()->equals($visitor)) {
             throw new GameLogicException(GameLogicException::$SAME_VISITOR_AND_LOCAL_MESS, GameLogicException::$SAME_VISITOR_AND_LOCAL);
         }
+
+        //Check that the visitor who wants to join is the one set in the game
+        if ($game->getVisitor() != null && !$game->getVisitor()->equals($visitor)) {
+            throw new GameLogicException(GameLogicException::$VISITOR_NOT_ALLOWED_TO_JOIN_MESS, GameLogicException::$VISITOR_NOT_ALLOWED_TO_JOIN);
+        }
         
         //Check the game did'nt start already
         if ($game->isVisitorJoined()) {
