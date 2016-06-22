@@ -40,6 +40,14 @@ class GameLogicException extends \Exception
     public static $BET_IS_NULL_OR_NEGATIVE_MESS = 'Bet must be superior to zero';
     public static $NO_VISITOR_FOUND = 8017;
     public static $NO_VISITOR_FOUND_MESS = 'Visitor does not exist';
+    public static $GAME_NOT_FOUND = 8018;
+    public static $GAME_NOT_FOUND_MESS = 'No game found for given id';
+    public static $VISITOR_ALREADY_SET = 8019;
+    public static $VISITOR_ALREADY_SET_MESS = 'there is already a visitor for this game';
+    public static $NO_VISITOR_CUBE_FOUND = 8020;
+    public static $NO_VISITOR_CUBE_FOUND_MESS = 'No visitor cube found';
+    public static $NO_LOCAL_CUBE_FOUND = 8021;
+    public static $NO_LOCAL_CUBE_FOUND_MESS = 'No visitor cube found';
 
 
 

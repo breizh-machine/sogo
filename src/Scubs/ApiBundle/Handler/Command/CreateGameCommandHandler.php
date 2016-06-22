@@ -74,6 +74,10 @@ class CreateGameCommandHandler implements MessageBus
             throw new GameLogicException(GameLogicException::$NO_VISITOR_FOUND_MESS, GameLogicException::$NO_VISITOR_FOUND);
         }
         
+        if ($localCube === null) {
+            throw new GameLogicException(GameLogicException::$NO_LOCAL_CUBE_FOUND_MESS, GameLogicException::$NO_LOCAL_CUBE_FOUND);
+        }
+        
         //Check that the user has the cube he wants to play with
         if (!$localCube->isNative() && count($this->rewardRepository->findRewardByCubeAndUser($message->local, $message->localCubeId)) < 1) {
             throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);

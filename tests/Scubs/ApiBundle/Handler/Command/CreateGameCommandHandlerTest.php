@@ -15,7 +15,7 @@ class CreateGameCommandHandlerTest extends BaseOrmRepository
     public function setUp()
     {  
         $this->init();
-        $this->handler = $this->container->get('scubs.api.handler.command.game');
+        $this->handler = $this->container->get('scubs.api.handler.command.game.create');
     }
     
     public function testCreateCommandHandlerOk()
@@ -236,4 +236,33 @@ class CreateGameCommandHandlerTest extends BaseOrmRepository
         }
         $this->assertTrue(false);
     }
+
+
+    public function testVisitorCubeDoesNotExist()
+    {
+        $command = new CreateGameCommand();
+        $local = $this->setLocal();
+        $visitor = $this->setVisitor();
+        $localCube = $this->setLocalCube();
+
+        $command->response = new Response();
+        $command->local = (string) $local->getId();
+        $command->localCubeId = 'NOT EXISTING';
+        $command->guest = (string) $visitor->getId();
+        $command->bet = 25;
+
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() === GameLogicException::$NO_LOCAL_CUBE_FOUND);
+            $this->cubeRepository->remove($localCube);
+            $this->userManager->deleteUser($visitor);
+            $this->userManager->deleteUser($local);
+            return;
+        }
+        $this->assertTrue(false);
+
+    }
+
+
 }

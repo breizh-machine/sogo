@@ -99,4 +99,14 @@ class BaseOrmRepository extends WebTestCase
         $this->gameRepository->add($game);
         return $game;
     }
+
+    protected function getNotJoinedGame($gameId, $local, $visitor, $localCube, $bet, $alreadyInvited = false)
+    {
+        $game = new Game(new GameId($gameId), $local, $bet, $localCube);
+        if ($alreadyInvited) {
+            $game->inviteVisitor($visitor);
+        }
+        $this->gameRepository->add($game);
+        return $game;
+    }
 }
