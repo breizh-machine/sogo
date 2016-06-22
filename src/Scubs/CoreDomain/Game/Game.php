@@ -48,7 +48,7 @@ class Game extends Resource
         return $this;
     }
 
-    public function assignVisitorCube(Cube $visitorCube)
+    private function assignVisitorCube(Cube $visitorCube)
     {
         if ($this->localCube->equals($visitorCube)) {
             throw new GameLogicException(GameLogicException::$SAME_CUBES_IN_GAME_MESS, GameLogicException::$SAME_CUBES_IN_GAME);
@@ -70,8 +70,9 @@ class Game extends Resource
         return $this;
     }
 
-    public function visitorJoined()
+    public function visitorJoined(Cube $visitorCube)
     {
+        $this->assignVisitorCube($visitorCube);
         $this->visitorJoined = true;
         return $this;
     }
@@ -167,7 +168,7 @@ class Game extends Resource
 
     public function isGameStarted()
     {
-        return $this->visitor !== null;
+        return $this->visitor !== null && $this->visitorCube !== null;
 
     }
 

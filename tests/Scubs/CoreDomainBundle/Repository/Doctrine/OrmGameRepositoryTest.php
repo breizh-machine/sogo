@@ -98,7 +98,7 @@ class OrmGameRepositoryTest extends BaseOrmRepository
         if (!$game) {
             $game = new Game(new GameId('agame'), $local, 25, $localCube);
             $game->inviteVisitor($visitor);
-            $game->assignVisitorCube($visitorCube);
+            $game->visitorJoined($visitorCube);
             $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
             $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
             $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
@@ -125,7 +125,7 @@ class OrmGameRepositoryTest extends BaseOrmRepository
         if (!$game) {
             $game = new Game(new GameId('agame'), $local, 25, $localCube);
             $game->inviteVisitor($visitor);
-            $game->assignVisitorCube($visitorCube);
+            $game->visitorJoined($visitorCube);
             $this->gameRepository->add($game);
             $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
             $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
@@ -144,7 +144,7 @@ class OrmGameRepositoryTest extends BaseOrmRepository
         if (!$game2) {
             $game2 = new Game(new GameId('agame2'), $thirdPlayer, 25, $localCube);
             $game2->inviteVisitor($visitor);
-            $game2->assignVisitorCube($visitorCube);
+            $game2->visitorJoined($visitorCube);
             $game2->play(new Turn(new TurnId(), $local, 0, 0, 0));
             $game2->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
             $game2->play(new Turn(new TurnId(), $local, 1, 1, 0));

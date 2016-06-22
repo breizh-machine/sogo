@@ -82,7 +82,7 @@ class BaseOrmRepository extends WebTestCase
     {
         $game = new Game(new GameId($gameId), $local, $bet, $localCube);
         $game->inviteVisitor($visitor);
-        $game->assignVisitorCube($visitorCube);
+        $game->visitorJoined($visitorCube);
         $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
         $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
         $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
