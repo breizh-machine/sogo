@@ -142,22 +142,159 @@ class PlayTurnCommandHandlerTest extends BaseOrmRepository
         $this->assertTrue(false);
     }
 
-    /*
-    //Check that the game exists
-        if ($game === null) {
-            throw new GameLogicException(GameLogicException::$GAME_NOT_FOUND_MESS, GameLogicException::$GAME_NOT_FOUND);
+    public function testGameNotStarted()
+    {
+        $command = new PlayTurnCommand();
+        $visitor = $this->setVisitor();
+        $local = $this->setLocal();
+        $visitorCube = $this->setVisitorCube();
+        $localCube = $this->setLocalCube();
+        $game = $this->getNotJoinedGame('id', $local, $visitor, $localCube, 25);
+
+        $command->gameId = (string) $game->getId();
+        $command->playerId = (string) $local->getId();
+        $command->x = 3;
+        $command->y = 3;
+        $command->z = 0;
+
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$GAME_NOT_STARTED);
+            $this->gameRepository->remove($game);
+            $this->cubeRepository->remove($localCube);
+            $this->cubeRepository->remove($visitorCube);
+            $this->userManager->deleteUser($visitor);
+            $this->userManager->deleteUser($local);
+            return;
+        }
+        $this->assertTrue(false);
+    }
+
+    public function testGameEnded()
+    {
+        $command = new PlayTurnCommand();
+        $visitor = $this->setVisitor();
+        $local = $this->setLocal();
+        $visitorCube = $this->setVisitorCube();
+        $localCube = $this->setLocalCube();
+        $game = $this->getGame('id', $local, $visitor, $localCube, $visitorCube, 25);
+
+        $command->gameId = (string) $game->getId();
+        $command->playerId = (string) $local->getId();
+        $command->x = 3;
+        $command->y = 3;
+        $command->z = 0;
+
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$GAME_ENDED);
+            $this->gameRepository->remove($game);
+            $this->cubeRepository->remove($localCube);
+            $this->cubeRepository->remove($visitorCube);
+            $this->userManager->deleteUser($visitor);
+            $this->userManager->deleteUser($local);
+            return;
+        }
+        $this->assertTrue(false);
+    }
+
+    public function testNotPlayerTurn()
+    {
+        $command = new PlayTurnCommand();
+        $visitor = $this->setVisitor();
+        $local = $this->setLocal();
+        $visitorCube = $this->setVisitorCube();
+        $localCube = $this->setLocalCube();
+        $game = $this->getGame('id', $local, $visitor, $localCube, $visitorCube, 25, false);
+
+        $command->gameId = (string) $game->getId();
+        $command->playerId = (string) $visitor->getId();
+        $command->x = 3;
+        $command->y = 3;
+        $command->z = 0;
+
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$NOT_PLAYER_TURN);
+            $this->gameRepository->remove($game);
+            $this->cubeRepository->remove($localCube);
+            $this->cubeRepository->remove($visitorCube);
+            $this->userManager->deleteUser($visitor);
+            $this->userManager->deleteUser($local);
+            return;
+        }
+        $this->assertTrue(false);
+    }
+
+
+    public function testUnplayablePosition()
+    {
+        $command = new PlayTurnCommand();
+        $visitor = $this->setVisitor();
+        $local = $this->setLocal();
+        $visitorCube = $this->setVisitorCube();
+        $localCube = $this->setLocalCube();
+        $game = $this->getGame('id', $local, $visitor, $localCube, $visitorCube, 25, false);
+
+        $command->gameId = (string) $game->getId();
+        $command->playerId = (string) $local->getId();
+        $command->x = 8;
+        $command->y = 3;
+        $command->z = 0;
+
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$UNPLAYABLE_POSITION);
         }
 
-        //Check that the player exists
-        if ($player === null) {
-            throw new GameLogicException(GameLogicException::$NO_VISITOR_FOUND_MESS, GameLogicException::$NO_VISITOR_FOUND);
+        $command->x = 0;
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$UNPLAYABLE_POSITION);
+            $this->gameRepository->remove($game);
+            $this->cubeRepository->remove($localCube);
+            $this->cubeRepository->remove($visitorCube);
+            $this->userManager->deleteUser($visitor);
+            $this->userManager->deleteUser($local);
+            return;
         }
 
-        //Check that the player is in this game
-        if (!$player->equals($game->getVisitor()) && !$player->equals($game->getLocal())) {
-            throw new GameLogicException(GameLogicException::$NOT_IN_GAME_PLAYER_MESS, GameLogicException::$NOT_IN_GAME_PLAYER);
-        }
 
-     */
+        $this->assertTrue(false);
+    }
+
+    public function testAlreadyPlayedPosition()
+    {
+        $command = new PlayTurnCommand();
+        $visitor = $this->setVisitor();
+        $local = $this->setLocal();
+        $visitorCube = $this->setVisitorCube();
+        $localCube = $this->setLocalCube();
+        $game = $this->getGame('id', $local, $visitor, $localCube, $visitorCube, 25, false);
+
+        $command->gameId = (string) $game->getId();
+        $command->playerId = (string) $local->getId();
+        $command->x = 3;
+        $command->y = 2;
+        $command->z = 0;
+
+        try {
+            $this->handler->handle($command);
+        } catch (GameLogicException $e) {
+            $this->assertTrue($e->getCode() == GameLogicException::$ALREADY_PLAYED_POSITION);
+            $this->gameRepository->remove($game);
+            $this->cubeRepository->remove($localCube);
+            $this->cubeRepository->remove($visitorCube);
+            $this->userManager->deleteUser($visitor);
+            $this->userManager->deleteUser($local);
+            return;
+        }
+        $this->assertTrue(false);
+    }
 
 }

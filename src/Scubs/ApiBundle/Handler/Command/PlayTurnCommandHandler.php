@@ -68,7 +68,7 @@ class PlayTurnCommandHandler implements MessageBus
         }
 
         //Check that the player is in this game
-        if (!$player->equals($game->getVisitor()) && !$player->equals($game->getLocal())) {
+        if ($game->getVisitor() !== null && !$player->equals($game->getVisitor()) && !$player->equals($game->getLocal())) {
             throw new GameLogicException(GameLogicException::$NOT_IN_GAME_PLAYER_MESS, GameLogicException::$NOT_IN_GAME_PLAYER);
         }
 
