@@ -9,6 +9,10 @@ use FOS\RestBundle\View;
 use Scubs\ApiBundle\Query\GamesQuery;
 use Scubs\ApiBundle\Query\GameQuery;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Scubs\ApiBundle\Command\JoinGameCommand;
+use Scubs\ApiBundle\Command\DenyInvitationCommand;
+use Scubs\ApiBundle\Command\PlayTurnCommand;
 
 class GameController extends Controller
 {
@@ -36,20 +40,65 @@ class GameController extends Controller
         return $view;
     }
 
-    public function createGameAction($userId)
+    public function createGameAction(Request $request, $userId)
     {
-        $response = new Response();
-
         $command = new CreateGameCommand();
-        $command->bet = 5;
-        $command->response = $response;
+        $command->response = new Response('', Response::HTTP_CREATED);
+        $command->bet = $request->request->get('bet');
         $command->local = $userId;
-        $command->localCubeId = '8bc905c1-40f3-4df6-a9c1-bd45232eb278';
-        $handler = $this->get('scubs.api.handler.command.game');
+        $command->localCubeId = $request->request->get('localCubeId');
+        $command->guest = $request->request->has('guest') ? $request->request->get('guest') : null;
+
+        $handler = $this->get('scubs.api.handler.command.game.create');
         $handler->handle($command);
 
-        return $response;
+        return $command->response;
     }
+
+    public function joinGameAction(Request $request, $gameId, $userId)
+    {
+        $command = new JoinGameCommand();
+
+        $command->gameId = $gameId;
+        $command->visitorId = $userId;
+        $command->visitorCubeId = $request->request->get('visitorCubeId');
+
+        $handler = $this->get('scubs.api.handler.command.game.join');
+        $handler->handle($command);
+
+        return new Response('', Response::HTTP_ACCEPTED);
+    }
+
+    public function denyGameAction($gameId, $userId)
+    {
+        $command = new DenyInvitationCommand();
+
+        $command->gameId = $gameId;
+        $command->visitorId = $userId;
+
+        $handler = $this->get('scubs.api.handler.command.game.deny');
+        $handler->handle($command);
+
+        return new Response('', Response::HTTP_ACCEPTED);
+    }
+
+    public function playTurnAction($gameId, $userId, $x, $y, $z)
+    {
+        $command = new PlayTurnCommand();
+
+        $command->gameId = $gameId;
+        $command->playerId = $userId;
+        $command->x = $x;
+        $command->y = $y;
+        $command->z = $z;
+
+        $handler = $this->get('scubs.api.handler.command.game.play');
+        $handler->handle($command);
+
+        return new Response('', Response::HTTP_CREATED);
+    }
+
+
 
 
 }

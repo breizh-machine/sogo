@@ -5,13 +5,28 @@ namespace Scubs\ApiBundle\ViewRenderer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Scubs\ApiBundle\View\GameListItemView;
+use Scubs\ApiBundle\View\GameView;
+use Scubs\ApiBundle\View\TurnView;
 use Scubs\CoreDomain\Game\Game;
 use Scubs\CoreDomain\Player\ScubPlayer;
+use Scubs\CoreDomain\Reward\Reward;
+use Scubs\CoreDomain\User\User;
+use Symfony\Component\Asset\Packages;
 
 class GameViewRenderer implements ViewRenderer
 {
+    private $assetsHelper;
+    private $profileImagesPath;
+    private $cubeImagesBasePath;
 
-    public function renderView($gameData, ScubPlayer $authenticatedPlayer)
+    public function __construct(Packages $assetsHelper)
+    {
+        $this->assetsHelper = $assetsHelper;
+        $this->profileImagesPath = PathConfiguration::$PROFILE_IMAGE_PATH;
+        $this->cubeImagesBasePath = PathConfiguration::$CUBE_IMAGE_PATH;
+    }
+
+    public function renderView($gameData, ScubPlayer $authenticatedPlayer, Reward $reward = null)
     {
         $renderedData = null;
         if ($gameData instanceof Collection || is_array($gameData)) {
@@ -20,7 +35,7 @@ class GameViewRenderer implements ViewRenderer
                 $renderedData->add($this->renderGameListItemView($game, $authenticatedPlayer));
             }
         } else {
-            $renderedData = $this->renderGameListItemView($gameData, $authenticatedPlayer);
+            $renderedData = $this->renderGameView($gameData, $authenticatedPlayer, $reward);
         }
         return $renderedData;
     }
@@ -46,9 +61,50 @@ class GameViewRenderer implements ViewRenderer
         return $view;
     }
 
-    private function renderGameView(Game $game, ScubPlayer $authenticatedPlayer)
+    private function renderGameView(Game $game, ScubPlayer $authenticatedPlayer, Reward $reward = null)
     {
-        //TODO
+        $gameView = new GameView();
+        $gameView->amILocal = $game->getLocal()->equals($authenticatedPlayer);
+
+        $visitorProfilePicture = $game->getVisitor() !== null ? $game->getVisitor()->getProfilePicture() : User::getDefaultProfilePicture();
+        $gameView->opponentProfilePicture = $gameView->amILocal ? $visitorProfilePicture : $game->getLocal()->getProfilePicture();
+        $gameView->opponentProfilePicture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->profileImagesPath, $gameView->opponentProfilePicture));
+
+        $gameView->myProfilePicture = $gameView->amILocal ? $game->getLocal()->getProfilePicture() : $visitorProfilePicture;
+        $gameView->myProfilePicture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->profileImagesPath, $gameView->myProfilePicture));
+
+        $gameView->didIWon = $game->isGameEnded() && $game->getWinner()->equals($authenticatedPlayer);
+        $gameView->isStarted = $game->isGameStarted();
+        $gameView->isEnded = $game->isGameEnded();
+        $gameView->isMyTurn = $game->isScubPlayerTurn($authenticatedPlayer);
+        $gameView->winningTurns = $game->isGameEnded() ? $game->getWinningTurns() : [];
+
+        $visitorCubeThumbnail = $game->getVisitorCube() !== null ? $game->getVisitorCube()->getThumbnail() : null;
+        $gameView->myCubeThumbnail = $gameView->amILocal ? $game->getLocalCube()->getThumbnail() : $visitorCubeThumbnail;
+        $gameView->myCubeThumbnail = $gameView->myCubeThumbnail !== null ? $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $gameView->myCubeThumbnail)) : '';
+
+        $gameView->opponentCubeThumbnail = $gameView->amILocal ? $visitorCubeThumbnail : $game->getLocalCube()->getThumbnail();
+        $gameView->opponentCubeThumbnail = $gameView->opponentCubeThumbnail !== null ? $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $gameView->opponentCubeThumbnail)) : '';
+        
+        $gameView->nbPlayedTurns = count($game->getTurns());
+        $gameView->gameStartDate = $game->getStartDate()->format(\DateTime::ISO8601);
+        $gameView->lastTurnStartDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format(\DateTime::ISO8601) : '';
+        $gameView->rewardDescription = $reward !== null ? $reward->getCube()->getDescription() : '';
+        $gameView->rewardRarity = $reward !== null ? $reward->getCube()->getRarity() : '';
+        $gameView->rewardCubeThumbnail = $reward !== null ? $reward->getCube()->getThumbnail() : '';
+        $gameView->bet = $game->getBet();
+        $gameView->newCreditsValue = $game->getWinner() !== null ? $game->getWinner()->getCredits() : '';
+        $gameView->turns = [];
+
+        foreach ($game->getTurns() as $turn) {
+            $turnView = new TurnView();
+            $turnView->x = $turn->getX();
+            $turnView->y = $turn->getY();
+            $turnView->z = $turn->getZ();
+            $gameView->turns[] = $turnView;
+        }
+        
+        return $gameView;
     }
     
 }

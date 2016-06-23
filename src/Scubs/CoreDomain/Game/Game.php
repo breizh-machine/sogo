@@ -186,7 +186,7 @@ class Game extends Resource
         if ($lastTurn !== null) {
             return !$player->equals($lastTurn->getPlayer());
         } else {
-            return !$player->equals($this->visitor);
+            return $this->visitor !== null && !$player->equals($this->visitor);
         }
     }
 

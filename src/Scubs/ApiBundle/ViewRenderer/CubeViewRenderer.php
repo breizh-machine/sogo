@@ -14,7 +14,7 @@ class CubeViewRenderer implements ViewRenderer
     public function __construct(Packages $assetsHelper)
     {
         $this->assetsHelper = $assetsHelper;
-        $this->cubeImagesBasePath = 'bundles/scubscoredomain/cube/images';
+        $this->cubeImagesBasePath = PathConfiguration::$CUBE_IMAGE_PATH;
     }
 
     public function renderView(Cube $data)

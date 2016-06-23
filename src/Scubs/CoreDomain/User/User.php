@@ -10,7 +10,9 @@ use Scubs\CoreDomain\Player\ScubPlayer;
 class User extends BaseUser implements ScubPlayer
 {
     protected $credits;
+    protected $profilePicture;
     public static $INITIAL_CREDITS = 100;
+    private static $DEFAULT_PROFILE_PICTURE = 'default_profile.png';
 
     public function __construct(ResourceId $playerId = null, $credits = null)
     {
@@ -61,4 +63,24 @@ class User extends BaseUser implements ScubPlayer
     {
         return $this->id == $player->getId()->getValue();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProfilePicture()
+    {
+        //TODO
+        return self::$DEFAULT_PROFILE_PICTURE;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getDefaultProfilePicture()
+    {
+        return self::$DEFAULT_PROFILE_PICTURE;
+    }
+
+
+
 }
