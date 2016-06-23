@@ -77,7 +77,8 @@ class BaseOrmRepository extends WebTestCase
 
     protected function setCube($id, $texture, $thumbnail, $rarity, $description, $native)
     {
-        $cube = new Cube(new CubeId($id), $texture, $thumbnail, $rarity, $description, $native);
+        $cubeId =  $id == null ? new CubeId() : new CubeId($id);
+        $cube = new Cube($cubeId, $texture, $thumbnail, $rarity, $description, $native);
         $this->cubeRepository->add($cube);
         return $cube;
     }
@@ -92,23 +93,34 @@ class BaseOrmRepository extends WebTestCase
         return $this->setCube('visitor', 'test', 0, 'test', 'test',  true);
     }
 
+    protected function setCubesForEachRarity()
+    {
+        $cubes = [];
+        $cubes[] = $this->setCube(null, 'test', 'test', 0, 'test', true);
+        $cubes[] = $this->setCube(null, 'test', 'test', 1, 'test', true);
+        $cubes[] = $this->setCube(null, 'test', 'test', 2, 'test', true);
+        $cubes[] = $this->setCube(null, 'test', 'test', 3, 'test', true);
+        $cubes[] = $this->setCube(null, 'test', 'test', 4, 'test', true);
+        return $cubes;
+    }
+
     protected function getGame($gameId, $local, $visitor, $localCube, $visitorCube, $bet, $won = true)
     {
         $game = new Game(new GameId($gameId), $local, $bet, $localCube);
         $game->inviteVisitor($visitor);
         $game->visitorJoined($visitorCube);
-        $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
-        $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
-        $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
-        $game->play(new Turn(new TurnId(), $visitor, 2, 0, 0));
-        $game->play(new Turn(new TurnId(), $local, 3, 0, 0));
-        $game->play(new Turn(new TurnId(), $visitor, 2, 1, 0));
-        $game->play(new Turn(new TurnId(), $local, 2, 2, 0));
-        $game->play(new Turn(new TurnId(), $visitor, 3, 1, 0));
-        $game->play(new Turn(new TurnId(), $local, 3, 2, 0));
-        $game->play(new Turn(new TurnId(), $visitor, 0, 1, 0));
+        $game->play(new Turn(new TurnId(), $game, $local, 0, 0, 0));
+        $game->play(new Turn(new TurnId(), $game, $visitor, 1, 0, 0));
+        $game->play(new Turn(new TurnId(), $game, $local, 1, 1, 0));
+        $game->play(new Turn(new TurnId(), $game, $visitor, 2, 0, 0));
+        $game->play(new Turn(new TurnId(), $game, $local, 3, 0, 0));
+        $game->play(new Turn(new TurnId(), $game, $visitor, 2, 1, 0));
+        $game->play(new Turn(new TurnId(), $game, $local, 2, 2, 0));
+        $game->play(new Turn(new TurnId(), $game, $visitor, 3, 1, 0));
+        $game->play(new Turn(new TurnId(), $game, $local, 3, 2, 0));
+        $game->play(new Turn(new TurnId(), $game, $visitor, 0, 1, 0));
         if ($won) {
-            $game->play(new Turn(new TurnId(), $local, 3, 3, 0));
+            $game->play(new Turn(new TurnId(), $game, $local, 3, 3, 0));
         }
         $this->gameRepository->add($game);
         return $game;

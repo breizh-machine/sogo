@@ -3,6 +3,7 @@
 namespace Scubs\CoreDomain\Turn;
 
 use Scubs\CoreDomain\Core\Resource;
+use Scubs\CoreDomain\Game\Game;
 use Scubs\CoreDomain\Player\ScubPlayer;
 
 class Turn extends Resource
@@ -14,9 +15,10 @@ class Turn extends Resource
     protected $z;
     protected $game;
 
-    public function __construct(TurnId $turnId, ScubPlayer $player, $x, $y, $z)
+    public function __construct(TurnId $turnId, Game $game, ScubPlayer $player, $x, $y, $z)
     {
         parent::__construct($turnId);
+        $this->game = $game;
         $this->player = $player;
         $this->startDate = new \DateTime();
         $this->x = $x;
@@ -30,6 +32,14 @@ class Turn extends Resource
     public function getPlayer()
     {
         return $this->player;
+    }
+
+    /**
+     * @return Game
+     */
+    public function getGame()
+    {
+        return $this->game;
     }
 
     /**

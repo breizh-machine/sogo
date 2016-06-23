@@ -99,9 +99,9 @@ class OrmGameRepositoryTest extends BaseOrmRepository
             $game = new Game(new GameId('agame'), $local, 25, $localCube);
             $game->inviteVisitor($visitor);
             $game->visitorJoined($visitorCube);
-            $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
-            $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
-            $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
+            $game->play(new Turn(new TurnId(), $game, $local, 0, 0, 0));
+            $game->play(new Turn(new TurnId(), $game, $visitor, 1, 0, 0));
+            $game->play(new Turn(new TurnId(), $game, $local, 1, 1, 0));
             $this->gameRepository->add($game);
         }
 
@@ -127,9 +127,9 @@ class OrmGameRepositoryTest extends BaseOrmRepository
             $game->inviteVisitor($visitor);
             $game->visitorJoined($visitorCube);
             $this->gameRepository->add($game);
-            $game->play(new Turn(new TurnId(), $local, 0, 0, 0));
-            $game->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
-            $game->play(new Turn(new TurnId(), $local, 1, 1, 0));
+            $game->play(new Turn(new TurnId(), $game, $local, 0, 0, 0));
+            $game->play(new Turn(new TurnId(), $game, $visitor, 1, 0, 0));
+            $game->play(new Turn(new TurnId(), $game, $local, 1, 1, 0));
             $this->gameRepository->update($game);
         }
 
@@ -145,9 +145,9 @@ class OrmGameRepositoryTest extends BaseOrmRepository
             $game2 = new Game(new GameId('agame2'), $thirdPlayer, 25, $localCube);
             $game2->inviteVisitor($visitor);
             $game2->visitorJoined($visitorCube);
-            $game2->play(new Turn(new TurnId(), $local, 0, 0, 0));
-            $game2->play(new Turn(new TurnId(), $visitor, 1, 0, 0));
-            $game2->play(new Turn(new TurnId(), $local, 1, 1, 0));
+            $game2->play(new Turn(new TurnId(), $game, $local, 0, 0, 0));
+            $game2->play(new Turn(new TurnId(), $game, $visitor, 1, 0, 0));
+            $game2->play(new Turn(new TurnId(), $game, $local, 1, 1, 0));
             $this->gameRepository->add($game2);
         }
 

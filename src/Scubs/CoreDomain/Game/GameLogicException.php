@@ -56,4 +56,6 @@ class GameLogicException extends \Exception
     public static $GAME_ALREADY_STARTED_MESS = 'Visitor is not part of this game';
     public static $VISITOR_NOT_ALLOWED_TO_JOIN = 8025;
     public static $VISITOR_NOT_ALLOWED_TO_JOIN_MESS = 'Visitor is not allowed to join this game';
+    public static $NOT_IN_GAME_PLAYER = 8026;
+    public static $NOT_IN_GAME_PLAYER_MESS = 'Player is not part of this game';
 }

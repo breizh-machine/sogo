@@ -2,12 +2,16 @@
 
 namespace Test\Scubs\CoreDomain\Game;
 
+use Scubs\CoreDomain\Cube\CubeId;
+use Scubs\CoreDomain\Game\Game;
+use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Turn\Turn;
 use Scubs\CoreDomain\Turn\TurnId;
 use Scubs\CoreDomain\User\User as ScubPlayer;
 use Scubs\CoreDomain\Game\GameUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Scubs\CoreDomain\Core\ResourceId;
+use Scubs\CoreDomain\Cube\Cube;
 
 class GameUtilsTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,11 +22,12 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $turns = new ArrayCollection();
-        $t1 = new Turn(new TurnId(), $local, 0, 0, 0);
-        $t2 = new Turn(new TurnId(), $local, 0, 1, 0);
-        $t3 = new Turn(new TurnId(), $visitor, 1, 2, 1);
-        $t4 = new Turn(new TurnId(), $local, 0, 2, 0);
-        $t5 = new Turn(new TurnId(), $local, 0, 3, 0);
+        $game = new Game(new GameId(), $local, 25, new Cube(new CubeId(), 'test', 'test', 0, 'test'));
+        $t1 =new Turn(new TurnId(), $game, $local, 0, 0, 0);
+        $t2 =new Turn(new TurnId(), $game, $local, 0, 1, 0);
+        $t3 =new Turn(new TurnId(), $game, $visitor, 1, 2, 1);
+        $t4 =new Turn(new TurnId(), $game, $local, 0, 2, 0);
+        $t5 =new Turn(new TurnId(), $game, $local, 0, 3, 0);
         $turns->add($t1);
         $turns->add($t2);
         $turns->add($t3);
@@ -42,11 +47,12 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $turns = new ArrayCollection();
-        $t1 = new Turn(new TurnId(), $local, 0, 0, 0);
-        $t2 = new Turn(new TurnId(), $local, 0, 1, 0);
-        $t3 = new Turn(new TurnId(), $visitor, 1, 2, 1);
-        $t4 = new Turn(new TurnId(), $local, 0, 2, 0);
-        $t5 = new Turn(new TurnId(), $local, 0, 3, 0);
+        $game = new Game(new GameId(), $local, 25, new Cube(new CubeId(), 'test', 'test', 0, 'test'));
+        $t1 =new Turn(new TurnId(), $game, $local, 0, 0, 0);
+        $t2 =new Turn(new TurnId(), $game, $local, 0, 1, 0);
+        $t3 =new Turn(new TurnId(), $game, $visitor, 1, 2, 1);
+        $t4 =new Turn(new TurnId(), $game, $local, 0, 2, 0);
+        $t5 =new Turn(new TurnId(), $game, $local, 0, 3, 0);
         $turns->add($t1);
         $turns->add($t2);
         $turns->add($t3);
@@ -66,9 +72,10 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetLastTurn()
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
-        $t1 = new Turn(new TurnId(), $local, 1, 1, 2);
-        $t2 = new Turn(new TurnId(), $local, 1, 2, 1);
-        $t3 = new Turn(new TurnId(), $local, 1, 2, 2);
+        $game = new Game(new GameId(), $local, 25, new Cube(new CubeId(), 'test', 'test', 0, 'test'));
+        $t1 =new Turn(new TurnId(), $game, $local, 1, 1, 2);
+        $t2 =new Turn(new TurnId(), $game, $local, 1, 2, 1);
+        $t3 =new Turn(new TurnId(), $game, $local, 1, 2, 2);
         $turns = new ArrayCollection();
         $turns->add($t1);
         $turns->add($t2);
@@ -82,8 +89,9 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetPlayablePositions()
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
-        $t1 = new Turn(new TurnId(), $local, 1, 1, 2);
-        $t2 = new Turn(new TurnId(), $local, 1, 2, 1);
+        $game = new Game(new GameId(), $local, 25, new Cube(new CubeId(), 'test', 'test', 0, 'test'));
+        $t1 =new Turn(new TurnId(), $game, $local, 1, 1, 2);
+        $t2 =new Turn(new TurnId(), $game, $local, 1, 2, 1);
         $playablePositions = GameUtils::getPlayablePositions($this->gridSize, $t1, $t2);
         $this->assertTrue($playablePositions->contains([1, 1, 2]));
         $this->assertTrue($playablePositions->contains([1, 2, 1]));
@@ -91,15 +99,15 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($playablePositions->contains([1, 0, 3]));
         $this->assertTrue($playablePositions->count() == 4);
 
-        $t1 = new Turn(new TurnId(), $local, 2, 1, 0);
-        $t2 = new Turn(new TurnId(), $local, 1, 0, 1);
+        $t1 =new Turn(new TurnId(), $game, $local, 2, 1, 0);
+        $t2 =new Turn(new TurnId(), $game, $local, 1, 0, 1);
         $playablePositions = GameUtils::getPlayablePositions($this->gridSize, $t1, $t2);
         $this->assertTrue($playablePositions->contains([2, 1, 0]));
         $this->assertTrue($playablePositions->contains([1, 0, 1]));
         $this->assertTrue($playablePositions->count() == 2);
 
-        $t1 = new Turn(new TurnId(), $local, 2, 0, 0);
-        $t2 = new Turn(new TurnId(), $local, 1, 1, 1);
+        $t1 =new Turn(new TurnId(), $game, $local, 2, 0, 0);
+        $t2 =new Turn(new TurnId(), $game, $local, 1, 1, 1);
         $playablePositions = GameUtils::getPlayablePositions($this->gridSize, $t1, $t2);
         $this->assertTrue($playablePositions->contains([2, 0, 0]));
         $this->assertTrue($playablePositions->contains([1, 1, 1]));
@@ -118,11 +126,12 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $visitor = new ScubPlayer(new ResourceId('VISITOR'));
         $turns = new ArrayCollection();
-        $t1 = new Turn(new TurnId(), $local, 1, 1, 1);
-        $t2 = new Turn(new TurnId(), $local, 1, 0, 1);
-        $t3 = new Turn(new TurnId(), $visitor, 1, 2, 1);
-        $t4 = new Turn(new TurnId(), $local, 0, 1, 1);
-        $t5 = new Turn(new TurnId(), $local, 3, 1, 1);
+        $game = new Game(new GameId(), $local, 25, new Cube(new CubeId(), 'test', 'test', 0, 'test'));
+        $t1 =new Turn(new TurnId(), $game, $local, 1, 1, 1);
+        $t2 =new Turn(new TurnId(), $game, $local, 1, 0, 1);
+        $t3 =new Turn(new TurnId(), $game, $visitor, 1, 2, 1);
+        $t4 =new Turn(new TurnId(), $game, $local, 0, 1, 1);
+        $t5 =new Turn(new TurnId(), $game, $local, 3, 1, 1);
         $turns->add($t1);
         $turns->add($t2);
         $turns->add($t3);
@@ -154,9 +163,10 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $turns = new ArrayCollection();
-        $t1 = new Turn(new TurnId(), $local, 1, 0, 1);
-        $t2 = new Turn(new TurnId(), $local, 1, 1, 1);
-        $t3 = new Turn(new TurnId(), $local, 1, 2, 1);
+        $game = new Game(new GameId(), $local, 25, new Cube(new CubeId(), 'test', 'test', 0, 'test'));
+        $t1 =new Turn(new TurnId(), $game, $local, 1, 0, 1);
+        $t2 =new Turn(new TurnId(), $game, $local, 1, 1, 1);
+        $t3 =new Turn(new TurnId(), $game, $local, 1, 2, 1);
         $turns->add($t1);
         $turns->add($t2);
         $turns->add($t3);
@@ -175,10 +185,11 @@ class GameUtilsTest extends \PHPUnit_Framework_TestCase
     {
         $local = new ScubPlayer(new ResourceId('LOCAL'));
         $turns = new ArrayCollection();
-        $t1 = new Turn(new TurnId(), $local, 1, 0, 1);
-        $t2 = new Turn(new TurnId(), $local, 1, 1, 1);
-        $t3 = new Turn(new TurnId(), $local, 1, 2, 1);
-        $t4 = new Turn(new TurnId(), $local, 0, 3, 1);
+        $game = new Game(new GameId(), $local, 25, new Cube(new CubeId(), 'test', 'test', 0, 'test'));
+        $t1 =new Turn(new TurnId(), $game, $local, 1, 0, 1);
+        $t2 =new Turn(new TurnId(), $game, $local, 1, 1, 1);
+        $t3 =new Turn(new TurnId(), $game, $local, 1, 2, 1);
+        $t4 =new Turn(new TurnId(), $game, $local, 0, 3, 1);
         $turns->add($t1);
         $turns->add($t2);
         $turns->add($t3);

@@ -123,6 +123,23 @@ class Game extends Resource
         return $this;
     }
 
+    public function checkIsPlayablePosition($x, $y, $z)
+    {
+        if (GameUtils::isOutOfBoundPosition(self::$GRID_SIZE, $x, $y, $z))
+        {
+            throw new GameLogicException(GameLogicException::$UNPLAYABLE_POSITION_MESS, GameLogicException::$UNPLAYABLE_POSITION);
+        }
+        $turnsAtXzPosition = GameUtils::getTurnsAtPosition($this->turns, self::$GRID_SIZE, $x, $z);
+        if ($turnsAtXzPosition->get($y) !== null)
+        {
+            throw new GameLogicException(GameLogicException::$ALREADY_PLAYED_POSITION_MESS, GameLogicException::$ALREADY_PLAYED_POSITION);
+        } else if ($y > 0 && GameUtils::getTurnAtPosition($this->turns, self::$GRID_SIZE, $x, $y - 1, $z) == null) {
+            throw new GameLogicException(GameLogicException::$UNPLAYABLE_POSITION_MESS, GameLogicException::$UNPLAYABLE_POSITION);
+        }
+        return true;
+    }
+
+
     public function isGameWon()
     {
         return $this->getWinningTurns() !== null;
@@ -151,24 +168,6 @@ class Game extends Resource
         }
         return null;
     }
-
-
-    public function checkIsPlayablePosition($x, $y, $z)
-    {
-        if (GameUtils::isOutOfBoundPosition(self::$GRID_SIZE, $x, $y, $z))
-        {
-            throw new GameLogicException(GameLogicException::$UNPLAYABLE_POSITION_MESS, GameLogicException::$UNPLAYABLE_POSITION);
-        }
-        $turnsAtXzPosition = GameUtils::getTurnsAtPosition($this->turns, self::$GRID_SIZE, $x, $z);
-        if ($turnsAtXzPosition->get($y) !== null)
-        {
-            throw new GameLogicException(GameLogicException::$ALREADY_PLAYED_POSITION_MESS, GameLogicException::$ALREADY_PLAYED_POSITION);
-        } else if ($y > 0 && GameUtils::getTurnAtPosition($this->turns, self::$GRID_SIZE, $x, $y - 1, $z) == null) {
-            throw new GameLogicException(GameLogicException::$UNPLAYABLE_POSITION_MESS, GameLogicException::$UNPLAYABLE_POSITION);
-        }
-        return true;
-    }
-
 
     public function isGameStarted()
     {
@@ -243,14 +242,6 @@ class Game extends Resource
     public function getWinner()
     {
         return $this->winner;
-    }
-
-    /**
-     * @return null
-     */
-    public function getReward()
-    {
-        return $this->reward;
     }
 
     /**
