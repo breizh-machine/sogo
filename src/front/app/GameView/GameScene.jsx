@@ -45,10 +45,6 @@ class GameScene extends React.Component {
             height: window.innerHeight
         })
     }
-    
-    addObjectToScene(object) {
-        this.gameObjects.push(object);
-    }
 
     handleSwipe(e) {
         this.refs.gameBoard.handleSwipe(e);
@@ -66,22 +62,11 @@ class GameScene extends React.Component {
     render() {
         return <div className="game-container">
             <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)}>
-                <Renderer toneMapping={THREE.ReinhardToneMapping} gammaInput gammaOutput physicallyCorrectLights shadowMapType={THREE.PCFSoftShadowMap} shadowMapEnabled background={0xf5f5f5} width={this.state.width} height={this.state.height} pixelRatio={window.devicePixelRatio} >
+                <Renderer background={0xf5f5f5} width={this.state.width} height={this.state.height} pixelRatio={window.devicePixelRatio} >
                     <Scene width={this.state.width} height={this.state.height} camera="maincamera">
                         <PointLight color={0xffffff}
                                     intensity={1.75}
                                     distance={1000}
-                                    castShadow
-                                    shadowCameraVisible
-                                    shadowDarkness={0.5}
-                                    shadowCameraLeft={-1}
-                                    shadowCameraRight={1}
-                                    shadowCameraTop={1}
-                                    shadowCameraBottom={-1}
-                                    shadowCameraFar={10}
-                                    shadowCameraNear={0.1}
-                                    shadowMapWidth={2048}
-                                    shadowMapHeight={2048}
                                     lookAt={new THREE.Vector3( 0, 0, 0 )} position={new THREE.Vector3( 10, 10, 10 )}/>
                         <HemisphereLight color={0xffffff} intensity={0.5} />
                         {this.gameObjects}

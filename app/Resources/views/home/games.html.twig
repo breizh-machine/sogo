@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="games">
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/babel">
+        var renderelement = document.getElementById('games');
+        ReactDOM.render(<GameList />, renderelement);
+    </script>
+{% endblock %}
