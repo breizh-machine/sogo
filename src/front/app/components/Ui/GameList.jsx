@@ -5,17 +5,10 @@ var GameListItem = require('./GameListItem');
 
 var GameList = React.createClass({
     displayName: 'GameList',
-    getInitialState: function() {
-        return {
-            list: [1, 2, 3]
-        };
-    },
-    componentDidMount: function() {
-    },
     render: function() {
         return  <ul>
-            {this.state.list.map(function(listValue){
-                return <GameListItem data={listValue} />;
+            {this.props.gameItems.map(function(gameItem, key) {
+                return <GameListItem key={key} gameItem={gameItem} />;
             })}
         </ul>;
     }
@@ -23,3 +16,5 @@ var GameList = React.createClass({
 
 module.exports = GameList;
 window.GameList = GameList;
+
+

@@ -4,11 +4,9 @@ var React = require('react');
 
 var GameListItem = React.createClass({
     displayName: 'GameListItem',
-    componentDidMount: function() {
-    },
     render: function() {
         return  <li>
-            {this.props.data}
+            {this.props.gameItem}
         </li>;
     }
 });
