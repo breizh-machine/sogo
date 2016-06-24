@@ -35,7 +35,7 @@ var GameLobby = React.createClass({
 
     render: function() {
         return <div className="game-lobby">
-            <GameCreation />
+            <GameCreation user={this.props.user} />
             <GameList gameItems={this.state.allGames} />
         </div>;
     },

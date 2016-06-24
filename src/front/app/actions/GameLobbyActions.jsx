@@ -13,12 +13,6 @@ var GameLobbyActions = {
             actionType: GameLobbyConstants.JOIN_GAME_ACTION,
             gameId: gameId
         });
-    },
-
-    switchViewMode: function() {
-        AppDispatcher.dispatch({
-            actionType: GameLobbyConstants.SWITCH_VIEW_MODE_ACTION
-        });
     }
 };
 

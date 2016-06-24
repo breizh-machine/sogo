@@ -20,5 +20,11 @@
             <argument type="service" id="scubs.api.view_renderer.game" />
             <argument type="service" id="scubs.security.user_provider.username" />
         </service>
+
+        <service id="scubs.api.handler.query.cubes_by_user" class="Scubs\ApiBundle\Handler\Query\CubesByUserQueryHandler">
+            <argument type="service" id="cube_repository" />
+            <argument type="service" id="reward_repository" />
+            <argument type="service" id="scubs.api.view_renderer.cube" />
+        </service>
     </services>
 </container>

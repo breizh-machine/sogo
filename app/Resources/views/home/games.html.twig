@@ -10,6 +10,6 @@
     {{ parent() }}
     <script type="text/babel">
         var renderelement = document.getElementById('game-lobby-container');
-        ReactDOM.render(<GameLobby />, renderelement);
+        ReactDOM.render(<GameLobby user={ {userId: 'a7e8c0d3-9e54-43de-a1bb-307bd428073b'} } />, renderelement);
     </script>
 {% endblock %}
