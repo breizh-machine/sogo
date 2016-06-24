@@ -1,9 +1,6 @@
 'use strict'
 
 var React = require('react');
-var If = require('react-if').If;
-var Then = If.Then;
-var Else = If.Else;
 
 var GameLobbyActions = require('../../actions/GameLobbyActions');
 var GameLobbyConstants = require('../../constants/GameLobbyConstants');
@@ -38,29 +35,9 @@ var GameLobby = React.createClass({
 
     render: function() {
         return <div className="game-lobby">
-            <div className="game-lobby-header">
-                <button onClick={this._onSwitchViewModeClicked}>Switch view</button>
-            </div>
-            <div className="game-lobby-body">
-                <If condition={this.state.viewMode == GameLobbyConstants.VIEW_MODE_LIST} >
-                    <Then>
-                        <GameList gameItems={this.state.allGames} />
-                    </Then>
-                    <Else>
-                        <If condition={this.state.viewMode == GameLobbyConstants.VIEW_MODE_GAME_CREATION} >
-                            <Then>
-                                <GameCreation />
-                            </Then>
-                            <Else>Undefined view mode !</Else>
-                        </If>
-                    </Else>
-                </If>
-            </div>
+            <GameCreation />
+            <GameList gameItems={this.state.allGames} />
         </div>;
-    },
-
-    _onSwitchViewModeClicked: function() {
-        GameLobbyActions.switchViewMode();
     },
 
     _onChange: function() {
