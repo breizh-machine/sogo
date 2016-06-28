@@ -1,3 +1,58 @@
+import React, { Component, PropTypes } from 'react'
+import Modal  from 'react-modal'
+import { connect } from 'react-redux'
+
+import { openGameCreationModalAction, closeGameCreationModalAction } from '../../actions/GameCreationActions'
+import CubesPicker from './CubesPicker';
+
+class GameCreation extends Component {
+    constructor(props) {
+        super(props);
+        this.openGameCreationModal = this.openGameCreationModal.bind(this);
+        this.closeGameCreationModal = this.closeGameCreationModal.bind(this);
+    }
+
+    openGameCreationModal() {
+        const { dispatch } = this.props;
+        dispatch(openGameCreationModalAction());
+    }
+
+    closeGameCreationModal() {
+        const { dispatch } = this.props;
+        dispatch(closeGameCreationModalAction());
+    }
+
+    render() {
+        return  <div className="game-creation">
+            <button onClick={this.openGameCreationModal}>Create a new game</button>
+            <Modal isOpen={this.props.isModalOpen}>
+                <button onClick={this.closeGameCreationModal}>close</button>
+                <h2>Game creation modal</h2>
+                <div className="cube-picker">
+                    <CubesPicker user={this.props.user} />
+                </div>
+            </Modal>
+        </div>;
+    }
+}
+
+GameCreation.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    isModalOpen: PropTypes.bool
+}
+
+function mapStateToProps(state) {
+
+    const isModalOpen = state.gameCreation.isModalOpen;
+
+    return {
+        isModalOpen
+    }
+}
+
+export default connect(mapStateToProps)(GameCreation)
+
+/*
 'use strict'
 
 var React = require('react');
@@ -67,3 +122,4 @@ var GameCreation = React.createClass({
 });
 
 module.exports = GameCreation;
+*/
