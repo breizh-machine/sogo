@@ -35,9 +35,9 @@ var GameCreation = React.createClass({
                         id={'cube-picker'}
                         placeholder={'Select a cube'}
                         value={''}
-                        onSave={this._onCubePickerSaved}
-                        changeAction={this._onCubePickerChanged}
-                        urlBuilder={this._buildCubePickerUrl}
+                        changeAction={this.handleInputValueChanged}
+                        value={this.props.value}
+                        isLoading={this.props.isLoading}
                     />
                     <div className={'picker-container'}>
                         <CubePickerList cubes={this.state.cubePickerItems}/>
@@ -47,14 +47,15 @@ var GameCreation = React.createClass({
         </div>;
     },
 
+    handleInputValueChanged: function(value) {
+        const url = Routing.generate('scubs_api.cubes_by_player', {userId: this.props.user.userId});
+        this.props.fetchCubes(url, 'get', { 'q': value} );
+    },
+
     _onCubePickerChanged: function(payload) {
         this.setState({
             cubePickerItems: payload
         });
-    },
-
-    _onCubePickerSaved: function() {
-
     },
 
     _buildCubePickerUrl: function(value) {
