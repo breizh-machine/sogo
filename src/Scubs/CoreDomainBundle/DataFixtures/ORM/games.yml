@@ -1,0 +1,35 @@
+Scubs\CoreDomainBundle\Entity\Game:
+  admin_local_games_{1..10}:
+    __construct: false
+    id (unique) : <uuid()>
+    startDate: <dateTime()>
+    local: "@admin"
+    visitor: "@player_visitor_*"
+    bet: <numberBetween(20, 200)>
+    localCube: "@generated_cube_*"
+    visitorCube: "@generated_cube_*"
+    visitorJoined: <boolean(50)>
+    visitorDeclined: <boolean(50)>
+    winner: "@admin"
+  admin_visitor_games_{1..10}:
+    __construct: false
+    id (unique) : <uuid()>
+    startDate: <dateTime()>
+    local: "@player_local_*"
+    visitor: "@admin"
+    bet: <numberBetween(20, 200)>
+    localCube: "@generated_cube_*"
+    visitorCube: "@generated_cube_*"
+    visitorJoined: <boolean(50)>
+    visitorDeclined: <boolean(50)>
+  generated_game_{1..30}:
+    __construct: false
+    id (unique) : <uuid()>
+    startDate: <dateTime()>
+    local: "@player_local_*"
+    visitor: "@player_visitor_*"
+    bet: 20
+    localCube: "@generated_cube_*"
+    visitorCube: "@generated_cube_*"
+    visitorJoined: <boolean(50)>
+    visitorDeclined: <boolean(50)>

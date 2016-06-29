@@ -1,14 +1,15 @@
-'use strict'
+import React, { Component } from 'react'
 
-var React = require('react');
+class GameListItem extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-var GameListItem = React.createClass({
-    displayName: 'GameListItem',
-    render: function() {
+    render() {
         return  <li>
-            {this.props.gameItem}
+            {this.props.gameItem.bet} -> {this.props.gameItem.opponent_name}
         </li>;
     }
-});
+}
 
-module.exports = GameListItem
+export default GameListItem;

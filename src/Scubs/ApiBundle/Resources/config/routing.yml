@@ -62,3 +62,11 @@ scubs_api.game.play:
     options:
       expose: true
 
+scubs_api.players_by_user:
+    path:  /users/{userId}/players.{_format}
+    defaults: { _controller: ScubsApiBundle:User:byUser, _format: ~ }
+    requirements:
+        _method: GET
+    options:
+      expose: true
+

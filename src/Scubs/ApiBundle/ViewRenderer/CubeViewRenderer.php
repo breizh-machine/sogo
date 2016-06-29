@@ -23,8 +23,15 @@ class CubeViewRenderer implements ViewRenderer
         $cubeView->id = (string) $data->getId();
         $cubeView->description = $data->getDescription();
         $cubeView->rarity = $data->getRarity();
-        $cubeView->textureUrl = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $data->getTexture()));
-        $cubeView->thumbnailUrl = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $data->getThumbnail()));
+        $cubeView->textureUrl = $data->getTexture();
+        $cubeView->thumbnailUrl = $data->getThumbnail();
+        if (!PathConfiguration::isFullUrl($cubeView->thumbnailUrl)) {
+            $cubeView->thumbnailUrl = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $data->getThumbnail()));
+        }
+        if (!PathConfiguration::isFullUrl($cubeView->textureUrl)) {
+            $cubeView->textureUrl = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $data->getTexture()));
+        }
+        
         return $cubeView;
     }
 }

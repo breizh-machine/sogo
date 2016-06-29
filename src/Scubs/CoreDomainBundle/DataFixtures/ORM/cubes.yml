@@ -1,7 +1,7 @@
 Scubs\CoreDomainBundle\Entity\Cube:
   green_grenat_cube:
     __construct: false
-    id: 'b89012a4-d066-4237-933c-c67bc622a963'
+    id (unique) : 'b89012a4-d066-4237-933c-c67bc622a963'
     texture: 'green-grenat.jpg'
     thumbnail: 'green-grenat-preview.jpg'
     rarity: 0
@@ -9,9 +9,17 @@ Scubs\CoreDomainBundle\Entity\Cube:
     native: true
   blue_stone_cube:
     __construct: false
-    id: '8bc905c1-40f3-4df6-a9c1-bd45232eb278'
+    id (unique) : '8bc905c1-40f3-4df6-a9c1-bd45232eb278'
     texture: 'blue-stone.jpg'
     thumbnail: 'blue-stone-preview.jpg'
     rarity: 0
     description: 'blue_stone_cube_name'
     native: true
+  generated_cube_{1..50}:
+    __construct: false
+    id (unique) : <uuid()>
+    texture: <imageUrl(100, 100)>
+    thumbnail: <imageUrl(100, 100)>
+    rarity: <numberBetween(0,4)>
+    description: <name()>
+    native: false

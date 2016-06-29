@@ -1,13 +1,15 @@
 'use strict'
 
-var React = require('react');
-var CubePickerListItem = require('./CubePickerListItem');
+import React, { Component } from 'react'
+import CubePickerListItem from './CubePickerListItem'
 
-var CubePickerList = React.createClass({
+class CubePickerList extends Component {
 
-    displayName: 'CubePickerList',
+    constructor(props) {
+        super(props);
+    }
 
-    render: function() {
+    render() {
         const clickHandler = this.props.handleCubeClicked;
         return  <ul>
             {this.props.cubes.map(function(cubeItem, key) {
@@ -15,7 +17,6 @@ var CubePickerList = React.createClass({
             })}
         </ul>;
     }
-});
+}
 
-
-module.exports = CubePickerList;
+export default CubePickerList;

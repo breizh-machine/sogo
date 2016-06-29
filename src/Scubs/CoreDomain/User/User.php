@@ -70,7 +70,7 @@ class User extends BaseUser implements ScubPlayer
     public function getProfilePicture()
     {
         //TODO
-        return self::$DEFAULT_PROFILE_PICTURE;
+        return $this->profilePicture !== null ? $this->profilePicture : self::$DEFAULT_PROFILE_PICTURE;
     }
 
     /**

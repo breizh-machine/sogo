@@ -1,0 +1,27 @@
+Scubs\CoreDomainBundle\Entity\User:
+  admin:
+    id (unique) : 'a7e8c0d3-9e54-43de-a1bb-307bd428073b'
+    credits: 100
+    username: 'FrancoisM'
+    email: 'martin.francois78@gmail.com'
+    enabled: 'true'
+    plainPassword: 'admin'
+    roles: ['ROLE_ADMIN']
+  player_local_{1..15}:
+    id (unique) : <uuid()>
+    credits: 100
+    profilePicture: <imageUrl(100, 100)>
+    username (unique): <userName()>
+    email: <freeEmail()>
+    enabled: 'true'
+    plainPassword: 'player'
+    roles: ['ROLE_USER']
+  player_visitor_{1..15}:
+    id (unique) : <uuid()>
+    credits: 100
+    profilePicture: <imageUrl(100, 100)>
+    username (unique): <userName()>
+    email: <freeEmail()>
+    enabled: 'true'
+    plainPassword: 'player'
+    roles: ['ROLE_USER']

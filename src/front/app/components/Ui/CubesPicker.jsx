@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { selectCube, loadCubes } from '../../actions/CubesPickerActions'
-var TextInputRemoteResourcePicker = require('./Utils/TextInputRemoteResourcePicker');
-var CubePickerList = require('./CubePickerList');
+import TextInputRemoteResourcePicker from './Utils/TextInputRemoteResourcePicker';
+import CubePickerList from './CubePickerList';
 
 class CubesPicker extends Component {
     constructor(props) {

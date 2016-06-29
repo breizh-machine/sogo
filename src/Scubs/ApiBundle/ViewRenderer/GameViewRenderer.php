@@ -53,7 +53,7 @@ class GameViewRenderer implements ViewRenderer
         $view->won = $game->getWinner() !== null && $game->getWinner()->equals($authenticatedPlayer);
         $view->lost = $game->getWinner() !== null && $game->getWinner()->equals($opponent);
         $view->bet = $game->getBet();
-        $view->cubeWonThumbnail = $view->won ? $game->getReward()->getCube()->getThumbnail() : null;
+        //$view->cubeWonThumbnail = $view->won ? $game->getReward()->getCube()->getThumbnail() : null;
         $view->nbTurnsPlayed = count($game->getTurns());
         $view->lastTurnPlayedDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format('d m Y') : '';
         $view->gameStartDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format('d m Y') : '';
@@ -68,10 +68,14 @@ class GameViewRenderer implements ViewRenderer
 
         $visitorProfilePicture = $game->getVisitor() !== null ? $game->getVisitor()->getProfilePicture() : User::getDefaultProfilePicture();
         $gameView->opponentProfilePicture = $gameView->amILocal ? $visitorProfilePicture : $game->getLocal()->getProfilePicture();
-        $gameView->opponentProfilePicture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->profileImagesPath, $gameView->opponentProfilePicture));
+        if (!PathConfiguration::isFullUrl($gameView->opponentProfilePicture)) {
+            $gameView->opponentProfilePicture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->profileImagesPath, $gameView->opponentProfilePicture));
+        }
 
         $gameView->myProfilePicture = $gameView->amILocal ? $game->getLocal()->getProfilePicture() : $visitorProfilePicture;
-        $gameView->myProfilePicture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->profileImagesPath, $gameView->myProfilePicture));
+        if (!PathConfiguration::isFullUrl($gameView->myProfilePicture)) {
+            $gameView->myProfilePicture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->profileImagesPath, $gameView->myProfilePicture));
+        }
 
         $gameView->didIWon = $game->isGameEnded() && $game->getWinner()->equals($authenticatedPlayer);
         $gameView->isStarted = $game->isGameStarted();
@@ -81,10 +85,14 @@ class GameViewRenderer implements ViewRenderer
 
         $visitorCubeThumbnail = $game->getVisitorCube() !== null ? $game->getVisitorCube()->getThumbnail() : null;
         $gameView->myCubeThumbnail = $gameView->amILocal ? $game->getLocalCube()->getThumbnail() : $visitorCubeThumbnail;
-        $gameView->myCubeThumbnail = $gameView->myCubeThumbnail !== null ? $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $gameView->myCubeThumbnail)) : '';
+        if (!PathConfiguration::isFullUrl($gameView->myCubeThumbnail)) {
+            $gameView->myCubeThumbnail = $gameView->myCubeThumbnail !== null ? $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $gameView->myCubeThumbnail)) : '';
+        }
 
         $gameView->opponentCubeThumbnail = $gameView->amILocal ? $visitorCubeThumbnail : $game->getLocalCube()->getThumbnail();
-        $gameView->opponentCubeThumbnail = $gameView->opponentCubeThumbnail !== null ? $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $gameView->opponentCubeThumbnail)) : '';
+        if (!PathConfiguration::isFullUrl($gameView->opponentCubeThumbnail)) {
+            $gameView->opponentCubeThumbnail = $gameView->opponentCubeThumbnail !== null ? $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $gameView->opponentCubeThumbnail)) : '';
+        }
         
         $gameView->nbPlayedTurns = count($game->getTurns());
         $gameView->gameStartDate = $game->getStartDate()->format(\DateTime::ISO8601);

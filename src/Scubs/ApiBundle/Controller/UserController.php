@@ -7,21 +7,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use FOS\RestBundle\View;
-use Scubs\ApiBundle\Query\CubesQuery;
-use Scubs\ApiBundle\Query\CubesByUserQuery;
+use Scubs\ApiBundle\Query\PlayersQuery;
 
-class CubeController extends Controller
+class UserController extends Controller
 {
-    /**
-     * @Rest\View
-     */
-    public function allAction()
-    {
-        $query = new CubesQuery();
-        $handler = $this->get('scubs.api.handler.query.cubes');
-        return $handler->handle($query);
-    }
-
     /**
      * @Rest\View
      */
@@ -29,12 +18,12 @@ class CubeController extends Controller
     {
         $q = $request->query->get('q');
 
-        $query = new CubesByUserQuery();
+        $query = new PlayersQuery();
 
         $query->userId = $userId;
         $query->q = $q;
 
-        $handler = $this->get('scubs.api.handler.query.cubes_by_user');
+        $handler = $this->get('scubs.api.handler.query.players_by_user');
 
         return $handler->handle($query);
     }

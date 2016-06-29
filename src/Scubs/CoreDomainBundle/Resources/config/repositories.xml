@@ -9,6 +9,7 @@
         <parameter key="reward_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmRewardRepository</parameter>
         <parameter key="turn_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmTurnRepository</parameter>
         <parameter key="game_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmGameRepository</parameter>
+        <parameter key="user_repository.doctrine_orm.class">Scubs\CoreDomainBundle\Repository\Doctrine\OrmUserRepository</parameter>
     </parameters>
 
     <services>
@@ -17,6 +18,7 @@
         <service id="reward_repository" alias="reward_repository.doctrine_orm" />
         <service id="turn_repository" alias="turn_repository.doctrine_orm" />
         <service id="game_repository" alias="game_repository.doctrine_orm" />
+        <service id="user_repository" alias="user_repository.doctrine_orm" />
 
         <!-- Concrete Implementations -->
         <service id="cube_repository.in_memory" public="false" class="%cube_repository.in_memory.class%" />
@@ -42,6 +44,12 @@
             <argument type="service" id="doctrine" />
             <argument>Scubs\CoreDomainBundle\Entity\Game</argument>
             <argument>Scubs\CoreDomain\Game\GameId</argument>
+        </service>
+
+        <service id="user_repository.doctrine_orm" public="true" class="%user_repository.doctrine_orm.class%">
+            <argument type="service" id="doctrine" />
+            <argument>Scubs\CoreDomainBundle\Entity\User</argument>
+            <argument>Scubs\CoreDomain\User\UserId</argument>
         </service>
     </services>
 </container>

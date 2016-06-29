@@ -18,16 +18,6 @@ export function requestCubes(q) {
     }
 }
 
-/*
-export function receiveCubes(json) {
-    console.log('receiveCubes called : ', json);
-    return {
-        type: CUBES_SUCCESS,
-        cubes: json.map(child => child)
-    }
-}
-*/
-
 function fetchCubes(callParams) {
     return {
         [CALL_API]: {
@@ -38,7 +28,7 @@ function fetchCubes(callParams) {
 }
 export function loadCubes(userId, q = '')
 {
-    const url = Routing.generate('scubs_api.cubes_by_player', {userId: userId, _format: 'json'});
+    const url = Routing.generate('scubs_api.cubes_by_player', {userId: userId, _format: 'json', q: q});
     const method = 'get';
     const params = [];
     const callParams = { url, method, params };

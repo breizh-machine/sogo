@@ -30,7 +30,7 @@ class CubesByUserQueryHandler
             $allCubeViews->add($this->cubeViewRenderer->renderView($cube));
         }
 
-        $allRewardedCubes = $this->rewardRepository->findRewardsByUser($query->userId);
+        $allRewardedCubes = $this->rewardRepository->findRewardsByUser($query->userId, $query->q);
         foreach ($allRewardedCubes as $reward)
         {
             $allCubeViews->add($this->cubeViewRenderer->renderView($reward->getCube()));

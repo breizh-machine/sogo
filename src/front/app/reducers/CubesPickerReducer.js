@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import {
     SELECT_CUBE,
-    CUBES_REQUEST, CUBES_SUCCESS
+    CUBES_REQUEST, CUBES_SUCCESS, CUBES_FAILURE
 } from '../actions/CubesPickerActions'
 
 function cubes(state = {
@@ -22,6 +22,13 @@ function cubes(state = {
             return Object.assign({}, state, {
                 isFetching: (state.callStack - 1) > 0,
                 items: action.response,
+                callStack: state.callStack - 1
+            })
+        case CUBES_FAILURE:
+            //TODO Add error message
+            return Object.assign({}, state, {
+                isFetching: (state.callStack - 1) > 0,
+                items: [],
                 callStack: state.callStack - 1
             })
         case SELECT_CUBE:

@@ -20,17 +20,20 @@ class OrmRewardRepository extends OrmResourceRepository implements RewardReposit
         return $query->getResult();
     }
 
-    public function findRewardsByUser($userId)
+    public function findRewardsByUser($userId, $q = null)
     {
-        $query = $this->getManager()->createQuery('
-        SELECT r
-        FROM ScubsCoreDomainBundle:Reward r
-        JOIN r.game g
-        WHERE g.winner = :user_id'
-        )
-            ->setParameter('user_id', $userId);
-
-        return $query->getResult();
+        if ($q !== null) {
+            return $this->getRewardsByUserAndName($userId, $q);
+        } else {
+            $query = $this->getManager()->createQuery('
+            SELECT r
+            FROM ScubsCoreDomainBundle:Reward r
+            JOIN r.game g
+            WHERE g.winner = :user_id'
+                )
+                    ->setParameter('user_id', $userId);
+            return $query->getResult();
+        }
     }
 
     public function findRewardByGame($gameId)
@@ -44,5 +47,20 @@ class OrmRewardRepository extends OrmResourceRepository implements RewardReposit
         return $query->getOneOrNullResult();
     }
 
+    private function getRewardsByUserAndName($userId, $q)
+    {
+        $query = $this->getManager()->createQuery('
+            SELECT r
+            FROM ScubsCoreDomainBundle:Reward r
+            JOIN r.game g
+            JOIN r.cube c
+            WHERE g.winner = :user_id AND c.description LIKE :q'
+        )
+            ->setParameter('user_id', $userId)
+            ->setParameter('q', sprintf('%%%s%%', $q));
+
+
+        return $query->getResult();
+    }
 
 }

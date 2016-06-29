@@ -1,0 +1,28 @@
+Scubs\CoreDomainBundle\Entity\Turn:
+  admin_local_turns_{1..50}:
+    __construct: false
+    id: <uuid()>
+    player: "@admin"
+    startDate: <dateTime()>
+    x: <numberBetween(0,3)>
+    y: <numberBetween(0,3)>
+    z: <numberBetween(0,3)>
+    game: "@admin_local_games_*"
+  admin_opponent_turns_{1..50}:
+    __construct: false
+    id: <uuid()>
+    player: "@player_local_*"
+    startDate: <dateTime()>
+    x: <numberBetween(0,3)>
+    y: <numberBetween(0,3)>
+    z: <numberBetween(0,3)>
+    game: "@admin_visitor_games_*"
+  generated_turn_{1..200}:
+    __construct: false
+    id: <uuid()>
+    player: "@player_*"
+    startDate: <dateTime()>
+    x: <numberBetween(0,3)>
+    y: <numberBetween(0,3)>
+    z: <numberBetween(0,3)>
+    game: "@generated_game_*"

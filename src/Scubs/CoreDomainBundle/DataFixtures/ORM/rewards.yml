@@ -1,0 +1,13 @@
+Scubs\CoreDomainBundle\Entity\Reward:
+  admin_reward{1..20}:
+    __construct: false
+    id (unique) : <uuid()>
+    cube: "@generated_cube_*"
+    startDate: <dateTime()>
+    game (unique): "@admin_*_games_*"
+  generated_reward{1..30}:
+    __construct: false
+    id (unique) : <uuid()>
+    cube: "@generated_cube_*"
+    startDate: <dateTime()>
+    game (unique): "@generated_game_*"

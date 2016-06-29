@@ -1,27 +1,17 @@
 'use strict'
 
-var React = require('react');
-var ReactPropTypes = React.PropTypes;
+import React, { Component, PropTypes } from 'react';
 
-var TextInputRemoteResourcePicker = React.createClass({
+class TextInputRemoteResourcePicker extends Component {
 
-    propTypes: {
-        className: ReactPropTypes.string,
-        id: ReactPropTypes.string,
-        placeholder: ReactPropTypes.string,
-        value: ReactPropTypes.string,
-        changeAction: ReactPropTypes.func.isRequired,
-        isLoading: ReactPropTypes.bool.isRequired
-    },
-
-    getInputStyle: function() {
+    getInputStyle() {
         return this.props.isLoading ? {'backgroundColor': 'red'} : {};
-    },
+    }
 
     /**
      * @return {object}
      */
-    render: function() {
+    render() {
         return (
             <input
                 className={this.props.className}
@@ -32,8 +22,17 @@ var TextInputRemoteResourcePicker = React.createClass({
                 autoFocus={true}
                 style={this.getInputStyle()}
             />
-        );
+        )
     }
-});
+}
 
-module.exports = TextInputRemoteResourcePicker;
+TextInputRemoteResourcePicker.propTypes = {
+    className: PropTypes.string,
+    id: PropTypes.string,
+    placeholder: PropTypes.string,
+    value: PropTypes.string,
+    changeAction: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired
+}
+
+export default TextInputRemoteResourcePicker;
