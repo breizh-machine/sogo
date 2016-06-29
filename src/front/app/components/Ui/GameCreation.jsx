@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Modal  from 'react-modal'
 import { connect } from 'react-redux'
+import { If, Then } from 'react-if';
 
 import { openGameCreationModalAction, closeGameCreationModalAction, setBetAction } from '../../actions/GameCreationActions'
 import CubesPicker from './CubesPicker';
