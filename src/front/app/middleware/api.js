@@ -10,15 +10,19 @@ function callApi(url, method, params = []) {
         }
     };
     if (method.toUpperCase() !== 'GET' && method.toUpperCase() !== 'HEAD') {
-        options.body = params.join('&');
+        options.body = JSON.stringify(params);
     }
+    console.log(options);
 
     return fetch(url, options)
-        .then(response =>
-            response.json().then(json => ({ json, response }))
-        ).then(({ json, response }) => {
+        .then(function(response) {
+            return response.json().then(json => ({ json, response }));
+        }).then(({ json, response }) => {
             if (!response.ok ||response.status === 500) {
                 return Promise.reject(json)
+            }
+            if (response.status == 201 && response.headers.has('Location')) {
+                return response.headers.get('Location');
             }
             return json;
         });

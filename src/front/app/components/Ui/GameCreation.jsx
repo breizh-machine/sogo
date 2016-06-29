@@ -3,7 +3,7 @@ import Modal  from 'react-modal'
 import { connect } from 'react-redux'
 import { If, Then } from 'react-if';
 
-import { openGameCreationModalAction, closeGameCreationModalAction, setBetAction } from '../../actions/GameCreationActions'
+import { openGameCreationModalAction, closeGameCreationModalAction, setBetAction, createGame } from '../../actions/GameCreationActions'
 import CubesPicker from './CubesPicker';
 import PlayersPicker from './PlayersPicker';
 
@@ -28,7 +28,11 @@ class GameCreation extends Component {
 
     onCreateGameClicked() {
         const { dispatch } = this.props;
-        dispatch(createGameAction());
+        const userId = this.props.user.userId;
+        const {localCubeId, betValue, guest} = this.props;
+        dispatch(createGame(userId, localCubeId, betValue, guest)).then(function(data, data1){
+            console.log('Action create finished with data ', data, data1);
+        });
     }
 
     onBetValueChanged(e) {
@@ -78,17 +82,23 @@ class GameCreation extends Component {
 GameCreation.propTypes = {
     dispatch: PropTypes.func.isRequired,
     betValue: PropTypes.number,
-    isModalOpen: PropTypes.bool
+    isModalOpen: PropTypes.bool,
+    localCubeId: PropTypes.string,
+    guest: PropTypes.string
 }
 
 function mapStateToProps(state) {
 
     const isModalOpen = state.gameCreation.isModalOpen;
     const betValue = state.gameCreation.betValue;
+    const localCubeId = state.cubes.selectedCubeId;
+    const guest = state.players.selectedPlayerId;
 
     return {
         isModalOpen,
-        betValue
+        betValue,
+        localCubeId,
+        guest
     }
 }
 

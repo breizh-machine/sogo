@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\View;
 use Scubs\ApiBundle\Query\GamesQuery;
 use Scubs\ApiBundle\Query\GameQuery;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Scubs\ApiBundle\Command\JoinGameCommand;
@@ -43,11 +44,13 @@ class GameController extends Controller
     public function createGameAction(Request $request, $userId)
     {
         $command = new CreateGameCommand();
-        $command->response = new Response('', Response::HTTP_CREATED);
-        $command->bet = $request->request->get('bet');
+        $command->response = new JsonResponse(null, Response::HTTP_CREATED);
+        $jsonBody = json_decode($request->getContent(), true);
+
+        $command->bet = $jsonBody['bet'];
         $command->local = $userId;
-        $command->localCubeId = $request->request->get('localCubeId');
-        $command->guest = $request->request->has('guest') ? $request->request->get('guest') : null;
+        $command->localCubeId = $jsonBody['localCubeId'];
+        $command->guest =isset($jsonBody['guest']) ? $jsonBody['guest'] : null;
 
         $handler = $this->get('scubs.api.handler.command.game.create');
         $handler->handle($command);

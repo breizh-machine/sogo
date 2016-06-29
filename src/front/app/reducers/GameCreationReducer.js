@@ -1,12 +1,15 @@
 import { combineReducers } from 'redux'
 import {
-    OPEN_GAME_CREATION_MODAL, CLOSE_GAME_CREATION_MODAL,SET_BET_ACTION
+    OPEN_GAME_CREATION_MODAL, CLOSE_GAME_CREATION_MODAL,SET_BET_ACTION,
+    CREATE_GAME_ACTION, CREATE_GAME_SUCCESS, CREATE_GAME_ERROR
 } from '../actions/GameCreationActions'
 
 //TODO get minBetValue
 function gameCreation(state = {
     isModalOpen: false,
-    betValue: 10
+    betValue: 10,
+    creationLoading: false,
+    creationErrorMessage: undefined
 }, action) {
     switch (action.type) {
         case OPEN_GAME_CREATION_MODAL:
@@ -20,6 +23,20 @@ function gameCreation(state = {
         case SET_BET_ACTION:
             return Object.assign({}, state, {
                 betValue: action.bet
+            })
+        case CREATE_GAME_ACTION: 
+            return Object.assign({}, state, {
+                creationLoading: true
+            })
+        case CREATE_GAME_SUCCESS:
+            return Object.assign({}, state, {
+                creationLoading: false
+            })
+        case CREATE_GAME_ERROR:
+            console.log(action);
+            return Object.assign({}, state, {
+                creationLoading: false,
+                creationErrorMessage: action.response.message
             })
         default:
             return state
