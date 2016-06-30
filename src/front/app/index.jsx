@@ -2,15 +2,17 @@ import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import GamesPage from './containers/GamesPage'
+import Scubs from './containers/Scubs'
+import { GAMES_PAGE_STATE, PLAY_PAGE_STATE } from './containers/Pages';
 import configureStore from './stores/configureStore'
 
 const store = configureStore();
+window.store = store;
+window.Provider = Provider;
+window.Scubs = Scubs;
+window.render = render;
+window.React = React;
+window.GAMES_PAGE_STATE = GAMES_PAGE_STATE;
+window.PLAY_PAGE_STATE = PLAY_PAGE_STATE;
 
-render(
-    <Provider store={store}>
-        <GamesPage user={ {userId: 'a7e8c0d3-9e54-43de-a1bb-307bd428073b'} }/>
-    </Provider>,
-    document.getElementById('games-page-container')
-)
 

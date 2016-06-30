@@ -5,7 +5,16 @@
     </div>
 {% endblock %}
 
-
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/babel">
+        let user = '{{ user }}';
+        user = JSON.parse(user.replace(/&quot;/g, '"'));
+        render(
+            <Provider store={store}>
+                <Scubs appState={GAMES_PAGE_STATE} user={user}/>
+            </Provider>,
+            document.getElementById('games-page-container')
+        )
+    </script>
 {% endblock %}

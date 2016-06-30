@@ -27,6 +27,12 @@ class AppController extends Controller
      */
     public function gamesAction(Request $request)
     {
-        return $this->render('home/games.html.twig', []);
+        $user = $this->getUser();
+        $jsonUser = json_encode([
+            'userId' => (string) $user->getId()
+        ]);
+        return $this->render('home/games.html.twig', [
+            'user' => $jsonUser
+        ]);
     }
 }

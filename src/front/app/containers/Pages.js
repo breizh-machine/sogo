@@ -1,0 +1,2 @@
+export const GAMES_PAGE_STATE = 'GAMES_PAGE_STATE';
+export const PLAY_PAGE_STATE = 'PLAY_PAGE_STATE';
