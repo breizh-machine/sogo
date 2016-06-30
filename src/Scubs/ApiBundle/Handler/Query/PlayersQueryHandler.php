@@ -21,7 +21,7 @@ class PlayersQueryHandler
 
     public function handle(PlayersQuery $query)
     {
-        $users = $this->userRepository->getUsersByUserAndUsername($query->userId, $query->q);
+        $users = $this->userRepository->getAvailablePlayersUsername($query->userId, $query->q);
         if (is_array($users)) {
             $users = new ArrayCollection($users);
         }
