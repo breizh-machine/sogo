@@ -3,9 +3,11 @@ import Modal  from 'react-modal'
 import { connect } from 'react-redux'
 import { If, Then } from 'react-if';
 
-import { openGameCreationModalAction, closeGameCreationModalAction, setBetAction, createGame } from '../../actions/GameCreationActions'
+import { isUuid } from '../../tools/stringTools'
+import { openGameCreationModalAction, closeGameCreationModalAction, setBetAction, createGame, hideGameCreationErrorMessage } from '../../actions/GameCreationActions'
 import CubesPicker from './CubesPicker';
 import PlayersPicker from './PlayersPicker';
+import ErrorFlashMessage from './Utils/ErrorFlashMessage'
 
 class GameCreation extends Component {
     constructor(props) {
@@ -14,6 +16,7 @@ class GameCreation extends Component {
         this.closeGameCreationModal = this.closeGameCreationModal.bind(this);
         this.onCreateGameClicked = this.onCreateGameClicked.bind(this);
         this.onBetValueChanged = this.onBetValueChanged.bind(this);
+        this.hideErrorMessage = this.hideErrorMessage.bind(this);
     }
 
     openGameCreationModal() {
@@ -30,9 +33,11 @@ class GameCreation extends Component {
         const { dispatch } = this.props;
         const userId = this.props.user.userId;
         const {localCubeId, betValue, guest} = this.props;
-        dispatch(createGame(userId, localCubeId, betValue, guest)).then(function(data, data1){
-            console.log('Action create finished with data ', data, data1);
-        });
+        dispatch(createGame(userId, localCubeId, betValue, guest)).then(
+            data => {
+                console.log('Action create finished with data ', data);
+            }
+        );
     }
 
     onBetValueChanged(e) {
@@ -42,13 +47,23 @@ class GameCreation extends Component {
     }
 
     _validateGameCreation() {
-        return this.props.betValue > 15;
+        return isUuid(this.props.localCubeId) && this.props.betValue >= 10;
+    }
+
+    hideErrorMessage() {
+        const { dispatch } = this.props;
+        dispatch(hideGameCreationErrorMessage());
     }
 
     render() {
         return  <div className="game-creation">
             <button onClick={this.openGameCreationModal}>Create a new game</button>
             <Modal isOpen={this.props.isModalOpen}>
+                <ErrorFlashMessage 
+                    display={this.props.displayCreationErrorMessage}
+                    message={this.props.creationErrorMessage}
+                    closeHandler={this.hideErrorMessage}
+                />
                 <button onClick={this.closeGameCreationModal}>close</button>
                 <h2>Create a new game</h2>
                 <div className="cube-picker">
@@ -84,7 +99,10 @@ GameCreation.propTypes = {
     betValue: PropTypes.number,
     isModalOpen: PropTypes.bool,
     localCubeId: PropTypes.string,
-    guest: PropTypes.string
+    guest: PropTypes.string,
+    creationErrorMessage: PropTypes.string,
+    creationLoading: PropTypes.bool,
+    displayCreationErrorMessage: PropTypes.bool
 }
 
 function mapStateToProps(state) {
@@ -93,12 +111,18 @@ function mapStateToProps(state) {
     const betValue = state.gameCreation.betValue;
     const localCubeId = state.cubes.selectedCubeId;
     const guest = state.players.selectedPlayerId;
+    const creationErrorMessage = state.gameCreation.creationErrorMessage;
+    const creationLoading = state.gameCreation.creationLoading;
+    const displayCreationErrorMessage = state.gameCreation.displayCreationErrorMessage;
 
     return {
         isModalOpen,
         betValue,
         localCubeId,
-        guest
+        guest,
+        creationErrorMessage,
+        creationLoading,
+        displayCreationErrorMessage
     }
 }
 

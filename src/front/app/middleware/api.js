@@ -12,13 +12,16 @@ function callApi(url, method, params = []) {
     if (method.toUpperCase() !== 'GET' && method.toUpperCase() !== 'HEAD') {
         options.body = JSON.stringify(params);
     }
-    console.log(options);
 
     return fetch(url, options)
         .then(function(response) {
             return response.json().then(json => ({ json, response }));
         }).then(({ json, response }) => {
             if (!response.ok ||response.status === 500) {
+                if (json.error && json.error.exception && json.error.exception.length > 0) {
+                    const errorMessage = json.error.exception[0].message;
+                    return Promise.reject({errorMessage: errorMessage})
+                }
                 return Promise.reject(json)
             }
             if (response.status == 201 && response.headers.has('Location')) {
@@ -73,7 +76,7 @@ export default store => next => action => {
         })),
         error => next(actionWith({
             type: failureType,
-            error: error.message || 'Something bad happened'
+            error: error
         }))
     )
 }

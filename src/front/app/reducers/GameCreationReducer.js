@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import {
-    OPEN_GAME_CREATION_MODAL, CLOSE_GAME_CREATION_MODAL,SET_BET_ACTION,
+    OPEN_GAME_CREATION_MODAL, CLOSE_GAME_CREATION_MODAL,SET_BET_ACTION, HIDE_GAME_CREATION_ERROR_MESSAGE,
     CREATE_GAME_ACTION, CREATE_GAME_SUCCESS, CREATE_GAME_ERROR
 } from '../actions/GameCreationActions'
 
@@ -9,16 +9,28 @@ function gameCreation(state = {
     isModalOpen: false,
     betValue: 10,
     creationLoading: false,
-    creationErrorMessage: undefined
+    creationErrorMessage: undefined,
+    displayCreationErrorMessage: false,
+    localCubeId: '',
+    guest: ''
 }, action) {
     switch (action.type) {
+        case HIDE_GAME_CREATION_ERROR_MESSAGE:
+            return Object.assign({}, state, {
+                displayCreationErrorMessage: false
+            })
         case OPEN_GAME_CREATION_MODAL:
             return Object.assign({}, state, {
                 isModalOpen: true
             })
         case CLOSE_GAME_CREATION_MODAL:
             return Object.assign({}, state, {
-                isModalOpen: false
+                isModalOpen: false,
+                creationErrorMessage: '',
+                displayCreationErrorMessage: false,
+                guest: '',
+                localCubeId: '',
+                betValue: 10
             })
         case SET_BET_ACTION:
             return Object.assign({}, state, {
@@ -26,17 +38,21 @@ function gameCreation(state = {
             })
         case CREATE_GAME_ACTION: 
             return Object.assign({}, state, {
-                creationLoading: true
+                creationLoading: true,
+                creationErrorMessage: '',
+                displayCreationErrorMessage: false
             })
         case CREATE_GAME_SUCCESS:
             return Object.assign({}, state, {
-                creationLoading: false
+                creationLoading: false,
+                isModalOpen: false
             })
         case CREATE_GAME_ERROR:
             console.log(action);
             return Object.assign({}, state, {
                 creationLoading: false,
-                creationErrorMessage: action.response.message
+                creationErrorMessage: action.error.errorMessage,
+                displayCreationErrorMessage: true
             })
         default:
             return state

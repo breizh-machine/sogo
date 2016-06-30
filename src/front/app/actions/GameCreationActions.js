@@ -1,5 +1,12 @@
 import { CALL_API } from '../middleware/api'
 
+export const HIDE_GAME_CREATION_ERROR_MESSAGE = 'HIDE_GAME_CREATION_ERROR_MESSAGE'
+export function hideGameCreationErrorMessage() {
+    return {
+        type: HIDE_GAME_CREATION_ERROR_MESSAGE
+    }
+}
+
 export const OPEN_GAME_CREATION_MODAL = 'OPEN_GAME_CREATION_MODAL'
 export function openGameCreationModalAction() {
     return {
