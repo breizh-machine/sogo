@@ -98,12 +98,16 @@ fos_rest:
         priorities: ['json', 'html', '*/*']
         fallback_format: json
         prefer_extension: true
+    exception:
+      enabled: true
+      exception_controller: 'Scubs\ApiBundle\Controller\ExceptionController::showAction'
 
 sensio_framework_extra:
     view:    { annotations: false }
 
 jms_serializer:
     metadata:
+      auto_detection: true
       directories:
           CoreDomain:
               namespace_prefix: "Scubs\\CoreDomain"

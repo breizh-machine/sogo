@@ -18,10 +18,6 @@ function callApi(url, method, params = []) {
             return response.json().then(json => ({ json, response }));
         }).then(({ json, response }) => {
             if (!response.ok ||response.status === 500) {
-                if (json.error && json.error.exception && json.error.exception.length > 0) {
-                    const errorMessage = json.error.exception[0].message;
-                    return Promise.reject({errorMessage: errorMessage})
-                }
                 return Promise.reject(json)
             }
             if (response.status == 201 && response.headers.has('Location')) {

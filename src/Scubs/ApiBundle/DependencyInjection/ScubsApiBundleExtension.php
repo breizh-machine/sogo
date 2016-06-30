@@ -18,5 +18,6 @@ class ScubsApiBundleExtension extends Extension
         $loader->load('handler/query.xml');
         $loader->load('handler/command.xml');
         $loader->load('viewRenderer.xml');
+        $loader->load('serializer/handlers.xml');
     }
 }

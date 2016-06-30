@@ -9,7 +9,7 @@ function gameCreation(state = {
     isModalOpen: false,
     betValue: 10,
     creationLoading: false,
-    creationErrorMessage: undefined,
+    creationError: {message: '', code: 0},
     displayCreationErrorMessage: false,
     localCubeId: '',
     guest: ''
@@ -26,7 +26,7 @@ function gameCreation(state = {
         case CLOSE_GAME_CREATION_MODAL:
             return Object.assign({}, state, {
                 isModalOpen: false,
-                creationErrorMessage: '',
+                creationError: {message: '', code: 0},
                 displayCreationErrorMessage: false,
                 guest: '',
                 localCubeId: '',
@@ -39,7 +39,7 @@ function gameCreation(state = {
         case CREATE_GAME_ACTION: 
             return Object.assign({}, state, {
                 creationLoading: true,
-                creationErrorMessage: '',
+                creationError: {message: '', code: 0},
                 displayCreationErrorMessage: false
             })
         case CREATE_GAME_SUCCESS:
@@ -48,10 +48,9 @@ function gameCreation(state = {
                 isModalOpen: false
             })
         case CREATE_GAME_ERROR:
-            console.log(action);
             return Object.assign({}, state, {
                 creationLoading: false,
-                creationErrorMessage: action.error.errorMessage,
+                creationError: action.error,
                 displayCreationErrorMessage: true
             })
         default:

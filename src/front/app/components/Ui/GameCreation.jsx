@@ -61,7 +61,7 @@ class GameCreation extends Component {
             <Modal isOpen={this.props.isModalOpen}>
                 <ErrorFlashMessage 
                     display={this.props.displayCreationErrorMessage}
-                    message={this.props.creationErrorMessage}
+                    message={this.props.creationError.message}
                     closeHandler={this.hideErrorMessage}
                 />
                 <button onClick={this.closeGameCreationModal}>close</button>
@@ -100,7 +100,7 @@ GameCreation.propTypes = {
     isModalOpen: PropTypes.bool,
     localCubeId: PropTypes.string,
     guest: PropTypes.string,
-    creationErrorMessage: PropTypes.string,
+    creationError: PropTypes.object,
     creationLoading: PropTypes.bool,
     displayCreationErrorMessage: PropTypes.bool
 }
@@ -111,7 +111,7 @@ function mapStateToProps(state) {
     const betValue = state.gameCreation.betValue;
     const localCubeId = state.cubes.selectedCubeId;
     const guest = state.players.selectedPlayerId;
-    const creationErrorMessage = state.gameCreation.creationErrorMessage;
+    const creationError = state.gameCreation.creationError;
     const creationLoading = state.gameCreation.creationLoading;
     const displayCreationErrorMessage = state.gameCreation.displayCreationErrorMessage;
 
@@ -120,7 +120,7 @@ function mapStateToProps(state) {
         betValue,
         localCubeId,
         guest,
-        creationErrorMessage,
+        creationError,
         creationLoading,
         displayCreationErrorMessage
     }
