@@ -14,10 +14,10 @@ class GameList extends Component {
     }
 
     render() {
-        const { games } = this.props;
+        const { games, joinGameHandler } = this.props;
         return  <ul>
             {games.map(function(gameItem, key) {
-                return <GameListItem key={key} gameItem={gameItem} />;
+                return <GameListItem key={key} gameItem={gameItem} joinGameHandler={joinGameHandler} />;
             })}
         </ul>;
     }
@@ -25,7 +25,8 @@ class GameList extends Component {
 
 GameList.propTypes = {
     games: PropTypes.array,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    joinGameHandler: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {

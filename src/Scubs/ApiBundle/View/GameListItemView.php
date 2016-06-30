@@ -16,4 +16,6 @@ class GameListItemView
     public $nbTurnsPlayed;
     public $lastTurnPlayedDate;
     public $gameStartDate;
+    public $joinable;
+    public $playable;
 }
