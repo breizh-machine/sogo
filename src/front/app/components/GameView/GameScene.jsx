@@ -1,38 +1,25 @@
-'use strict'
-
-var React = require('react');
-var THREE = require('three');
-var ReactTHREE = require('react-three');
-var Hammer = require('react-hammerjs');
-
-var Renderer = ReactTHREE.Renderer;
-var Scene = ReactTHREE.Scene;
-var PointLight = ReactTHREE.PointLight;
-var HemisphereLight = ReactTHREE.HemisphereLight;
-
-var GameBoard = require('./GameBoard');
-var GameCamera = require('./GameCamera');
-var GameControls = require('./GameControls');
-
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import React3 from 'react-three-renderer';
+import THREE, { Vector3, Fog, BoxGeometry, MeshLambertMaterial, Euler, Matrix4 } from 'three';
+import { resizeScene, translateCameraOnZ, rotateCameraOnAxis, rotateAroundGameBoard, updateRotationImpulse, addRotationImpulse, stopGameBoardRotation } from '../../actions/GameView/GameSceneActions';
+import Hammer from 'react-hammerjs'
 
 class GameScene extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            width: window.innerWidth,
-            height: window.innerHeight
-        };
-        this.gameObjects = [];
-        this.gameObjects.push(<GameBoard ref="gameBoard" />);
-        this.gameObjects.push(<GameCamera ref="gameCamera"/>);
+
+    constructor(props, context) {
+        super(props, context);
+        this.onAnimate = this.onAnimate.bind(this);
+        this.onSwipe = this.onSwipe.bind(this);
+        this.onTap = this.onTap.bind(this);
+        this.onWindowResize = this.onWindowResize.bind(this);
     }
 
     componentDidMount() {
-        this.camera = this.refs['gameCamera'].getThreeJsObject();
-        this.camera.rotateOnAxis(new THREE.Vector3( 1, 0, 0), THREE.Math.degToRad( -30 ));
-        this.camera.translateZ( 5 );
-
-        window.addEventListener( 'resize', this.onWindowResize.bind(this), false )
+        const { dispatch } = this.props;
+        dispatch(translateCameraOnZ( 5 ));
+        dispatch(rotateCameraOnAxis( new Vector3( 1, 0, 0), -25 ));
+        window.addEventListener( 'resize', this.onWindowResize, false )
     }
 
     componentWillUnmount() {
@@ -40,43 +27,91 @@ class GameScene extends React.Component {
     }
 
     onWindowResize() {
-        this.setState({
-            width: window.innerWidth,
-            height: window.innerHeight
-        })
+        const { dispatch } = this.props;
+        dispatch(resizeScene(window.innerWidth, window.innerHeight))
     }
 
-    handleSwipe(e) {
-        this.refs.gameBoard.handleSwipe(e);
+    onSwipe(e) {
+        const { dispatch } = this.props;
+        dispatch(addRotationImpulse( -1 * e.deltaX ));
     }
 
-    handleTap(e) {
-        this.refs.gameBoard.handleTap(e);
+    onTap() {
+        const { dispatch } = this.props;
+        dispatch(stopGameBoardRotation());
     }
 
-    getRef(id) {
-        console.log('Getting ref', this.refs[id]);
-        return this.refs[id];
+    onAnimate() {
+        const { dispatch } = this.props;
+        dispatch(updateRotationImpulse());
+        dispatch(rotateAroundGameBoard());
     }
 
     render() {
-        return <div className="game-container">
-            <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)}>
-                <Renderer background={0xf5f5f5} width={this.state.width} height={this.state.height} pixelRatio={window.devicePixelRatio} >
-                    <Scene width={this.state.width} height={this.state.height} camera="maincamera">
-                        <PointLight color={0xffffff}
-                                    intensity={1.75}
-                                    distance={1000}
-                                    lookAt={new THREE.Vector3( 0, 0, 0 )} position={new THREE.Vector3( 10, 10, 10 )}/>
-                        <HemisphereLight color={0xffffff} intensity={0.5} />
-                        {this.gameObjects}
-                    </Scene>
-                </Renderer>
+        const { width, height, cameraMatrix} = this.props;
+        let position = new Vector3();
+        let rotation = new Euler();
+        let scale = new Vector3();
+        cameraMatrix.decompose(position, rotation, scale);
+        return (
+            <Hammer onTap={this.onTap} onSwipe={this.onSwipe}>
+                <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} >
+                    <scene>
+                        <perspectiveCamera position={position} rotation={rotation} lookAt={new Vector3(0, 0, 0) } name="camera" fov={75} aspect={width / height} near={0.1} far={1000} />
+                        <ambientLight color={0x666666} />
+                        <directionalLight color={0xffffff} intensity={1.75} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
+                        <mesh>
+                            <boxGeometry width={1} height={1} depth={1} />
+                            <meshBasicMaterial color={0x00ff00} />
+                        </mesh>
+                        <object3D castShadow receiveShadow>
+                            <mesh castShadow receiveShadow position={new Vector3(0,0,0)}>
+                                <boxGeometry width={4} height={0.1} depth={4} />
+                                <meshBasicMaterial color={0x00ffff} />
+                            </mesh>
+                            <mesh castShadow receiveShadow position={new Vector3(0,0,0)}>
+                                <boxGeometry width={0.1} height={0.1} depth={0.1} />
+                                <meshBasicMaterial color={0x00ff00} />
+                            </mesh>
+                        </object3D>
+                    </scene>
+                </React3>
             </Hammer>
-
-            <GameControls gameboard={this.getRef.bind(this)} />
-        </div>
+        );
     }
 }
 
-module.exports = GameScene;
+GameScene.defaultProps = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    cameraRotationY: 0,
+    cameraMatrix: new Matrix4()
+}
+
+GameScene.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    cameraRotationY: React.PropTypes.number,
+    cameraMatrix: React.PropTypes.object,
+    rotationImpulse: React.PropTypes.number
+};
+
+function mapStateToProps(state) {
+
+    const width = state.gameScene.width;
+    const height = state.gameScene.height;
+    const cameraMatrix = state.gameScene.cameraMatrix;
+    const rotationImpulse = state.gameScene.rotationImpulse;
+    const cameraRotationY = state.gameScene.cameraRotationY;
+
+    return {
+        width,
+        height,
+        cameraRotationY,
+        cameraMatrix,
+        rotationImpulse
+    }
+}
+
+export default connect(mapStateToProps)(GameScene)

@@ -1,30 +1,28 @@
-'use strict'
+import React, { Component, PropTypes } from 'react'
+import THREE from 'three'
+import ReactTHREE from 'react-three'
+const PerspectiveCamera = ReactTHREE.PerspectiveCamera;
 
-var React = require('react');
-var THREE = require('three');
-var ReactTHREE = require('react-three');
-var PerspectiveCamera = ReactTHREE.PerspectiveCamera;
+class GameCamera extends Component {
 
-var GameCamera = React.createClass({
-    displayName: 'GameCamera',
-    getInitialState: function() {
-        return {
-            width: window.innerWidth,
-            height: window.innerHeight,
-            name:'maincamera',
-            fov:'75',
-            aspect:window.innerWidth/window.innerHeight,
-            near: 0.1,
-            far:1000
-        };
-    },
-    getThreeJsObject: function() {
-        return this.refs['cameraRef'];
-    },
-    render: function() {
-        var threeCamera = <PerspectiveCamera ref="cameraRef" {...this.state} />;
-        return threeCamera;
+    constructor(props) {
+        super(props);
     }
-});
+
+    render() {
+        return <PerspectiveCamera {...this.props} />;
+    }
+}
+
+GameCamera.defaultProps = {
+    ref: 'maincamera',
+    name: 'maincamera',
+    fov: '75',
+    aspect: window.innerWidth/window.innerHeight,
+    near: 0.1,
+    far: 1000,
+    rotation: new THREE.Vector3( 0, 0, 0),
+    position: new THREE.Vector3( 0, 5, 0)
+}
 
 module.exports = GameCamera

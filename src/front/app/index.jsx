@@ -12,7 +12,5 @@ window.Provider = Provider;
 window.Scubs = Scubs;
 window.render = render;
 window.React = React;
-window.GAMES_PAGE_STATE = GAMES_PAGE_STATE;
-window.PLAY_PAGE_STATE = PLAY_PAGE_STATE;
 
 

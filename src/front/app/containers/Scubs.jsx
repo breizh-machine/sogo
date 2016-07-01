@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { GAMES_PAGE_STATE, PLAY_PAGE_STATE } from './Pages';
 import GamesPage from './GamesPage';
+import PlayPage from './PlayPage';
 
 class Scubs extends Component {
     constructor(props) {
@@ -14,9 +15,7 @@ class Scubs extends Component {
             case GAMES_PAGE_STATE:
                 return <GamesPage user={this.props.user}/>;
             case PLAY_PAGE_STATE:
-                return <div>
-                    Play state
-                </div>;
+                return <PlayPage user={this.props.user} currentGame={this.props.currentGame}/>;
             default:
                 return <div>
                     Unknown state

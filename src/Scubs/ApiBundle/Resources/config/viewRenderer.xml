@@ -20,5 +20,9 @@
         <service id="scubs.api.view_renderer.player" class="Scubs\ApiBundle\ViewRenderer\PlayerViewRenderer">
             <argument type="service" id="assets.packages" />
         </service>
+
+        <service id="scubs.api.view_renderer.user" class="Scubs\ApiBundle\ViewRenderer\UserViewRenderer">
+            <argument type="service" id="assets.packages" />
+        </service>
     </services>
 </container>

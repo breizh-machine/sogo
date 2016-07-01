@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div id="games-page-container">
+    <div id="profile-page-container">
     </div>
 {% endblock %}
 
@@ -10,10 +10,10 @@
     <script type="text/babel">
         let user = JSON.parse("{{ user|e('js') }}");
         render(
-            <Provider store={store}>
-                <Scubs appState={'GAMES_PAGE_STATE'} user={user}/>
-            </Provider>,
-            document.getElementById('games-page-container')
+                <Provider store={store}>
+                    <Scubs appState={'PROFILE_PAGE_STATE'} user={user}/>
+                </Provider>,
+                document.getElementById('profile-page-container')
         )
     </script>
 {% endblock %}
