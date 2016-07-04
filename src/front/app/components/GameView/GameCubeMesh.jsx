@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import THREE, { Vector3 } from 'three'
-
-const gridSize = 4;
-const cubeSize = 0.1;
+import { gridSize, cubeSize, gridHeight } from './GameScene'
 
 class GameCubeMesh extends Component {
 
@@ -12,17 +10,22 @@ class GameCubeMesh extends Component {
 
     _calculateWorldPosition(turnPosition) {
         let {x, y, z} = turnPosition;
-        x -= gridSize / 2 + cubeSize;
-        z -= gridSize / 2 + cubeSize;
-        y += cubeSize;
+
+        const initialYOffset = 3 * gridHeight;
+        const unit = gridSize / 9;
+
+        x =  2 * x * unit - 3 * unit;
+        z =  -1 * (2 * z * unit - 3 * unit);
+        y = ( initialYOffset + cubeSize) * 0.5 + y * (unit + gridHeight);
+
         return new Vector3(x, y, z);
     }
 
     render() {
         const position = this._calculateWorldPosition(this.props.position);
         return <mesh castShadow receiveShadow position={position}>
-            <boxGeometry width={0.1} height={0.1} depth={0.1} />
-            <meshBasicMaterial color={0x00ffff} />
+            <boxGeometry width={cubeSize} height={cubeSize} depth={cubeSize} />
+            <meshBasicMaterial color={0xff00ff} />
         </mesh>
     }
 }

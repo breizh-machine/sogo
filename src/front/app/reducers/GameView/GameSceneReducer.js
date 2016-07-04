@@ -37,7 +37,6 @@ function gameScene(state = {
             })
         case ADD_ROTATION_GAMEBOARD_IMPULSE:
             const newRotationImpulse = state.rotationImpulse + action.rotationImpulse;
-            console.log(newRotationImpulse);
             return Object.assign({}, state, {
                 rotationImpulse: newRotationImpulse
             })

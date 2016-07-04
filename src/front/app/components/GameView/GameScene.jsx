@@ -8,6 +8,10 @@ import Hammer from 'react-hammerjs'
 
 import GameCubeMesh from './GameCubeMesh.jsx'
 
+export const gridSize = 4;
+export const cubeSize = 0.25;
+export const gridHeight = 0.1;
+
 class GameScene extends React.Component {
 
     constructor(props, context) {
@@ -20,8 +24,8 @@ class GameScene extends React.Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(translateCameraOnZ( 5 ));
-        dispatch(rotateCameraOnAxis( new Vector3( 1, 0, 0), -25 ));
+        dispatch(translateCameraOnZ( 6 ));
+        dispatch(rotateCameraOnAxis( new Vector3( 1, 0, 0), -32 ));
         window.addEventListener( 'resize', this.onWindowResize, false )
     }
 
@@ -72,11 +76,11 @@ class GameScene extends React.Component {
                                 return <GameCubeMesh key={key} position={new Vector3(turnItem.x, turnItem.y, turnItem.z)} />;
                             })}
                             <mesh castShadow receiveShadow position={new Vector3(0,0,0)}>
-                                <boxGeometry width={4} height={0.1} depth={4} />
+                                <boxGeometry width={gridSize} height={gridHeight} depth={gridSize} />
                                 <meshBasicMaterial color={0x00ffff} />
                             </mesh>
                             <mesh castShadow receiveShadow position={new Vector3(0,0,0)}>
-                                <boxGeometry width={0.1} height={0.1} depth={0.1} />
+                                <boxGeometry width={cubeSize} height={cubeSize} depth={cubeSize} />
                                 <meshBasicMaterial color={0x00ff00} />
                             </mesh>
                         </object3D>
