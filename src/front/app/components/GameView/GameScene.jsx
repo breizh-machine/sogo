@@ -66,7 +66,7 @@ class GameScene extends React.Component {
         cameraMatrix.decompose(position, rotation, scale);
         return (
             <Hammer onTap={this.onTap} onSwipe={this.onSwipe}>
-                <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} >
+                <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} clearColor={0xffffff}>
                     <scene>
                         <Resources
                             localCubeTexture={this.props.game.localCubeTexture}
@@ -74,8 +74,8 @@ class GameScene extends React.Component {
                             gameboardTexture={this.props.game.gameboardTexture}
                         />
                         <perspectiveCamera position={position} rotation={rotation} name="camera" fov={75} aspect={width / height} near={0.1} far={1000} />
-                        <ambientLight color={0x666666} />
-                        <directionalLight castShadow color={0xffffff} intensity={0.85} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
+                        <ambientLight color={0x999999} />
+                        <directionalLight castShadow color={0xffffff} intensity={1.25} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
                         <object3D>
                             <mesh position={new Vector3(0,0,0)} receiveShadow>
                                 <boxGeometry width={gridSize} height={gridHeight} depth={gridSize} />
