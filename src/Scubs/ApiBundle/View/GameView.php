@@ -4,6 +4,7 @@ namespace Scubs\ApiBundle\View;
 
 class GameView
 {
+    public $id;
     public $opponentProfilePicture;
     public $myProfilePicture;
     public $amILocal;
@@ -24,4 +25,7 @@ class GameView
     public $isNewReward;
     public $bet;
     public $newCreditsValue;
+    public $localCubeTexture;
+    public $visitorCubeTexture;
+    public $gameboardTexture;
 }

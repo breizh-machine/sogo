@@ -66,6 +66,8 @@ class GameViewRenderer implements ViewRenderer
     private function renderGameView(Game $game, ScubPlayer $authenticatedPlayer, Reward $reward = null)
     {
         $gameView = new GameView();
+        $gameView->gameboardTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, 'gameboard.jpg'));
+        $gameView->id = (string) $game->getId();
         $gameView->amILocal = $game->getLocal()->equals($authenticatedPlayer);
 
         $visitorProfilePicture = $game->getVisitor() !== null ? $game->getVisitor()->getProfilePicture() : User::getDefaultProfilePicture();
@@ -95,7 +97,7 @@ class GameViewRenderer implements ViewRenderer
         if (!PathConfiguration::isFullUrl($gameView->opponentCubeThumbnail)) {
             $gameView->opponentCubeThumbnail = $gameView->opponentCubeThumbnail !== null ? $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $gameView->opponentCubeThumbnail)) : '';
         }
-        
+
         $gameView->nbPlayedTurns = count($game->getTurns());
         $gameView->gameStartDate = $game->getStartDate()->format(\DateTime::ISO8601);
         $gameView->lastTurnStartDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format(\DateTime::ISO8601) : '';
@@ -106,11 +108,21 @@ class GameViewRenderer implements ViewRenderer
         $gameView->newCreditsValue = $game->getWinner() !== null ? $game->getWinner()->getCredits() : '';
         $gameView->turns = [];
 
+        $gameView->localCubeTexture = $game->getLocalCube()->getTexture();
+        if (!PathConfiguration::isFullUrl($gameView->localCubeTexture)) {
+            $gameView->localCubeTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $game->getLocalCube()->getTexture()));
+        }
+        $gameView->visitorCubeTexture = $game->getVisitorCube()->getTexture();
+        if (!PathConfiguration::isFullUrl($gameView->visitorCubeTexture)) {
+            $gameView->visitorCubeTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $game->getVisitorCube()->getTexture()));
+        }
+
         foreach ($game->getTurns() as $turn) {
             $turnView = new TurnView();
             $turnView->x = $turn->getX();
             $turnView->y = $turn->getY();
             $turnView->z = $turn->getZ();
+            $turnView->isLocalTurn = $game->getLocal()->equals($turn->getPlayer());
             $gameView->turns[] = $turnView;
         }
         

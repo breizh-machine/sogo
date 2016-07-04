@@ -7,4 +7,5 @@ class TurnView
     public $x;
     public $y;
     public $z;
+    public $isLocalTurn;
 }

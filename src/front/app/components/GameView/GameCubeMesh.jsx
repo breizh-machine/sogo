@@ -23,9 +23,11 @@ class GameCubeMesh extends Component {
 
     render() {
         const position = this._calculateWorldPosition(this.props.position);
-        return <mesh castShadow receiveShadow position={position}>
+        const _material = this.props.isLocalTurn ? 'localCubePhongMaterial' : 'visitorCubePhongMaterial';
+
+        return <mesh position={position} castShadow>
             <boxGeometry width={cubeSize} height={cubeSize} depth={cubeSize} />
-            <meshBasicMaterial color={0xff00ff} />
+            <materialResource resourceId={_material} />
         </mesh>
     }
 }

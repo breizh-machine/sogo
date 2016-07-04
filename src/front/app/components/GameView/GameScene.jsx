@@ -6,7 +6,8 @@ import { resizeScene, translateCameraOnZ, rotateCameraOnAxis, rotateAroundGameBo
     updateRotationImpulse, addRotationImpulse, stopGameBoardRotation } from '../../actions/GameView/GameSceneActions';
 import Hammer from 'react-hammerjs'
 
-import GameCubeMesh from './GameCubeMesh.jsx'
+import GameCubeMesh from './GameCubeMesh'
+import Resources from './Resources'
 
 export const gridSize = 4;
 export const cubeSize = 0.25;
@@ -26,7 +27,10 @@ class GameScene extends React.Component {
         const { dispatch } = this.props;
         dispatch(translateCameraOnZ( 6 ));
         dispatch(rotateCameraOnAxis( new Vector3( 1, 0, 0), -32 ));
-        window.addEventListener( 'resize', this.onWindowResize, false )
+        window.addEventListener( 'resize', this.onWindowResize, false );
+
+        console.log('props : ', this.props);
+
     }
 
     componentWillUnmount() {
@@ -64,25 +68,22 @@ class GameScene extends React.Component {
             <Hammer onTap={this.onTap} onSwipe={this.onSwipe}>
                 <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} >
                     <scene>
+                        <Resources
+                            localCubeTexture={this.props.game.localCubeTexture}
+                            visitorCubeTexture={this.props.game.visitorCubeTexture}
+                            gameboardTexture={this.props.game.gameboardTexture}
+                        />
                         <perspectiveCamera position={position} rotation={rotation} name="camera" fov={75} aspect={width / height} near={0.1} far={1000} />
                         <ambientLight color={0x666666} />
-                        <directionalLight color={0xffffff} intensity={1.75} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
-                        <mesh>
-                            <boxGeometry width={1} height={1} depth={1} />
-                            <meshBasicMaterial color={0x00ff00} />
-                        </mesh>
-                        <object3D castShadow receiveShadow>
-                            {game.turns.map(function(turnItem, key) {
-                                return <GameCubeMesh key={key} position={new Vector3(turnItem.x, turnItem.y, turnItem.z)} />;
-                            })}
-                            <mesh castShadow receiveShadow position={new Vector3(0,0,0)}>
+                        <directionalLight castShadow color={0xffffff} intensity={0.85} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
+                        <object3D>
+                            <mesh position={new Vector3(0,0,0)} receiveShadow>
                                 <boxGeometry width={gridSize} height={gridHeight} depth={gridSize} />
-                                <meshBasicMaterial color={0x00ffff} />
+                                <materialResource resourceId={'gameboardPhongMaterial'} />
                             </mesh>
-                            <mesh castShadow receiveShadow position={new Vector3(0,0,0)}>
-                                <boxGeometry width={cubeSize} height={cubeSize} depth={cubeSize} />
-                                <meshBasicMaterial color={0x00ff00} />
-                            </mesh>
+                            {game.turns.map(function(turnItem, key) {
+                                return <GameCubeMesh key={key} position={new Vector3(turnItem.x, turnItem.y, turnItem.z)} isLocalTurn={turnItem.isLocalTurn} />;
+                            })}
                         </object3D>
                     </scene>
                 </React3>
