@@ -1,7 +1,8 @@
 export const MOVE_CURSOR = 'MOVE_CURSOR'
-export function moveCursor(direction) {
+export function moveCursor(direction, turns) {
     return {
         type: MOVE_CURSOR,
-        direction: direction
+        direction: direction,
+        turns: turns
     }
 }

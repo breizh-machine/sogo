@@ -33,7 +33,7 @@ export function getCursorNextPosition(currentPosition, direction, angle, turns) 
             position = _moveCursorTop(currentPosition, angle, turns);
             break;
     }
-    return calculateWorldPosition(position);
+    return position;
 }
 
 function _moveCursorLeft(currentPosition, angle, turns)
@@ -64,50 +64,52 @@ function getNextAvailablePosition(currentPosition, direction, turns) {
             x--;
             let newPosition = new Vector3(x, 0, z);
             if (isPositionAvailable(newPosition, turns)) {
+                newPosition.y = 4;
                 return newPosition
             }
         }
-        return new Vector3(0, 0, 0);
     } else if (direction.x == 1) {
         while (x < 4) {
             x++;
             let newPosition = new Vector3(x, 0, z);
             if (isPositionAvailable(newPosition, turns)) {
+                newPosition.y = 4;
                 return newPosition
             }
         }
-        return new Vector3(0, 0, 0);
     } else if (direction.z == -1) {
         while (z > -1) {
             z--;
             let newPosition = new Vector3(x, 0, z);
             if (isPositionAvailable(newPosition, turns)) {
+                newPosition.y = 4;
                 return newPosition
             }
         }
-        return new Vector3(0, 0, 0);
     } else if (direction.z == 1) {
         while (z < 4) {
             z++;
             let newPosition = new Vector3(x, 0, z);
             if (isPositionAvailable(newPosition, turns)) {
+                newPosition.y = 4;
                 return newPosition
             }
         }
-        return new Vector3(0, 0, 0);
     }
+    return currentPosition;
 }
 
 function isPositionAvailable(position, turns)
 {
     const { x, z } = position;
     const yAtPosition = getYatPosition(position.x, position.z, turns);
-    return (x > 0 && x < 4 && yAtPosition > 0 && yAtPosition < 4 && z > 0 && z < 4);
+    return (x > -1 && x < 4 && yAtPosition > -1 && yAtPosition < 4 && z > -1 && z < 4);
 }
 
 function getYatPosition(x, z, turns)
 {
-    for (const turn in turns) {
+    for (var turnKey in turns) {
+        var turn = turns[turnKey]
         if (turn.x == x && turn.z == z) {
             return turn.y < 3 ? turn.y + 1 : -1;
         }

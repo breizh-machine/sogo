@@ -55,4 +55,4 @@ class Resources extends Component {
     }
 }
 
-module.exports = Resources
+export default Resources

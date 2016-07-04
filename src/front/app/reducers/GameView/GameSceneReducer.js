@@ -15,8 +15,8 @@ function gameScene(state = {
     cameraMatrix: new Matrix4(),
     rotationImpulse: 0,
     cameraRotationY: 0,
-    cursorPosition: new Vector3(0, 0, 0),
-    game: {}
+    game: {},
+    cursorPosition: new Vector3(0, 4, 0)
 }, action) {
     switch (action.type) {
         case RESIZE_SCENE:
@@ -61,9 +61,10 @@ function gameScene(state = {
             const currentPosition = state.cursorPosition;
             const direction = action.direction;
             const angle = state.cameraRotationY;
-            const turns = state.game.turns !== undefined ? state.game.turns : [];
+            const turns = action.turns;
 
             const nextPosition = getCursorNextPosition(currentPosition, direction, angle, turns);
+            console.log('getting MOVE_CURSOR', nextPosition);
             return Object.assign({}, state, {
                 cursorPosition: nextPosition
             });

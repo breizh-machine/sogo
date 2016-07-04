@@ -21,4 +21,4 @@ class GameCubeMesh extends Component {
     }
 }
 
-module.exports = GameCubeMesh
+export default GameCubeMesh

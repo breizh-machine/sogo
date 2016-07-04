@@ -8,8 +8,7 @@ import Hammer from 'react-hammerjs'
 
 import GameCubeMesh from './GameCubeMesh'
 import Resources from './Resources'
-import GameControls from './GameControls'
-import { moveCursor } from '../../actions/GameView/GameControlsActions'
+import { calculateWorldPosition } from '../../tools/threeTools'
 
 export const gridSize = 4;
 export const cubeSize = 0.25;
@@ -23,7 +22,6 @@ class GameScene extends Component {
         this.onSwipe = this.onSwipe.bind(this);
         this.onTap = this.onTap.bind(this);
         this.onWindowResize = this.onWindowResize.bind(this);
-        this.handleMoveCursor = this.handleMoveCursor.bind(this);
     }
 
     componentDidMount() {
@@ -61,13 +59,9 @@ class GameScene extends Component {
         dispatch(rotateAroundGameBoard());
     }
 
-    handleMoveCursor(direction) {
-        const { dispatch } = this.props;
-        dispatch(moveCursor(direction));
-    }
-
     render() {
-        const { width, height, cameraMatrix, game, cursorPosition} = this.props;
+        const { width, height, cameraMatrix, game} = this.props;
+        let cursorPosition = calculateWorldPosition(this.props.cursorPosition);
         let position = new Vector3();
         let rotation = new Euler();
         let scale = new Vector3();
@@ -97,7 +91,6 @@ class GameScene extends Component {
                                 <materialResource resourceId={'gameboardPhongMaterial'} />
                             </mesh>
                         </object3D>
-                        <GameControls handleMoveCursor={this.handleMoveCursor} />
                     </scene>
                 </React3>
             </Hammer>
