@@ -8,12 +8,14 @@ import Hammer from 'react-hammerjs'
 
 import GameCubeMesh from './GameCubeMesh'
 import Resources from './Resources'
+import GameControls from './GameControls'
+import { moveCursor } from '../../actions/GameView/GameControlsActions'
 
 export const gridSize = 4;
 export const cubeSize = 0.25;
 export const gridHeight = 0.1;
 
-class GameScene extends React.Component {
+class GameScene extends Component {
 
     constructor(props, context) {
         super(props, context);
@@ -21,6 +23,7 @@ class GameScene extends React.Component {
         this.onSwipe = this.onSwipe.bind(this);
         this.onTap = this.onTap.bind(this);
         this.onWindowResize = this.onWindowResize.bind(this);
+        this.handleMoveCursor = this.handleMoveCursor.bind(this);
     }
 
     componentDidMount() {
@@ -58,8 +61,13 @@ class GameScene extends React.Component {
         dispatch(rotateAroundGameBoard());
     }
 
+    handleMoveCursor(direction) {
+        const { dispatch } = this.props;
+        dispatch(moveCursor(direction));
+    }
+
     render() {
-        const { width, height, cameraMatrix, game} = this.props;
+        const { width, height, cameraMatrix, game, cursorPosition} = this.props;
         let position = new Vector3();
         let rotation = new Euler();
         let scale = new Vector3();
@@ -74,7 +82,7 @@ class GameScene extends React.Component {
                             gameboardTexture={this.props.game.gameboardTexture}
                         />
                         <perspectiveCamera position={position} rotation={rotation} name="camera" fov={75} aspect={width / height} near={0.1} far={1000} />
-                        <ambientLight color={0x999999} />
+                        <ambientLight color={0xbbbbbb} />
                         <directionalLight castShadow color={0xffffff} intensity={1.25} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
                         <object3D>
                             <mesh position={new Vector3(0,0,0)} receiveShadow>
@@ -84,7 +92,12 @@ class GameScene extends React.Component {
                             {game.turns.map(function(turnItem, key) {
                                 return <GameCubeMesh key={key} position={new Vector3(turnItem.x, turnItem.y, turnItem.z)} isLocalTurn={turnItem.isLocalTurn} />;
                             })}
+                            <mesh position={cursorPosition} receiveShadow>
+                                <boxGeometry width={cubeSize} height={cubeSize} depth={cubeSize} />
+                                <materialResource resourceId={'gameboardPhongMaterial'} />
+                            </mesh>
                         </object3D>
+                        <GameControls handleMoveCursor={this.handleMoveCursor} />
                     </scene>
                 </React3>
             </Hammer>
@@ -115,13 +128,15 @@ function mapStateToProps(state) {
     const cameraMatrix = state.gameScene.cameraMatrix;
     const rotationImpulse = state.gameScene.rotationImpulse;
     const cameraRotationY = state.gameScene.cameraRotationY;
+    const cursorPosition = state.gameScene.cursorPosition;
 
     return {
         width,
         height,
         cameraRotationY,
         cameraMatrix,
-        rotationImpulse
+        rotationImpulse,
+        cursorPosition
     }
 }
 

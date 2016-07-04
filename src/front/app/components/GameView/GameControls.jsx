@@ -1,38 +1,30 @@
-'use strict'
+import React, { Component, PropTypes } from 'react'
 
-var React = require('react');
-var THREE = require('three');
-var ReactTHREE = require('react-three');
+export const LEFT_POSITION = 'LEFT_POSITION';
+export const RIGHT_POSITION = 'RIGHT_POSITION';
+export const TOP_POSITION = 'TOP_POSITION';
+export const BOTTOM_POSITION = 'BOTTOM_POSITION';
 
-var Mesh = ReactTHREE.Mesh;
-var topgeometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-var topmaterial = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
+class GameControls extends Component {
 
-var GameControls = React.createClass({
-    displayName: 'GameControls',
-    getInitialState: function() {
-        return {
-            counter: 2
-        };
-    },
-    handleClick: function() {
-        this.gameboard.addChild(<Mesh widthSegments={0.01}
-                                      heightSegments={0.01}
-                                      castShadow receiveShadow position={new THREE.Vector3(Math.random(),0.1 * this.state.counter,Math.random())} geometry={topgeometry} material={topmaterial} />);
-        this.setState({ counter: this.state.counter + 1 });
-    },
-    componentDidMount: function() {
-        this.gameboard = this.props.gameboard('gameBoard');
-    },
-    render: function() {
-        return  <div className="game-controls">
-            <button type="button" className="game-control">G</button>
-            <button type="button"className="game-control">H</button>
-            <button type="button" className="game-control" onClick={this.handleClick}>PLAY</button>
-            <button type="button" className="game-control">D</button>
-            <button type="button" className="game-control">B</button>
+    constructor(props) {
+        super(props);
+        this.handleDirectionClicked = this.handleDirectionClicked.bind(this);
+    }
+
+    handleDirectionClicked(direction) {
+        this.props.handleMoveCursor(direction)
+    };
+
+    render() {
+        return <div>
+            <button type="button" className="game-control" onClick={this.handleDirectionClicked(LEFT_POSITION)}>Left</button>
+            <button type="button" className="game-control" onClick={this.handleDirectionClicked(TOP_POSITION)}>Top</button>
+            <button type="button" className="game-control" onClick={this.handlePlayClicked}>PLAY</button>
+            <button type="button" className="game-control" onClick={this.handleDirectionClicked(RIGHT_POSITION)}>Right</button>
+            <button type="button" className="game-control" onClick={this.handleDirectionClicked(BOTTOM_POSITION)}>Bottom</button>
         </div>;
     }
-});
+}
 
 module.exports = GameControls

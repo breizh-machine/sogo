@@ -3,14 +3,20 @@ import { Vector3, Euler, Matrix4 } from 'three'
 import {
     RESIZE_SCENE, TRANSLATE_CAMERA_ON_Z, ROTATE_CAMERA_ON_AXIS, ROTATE_AROUND_GAMEBOARD, UPDATE_ROTATION_GAMEBOARD_IMPULSE, ADD_ROTATION_GAMEBOARD_IMPULSE, STOP_GAMEBOARD_ROTATION
 } from '../../actions/GameView/GameSceneActions'
-import { rotateMatrixAroundWorldAxis, getObjectTranslationZ } from '../../tools/threeTools'
+import {
+    MOVE_CURSOR
+} from '../../actions/GameView/GameControlsActions'
+
+import { rotateMatrixAroundWorldAxis, getObjectTranslationZ, getCursorNextPosition } from '../../tools/threeTools'
 
 function gameScene(state = {
     width: 800,
     height: 600,
     cameraMatrix: new Matrix4(),
     rotationImpulse: 0,
-    cameraRotationY: 0
+    cameraRotationY: 0,
+    cursorPosition: new Vector3(0, 0, 0),
+    game: {}
 }, action) {
     switch (action.type) {
         case RESIZE_SCENE:
@@ -50,6 +56,17 @@ function gameScene(state = {
             return Object.assign({}, state, {
                 rotationImpulse: 0
             })
+
+        case MOVE_CURSOR:
+            const currentPosition = state.cursorPosition;
+            const direction = action.direction;
+            const angle = state.cameraRotationY;
+            const turns = state.game.turns !== undefined ? state.game.turns : [];
+
+            const nextPosition = getCursorNextPosition(currentPosition, direction, angle, turns);
+            return Object.assign({}, state, {
+                cursorPosition: nextPosition
+            });
         default:
             return state
     }
