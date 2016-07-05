@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import GameScene from '../components/GameView/GameScene'
 import GameControls from '../components/GameView/GameControls'
+import { FPSStats } from 'react-stats';
 import { moveCursor } from '../actions/GameView/GameControlsActions'
 
 class PlayPage extends Component {
@@ -25,6 +26,7 @@ class PlayPage extends Component {
 
     render() {
         return  <div className="play-page">
+            <FPSStats />
             <GameScene game={this.props.currentGame} cursorPosition={this.props.cursorPosition}/>
             <GameControls handleMoveCursor={this.handleMoveCursor} handlePlay={this.handlePlay} />
         </div>;

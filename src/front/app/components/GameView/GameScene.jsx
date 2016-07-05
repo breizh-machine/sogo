@@ -55,8 +55,10 @@ class GameScene extends Component {
 
     onAnimate() {
         const { dispatch } = this.props;
-        dispatch(updateRotationImpulse());
-        dispatch(rotateAroundGameBoard());
+        if (Math.abs(this.props.rotationImpulse) > 0) {
+            dispatch(updateRotationImpulse());
+            dispatch(rotateAroundGameBoard());
+        }
     }
 
     render() {
@@ -69,12 +71,12 @@ class GameScene extends Component {
         return (
             <Hammer onTap={this.onTap} onSwipe={this.onSwipe}>
                 <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} clearColor={0xffffff}>
+                    <Resources
+                        localCubeTexture={this.props.game.localCubeTexture}
+                        visitorCubeTexture={this.props.game.visitorCubeTexture}
+                        gameboardTexture={this.props.game.gameboardTexture}
+                    />
                     <scene>
-                        <Resources
-                            localCubeTexture={this.props.game.localCubeTexture}
-                            visitorCubeTexture={this.props.game.visitorCubeTexture}
-                            gameboardTexture={this.props.game.gameboardTexture}
-                        />
                         <perspectiveCamera position={position} rotation={rotation} name="camera" fov={75} aspect={width / height} near={0.1} far={1000} />
                         <ambientLight color={0xbbbbbb} />
                         <directionalLight castShadow color={0xffffff} intensity={1.25} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
