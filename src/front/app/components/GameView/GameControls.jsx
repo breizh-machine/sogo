@@ -14,6 +14,7 @@ class GameControls extends Component {
         this.handleRightCliked = this.handleRightCliked.bind(this);
         this.handleTopCliked = this.handleTopCliked.bind(this);
         this.handleBottomCliked = this.handleBottomCliked.bind(this);
+        this.handlePlayClicked = this.handlePlayClicked.bind(this);
     }
 
     handleDirectionClicked(direction) {

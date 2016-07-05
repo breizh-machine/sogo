@@ -11,10 +11,10 @@ class PlayPage extends Component {
     }
 
     render() {
-        const { currentGame } = this.props;
+        const { currentGame, user } = this.props;
         return  <div className="play-page">
             <FPSStats />
-            <GameScene game={currentGame} />
+            <GameScene game={currentGame} user={user}/>
         </div>;
     }
 }

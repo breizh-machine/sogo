@@ -67,6 +67,8 @@ class GameUtils
                 for ($indZ = $zStart - 1; $indZ <= $zStart + 1; $indZ++) {
                     if (!self::isOutOfBoundPosition($gridSize, $indX, $indY, $indZ)) {
                         $neighbor = self::getTurnAtPosition($turns, $gridSize, $indX, $indY, $indZ);
+                        dump($neighbor);
+                        dump($turn);
                         if ($neighbor !== null && !$neighbor->equals($turn) && $neighbor->getPlayer()->equals($turn->getPlayer())) {
                             $neighborhood->add($neighbor);
                         }

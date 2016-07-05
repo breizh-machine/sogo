@@ -3,15 +3,16 @@ import { connect } from 'react-redux'
 import React3 from 'react-three-renderer';
 import THREE, { Vector3, Fog, BoxGeometry, MeshLambertMaterial, Euler, Matrix4 } from 'three';
 import { resizeScene, translateCameraOnZ, rotateCameraOnAxis, rotateAroundGameBoard,
-    updateRotationImpulse, addRotationImpulse, stopGameBoardRotation } from '../../actions/GameView/GameSceneActions';
+    updateRotationImpulse, addRotationImpulse, stopGameBoardRotation, doPlayTurn, hidePlayTurnErrorMessage } from '../../actions/GameView/GameSceneActions';
 import Hammer from 'react-hammerjs'
 
 import GameCubeMesh from './GameCubeMesh'
 import GameControls from './GameControls'
 import Resources from './Resources'
+import ErrorFlashMessage from '../Ui/Utils/ErrorFlashMessage'
 import { calculateWorldPosition, radToDegrees } from '../../tools/threeTools'
 import { moveCursor } from '../../actions/GameView/GameControlsActions'
-import { isPositionAvailable } from '../../tools/threeTools'
+import { isPositionAvailable, getYatPosition } from '../../tools/threeTools'
 
 export const gridSize = 4;
 export const cubeSize = 0.25;
@@ -27,6 +28,7 @@ class GameScene extends Component {
         this.onWindowResize = this.onWindowResize.bind(this);
         this.handleMoveCursor = this.handleMoveCursor.bind(this);
         this.handlePlay = this.handlePlay.bind(this);
+        this.hidePlayTurnErrorMessage = this.hidePlayTurnErrorMessage.bind(this);
     }
 
     componentDidMount() {
@@ -69,8 +71,17 @@ class GameScene extends Component {
     }
 
     handlePlay() {
+        const { dispatch, cursorPosition, game, user } = this.props;
+        const userId = user.id;
+        const gameId = game.id;
+        let position = cursorPosition;
+        position.y = getYatPosition(position.x, position.z, game.turns);
+        dispatch(doPlayTurn(userId, gameId, position));
+    }
+
+    hidePlayTurnErrorMessage() {
         const { dispatch } = this.props;
-        //dispatch(moveCursor(direction));
+        dispatch(hidePlayTurnErrorMessage());
     }
 
     render() {
@@ -83,7 +94,12 @@ class GameScene extends Component {
         let worldCursorPosition = calculateWorldPosition(cursorPosition);
 
         return (
-            <div class=''>
+            <div class='game-scene'>
+                <ErrorFlashMessage
+                    display={this.props.displayPlayTurnErrorMessage}
+                    message={this.props.playTurnError.message}
+                    closeHandler={this.hidePlayTurnErrorMessage}
+                />
                 <Hammer onTap={this.onTap} onSwipe={this.onSwipe}>
                     <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} clearColor={0xffffff}>
                         <Resources
@@ -141,6 +157,9 @@ function mapStateToProps(state) {
     const rotationImpulse = state.gameScene.rotationImpulse;
     const cameraRotationY = state.gameScene.cameraRotationY;
     const cursorPosition = state.gameScene.cursorPosition;
+    const playTurnError = state.gameScene.playTurnError;
+    const playTurnLoading= state.gameScene.playTurnLoading;
+    const displayPlayTurnErrorMessage = state.gameScene.displayPlayTurnErrorMessage;
 
     return {
         width,
@@ -148,7 +167,10 @@ function mapStateToProps(state) {
         cameraRotationY,
         cameraMatrix,
         rotationImpulse,
-        cursorPosition
+        cursorPosition,
+        playTurnError,
+        playTurnLoading,
+        displayPlayTurnErrorMessage
     }
 }
 

@@ -184,7 +184,7 @@ export function isPositionAvailable(position, turns)
     return !isPositionOutOfBound(position) && yAtPosition > -1 && yAtPosition < 4;
 }
 
-function getYatPosition(x, z, turns)
+export function getYatPosition(x, z, turns)
 {
     let maxY = -1;
     for (var turnKey in turns) {

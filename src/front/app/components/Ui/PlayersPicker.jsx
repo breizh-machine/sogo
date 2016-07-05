@@ -18,7 +18,7 @@ class PlayersPicker extends Component {
     handleChange(e) {
         e.preventDefault();
         const { dispatch } = this.props
-        dispatch(loadPlayers(this.props.user.userId, e.target.value));
+        dispatch(loadPlayers(this.props.user.id, e.target.value));
     }
 
     render() {

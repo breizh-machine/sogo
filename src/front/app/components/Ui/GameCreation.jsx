@@ -31,7 +31,7 @@ class GameCreation extends Component {
 
     onCreateGameClicked() {
         const { dispatch } = this.props;
-        const userId = this.props.user.userId;
+        const userId = this.props.user.id;
         const {localCubeId, betValue, guest} = this.props;
         dispatch(createGame(userId, localCubeId, betValue, guest)).then(
             data => {

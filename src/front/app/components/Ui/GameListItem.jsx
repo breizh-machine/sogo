@@ -12,9 +12,12 @@ class GameListItem extends Component {
     }
 
     _getPlayGameRoute(gameId) {
-        //TODO
-        return 'wwww.google.com/'+gameId;
-        //return Routing.generate()
+        return '/scubs/games/' + gameId + '/play'
+        /*
+        return Routing.generate('playPage', {
+            gameId: gameId
+        });
+        */
     }
 
     render() {

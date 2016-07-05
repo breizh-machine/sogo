@@ -13,7 +13,7 @@ class CubesPicker extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(loadCubes(this.props.user.userId))
+        dispatch(loadCubes(this.props.user.id))
     }
 
     handleCubeClicked(cubeId) {
@@ -23,7 +23,7 @@ class CubesPicker extends Component {
     handleChange(e) {
         e.preventDefault();
         const { dispatch } = this.props
-        dispatch(loadCubes(this.props.user.userId, e.target.value));
+        dispatch(loadCubes(this.props.user.id, e.target.value));
     }
 
     render() {

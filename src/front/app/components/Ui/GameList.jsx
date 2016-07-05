@@ -10,7 +10,7 @@ class GameList extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(loadGames(this.props.user.userId))
+        dispatch(loadGames(this.props.user.id))
     }
 
     render() {

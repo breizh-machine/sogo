@@ -14,7 +14,11 @@ class Resource {
     }
 
     public function equals(BaseResource $externalResource) {
-        return $this->id->equals($externalResource->getId());
+        if ($externalResource->getId() instanceof ResourceId && $this->id instanceof ResourceId) {
+            return $this->id->equals($externalResource->getId());
+        } else {
+            return (string) $this->id == (string) $externalResource->getId();
+        }
     }
 
     public function getId()

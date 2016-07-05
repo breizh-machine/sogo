@@ -13,7 +13,7 @@ class GamesPage extends Component {
 
     joinGameHandler(gameId) {
         const { dispatch } = this.props;
-        dispatch(joinGame(this.props.user.userId, gameId));
+        dispatch(joinGame(this.props.user.id, gameId));
     }
 
     render() {

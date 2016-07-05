@@ -1,4 +1,4 @@
-//import { CALL_API } from '../../middleware/api'
+import { CALL_API } from '../../middleware/api'
 
 export const RESIZE_SCENE = 'RESIZE_SCENE'
 export function resizeScene(width, height) {
@@ -52,5 +52,49 @@ export const STOP_GAMEBOARD_ROTATION = 'STOP_GAMEBOARD_ROTATION'
 export function stopGameBoardRotation() {
     return {
         type: STOP_GAMEBOARD_ROTATION
+    }
+}
+
+export const HIDE_PLAY_TURN_ERROR_MESSAGE = 'HIDE_PLAY_TURN_ERROR_MESSAGE'
+export function hidePlayTurnErrorMessage() {
+    return {
+        type: HIDE_PLAY_TURN_ERROR_MESSAGE
+    }
+}
+
+export const PLAY_TURN_FAILURE = 'PLAY_TURN_FAILURE'
+export const PLAY_TURN_REQUEST= 'PLAY_TURN_REQUEST'
+export const PLAY_TURN_SUCCESS= 'PLAY_TURN_SUCCESS'
+export function requestPlayTurn() {
+    return {
+        type: PLAY_TURN_REQUEST
+    }
+}
+
+function fetchPlayTurn(callParams) {
+    return {
+        [CALL_API]: {
+            types: [ PLAY_TURN_SUCCESS, PLAY_TURN_FAILURE ],
+            callParams: callParams
+        }
+    }
+}
+export function doPlayTurn(userId, gameId, position)
+{
+    const { x, y, z } = position;
+    const url = Routing.generate('scubs_api.game.play', {
+        userId: userId,
+        gameId: gameId,
+        x: x,
+        y: y,
+        z: z
+    });
+    const method = 'post';
+    const params = [];
+    const callParams = { url, method, params };
+
+    return ( dispatch ) => {
+        dispatch(requestPlayTurn());
+        return dispatch(fetchPlayTurn(callParams));
     }
 }
