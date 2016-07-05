@@ -7,8 +7,11 @@ import { resizeScene, translateCameraOnZ, rotateCameraOnAxis, rotateAroundGameBo
 import Hammer from 'react-hammerjs'
 
 import GameCubeMesh from './GameCubeMesh'
+import GameControls from './GameControls'
 import Resources from './Resources'
-import { calculateWorldPosition } from '../../tools/threeTools'
+import { calculateWorldPosition, radToDegrees } from '../../tools/threeTools'
+import { moveCursor } from '../../actions/GameView/GameControlsActions'
+import { isPositionAvailable } from '../../tools/threeTools'
 
 export const gridSize = 4;
 export const cubeSize = 0.25;
@@ -22,6 +25,8 @@ class GameScene extends Component {
         this.onSwipe = this.onSwipe.bind(this);
         this.onTap = this.onTap.bind(this);
         this.onWindowResize = this.onWindowResize.bind(this);
+        this.handleMoveCursor = this.handleMoveCursor.bind(this);
+        this.handlePlay = this.handlePlay.bind(this);
     }
 
     componentDidMount() {
@@ -29,9 +34,6 @@ class GameScene extends Component {
         dispatch(translateCameraOnZ( 6 ));
         dispatch(rotateCameraOnAxis( new Vector3( 1, 0, 0), -32 ));
         window.addEventListener( 'resize', this.onWindowResize, false );
-
-        console.log('props : ', this.props);
-
     }
 
     componentWillUnmount() {
@@ -61,41 +63,56 @@ class GameScene extends Component {
         }
     }
 
+    handleMoveCursor(direction) {
+        const { dispatch, game } = this.props;
+        dispatch(moveCursor(direction, game.turns));
+    }
+
+    handlePlay() {
+        const { dispatch } = this.props;
+        //dispatch(moveCursor(direction));
+    }
+
     render() {
-        const { width, height, cameraMatrix, game} = this.props;
-        let cursorPosition = calculateWorldPosition(this.props.cursorPosition);
+        const { width, height, cameraMatrix, game, cursorPosition} = this.props;
         let position = new Vector3();
         let rotation = new Euler();
         let scale = new Vector3();
         cameraMatrix.decompose(position, rotation, scale);
+        const canUserPlay = game.isMyTurn && isPositionAvailable(cursorPosition, game.turns);
+        let worldCursorPosition = calculateWorldPosition(cursorPosition);
+
         return (
-            <Hammer onTap={this.onTap} onSwipe={this.onSwipe}>
-                <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} clearColor={0xffffff}>
-                    <Resources
-                        localCubeTexture={this.props.game.localCubeTexture}
-                        visitorCubeTexture={this.props.game.visitorCubeTexture}
-                        gameboardTexture={this.props.game.gameboardTexture}
-                    />
-                    <scene>
-                        <perspectiveCamera position={position} rotation={rotation} name="camera" fov={75} aspect={width / height} near={0.1} far={1000} />
-                        <ambientLight color={0xbbbbbb} />
-                        <directionalLight castShadow color={0xffffff} intensity={1.25} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
-                        <object3D>
-                            <mesh position={new Vector3(0,0,0)} receiveShadow>
-                                <boxGeometry width={gridSize} height={gridHeight} depth={gridSize} />
-                                <materialResource resourceId={'gameboardPhongMaterial'} />
-                            </mesh>
-                            {game.turns.map(function(turnItem, key) {
-                                return <GameCubeMesh key={key} position={new Vector3(turnItem.x, turnItem.y, turnItem.z)} isLocalTurn={turnItem.isLocalTurn} />;
-                            })}
-                            <mesh position={cursorPosition} receiveShadow>
-                                <boxGeometry width={cubeSize} height={cubeSize} depth={cubeSize} />
-                                <materialResource resourceId={'gameboardPhongMaterial'} />
-                            </mesh>
-                        </object3D>
-                    </scene>
-                </React3>
-            </Hammer>
+            <div class=''>
+                <Hammer onTap={this.onTap} onSwipe={this.onSwipe}>
+                    <React3 mainCamera="camera" width={width} height={height} onAnimate={this.onAnimate} clearColor={0xffffff}>
+                        <Resources
+                            localCubeTexture={this.props.game.localCubeTexture}
+                            visitorCubeTexture={this.props.game.visitorCubeTexture}
+                            gameboardTexture={this.props.game.gameboardTexture}
+                        />
+                        <scene>
+                            <perspectiveCamera position={position} rotation={rotation} name="camera" fov={75} aspect={width / height} near={0.1} far={1000} />
+                            <ambientLight color={0xbbbbbb} />
+                            <directionalLight castShadow color={0xffffff} intensity={1.25} lookAt={new Vector3( 0, 0, 0 )} position={new Vector3( 10, 10, 10 )}/>
+                            <object3D>
+                                <mesh position={new Vector3(0,0,0)} receiveShadow>
+                                    <boxGeometry width={gridSize} height={gridHeight} depth={gridSize} />
+                                    <materialResource resourceId={'gameboardPhongMaterial'} />
+                                </mesh>
+                                {game.turns.map(function(turnItem, key) {
+                                    return <GameCubeMesh key={key} position={new Vector3(turnItem.x, turnItem.y, turnItem.z)} isLocalTurn={turnItem.isLocalTurn} />;
+                                })}
+                                <mesh position={worldCursorPosition} receiveShadow>
+                                    <boxGeometry width={cubeSize} height={cubeSize} depth={cubeSize} />
+                                    <materialResource resourceId={'gameboardPhongMaterial'} />
+                                </mesh>
+                            </object3D>
+                        </scene>
+                    </React3>
+                </Hammer>
+                <GameControls canUserPlay={canUserPlay} handleMoveCursor={this.handleMoveCursor} handlePlay={this.handlePlay} />
+            </div>
         );
     }
 }

@@ -60,11 +60,14 @@ function gameScene(state = {
         case MOVE_CURSOR:
             const currentPosition = state.cursorPosition;
             const direction = action.direction;
-            const angle = state.cameraRotationY;
             const turns = action.turns;
+            let position = new Vector3();
+            let rotation = new Euler();
+            let scale = new Vector3();
+            state.cameraMatrix.decompose(position, rotation, scale);
+            const angle = rotation.z;
 
             const nextPosition = getCursorNextPosition(currentPosition, direction, angle, turns);
-            console.log('getting MOVE_CURSOR', nextPosition);
             return Object.assign({}, state, {
                 cursorPosition: nextPosition
             });

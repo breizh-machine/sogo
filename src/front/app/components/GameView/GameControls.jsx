@@ -17,7 +17,6 @@ class GameControls extends Component {
     }
 
     handleDirectionClicked(direction) {
-        console.log('direction clicked', direction);
         this.props.handleMoveCursor(direction)
     }
 
@@ -42,7 +41,7 @@ class GameControls extends Component {
         return <div className="game-controls">
             <button id="left" type="button" className="game-control" onClick={this.handleLeftCliked}>Left</button>
             <button type="button" className="game-control" onClick={this.handleTopCliked}>Top</button>
-            <button type="button" className="game-control" onClick={this.handlePlayClicked}>PLAY</button>
+            <button disabled={!this.props.canUserPlay} type="button" className="game-control" onClick={this.handlePlayClicked}>PLAY</button>
             <button type="button" className="game-control" onClick={this.handleRightCliked}>Right</button>
             <button type="button" className="game-control" onClick={this.handleBottomCliked}>Bottom</button>
         </div>;
