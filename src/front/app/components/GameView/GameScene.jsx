@@ -90,7 +90,7 @@ class GameScene extends Component {
         let rotation = new Euler();
         let scale = new Vector3();
         cameraMatrix.decompose(position, rotation, scale);
-        const canUserPlay = game.isMyTurn && isPositionAvailable(cursorPosition, game.turns);
+        const canUserPlay = !game.isEnded && game.isMyTurn && isPositionAvailable(cursorPosition, game.turns);
         let worldCursorPosition = calculateWorldPosition(cursorPosition);
 
         return (
