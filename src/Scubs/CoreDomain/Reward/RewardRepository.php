@@ -9,4 +9,5 @@ interface RewardRepository extends ResourceRepository
     public function findRewardByCubeAndUser($userId, $cubeId);
     public function findRewardsByUser($userId, $q = null);
     public function findRewardByGame($gameId);
+    public function findAvailableRewardsByVisitorIdAndLocalCubeId($visitorId, $localCubeId);
 }

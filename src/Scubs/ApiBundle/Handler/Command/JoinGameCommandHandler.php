@@ -33,7 +33,19 @@ class JoinGameCommandHandler implements MessageBus
 
         $game = $this->gameRepository->find(new GameId($message->gameId));
         $visitor = $this->userProvider->loadUserById($message->visitorId);
-        $visitorCube = $this->cubeRepository->find(new CubeId($message->visitorCubeId));
+        if ($message->visitorCubeId) {
+            $visitorCube = $this->cubeRepository->find(new CubeId($message->visitorCubeId));
+        } else {
+            $availableRewards = $this->rewardRepository->findAvailableRewardsByVisitorIdAndLocalCubeId($message->visitorId, (string) $game->getLocalCube()->getId());
+            $availableCubes = [];
+            foreach($availableRewards as $availableReward) {
+                $availableCubes[] = $availableReward->getCube();
+            }
+            if (count($availableCubes) === 0) {
+                $availableCubes = $this->cubeRepository->getAvailableNativeCubes((string) $game->getLocalCube()->getId());
+            }
+            $visitorCube = $availableCubes[array_rand($availableCubes)];
+        }
 
         if (!$game->isVisitorJoined()) {
             $game->inviteVisitor($visitor);
@@ -48,7 +60,6 @@ class JoinGameCommandHandler implements MessageBus
     private function validate($message)
     {
         $visitor = $this->userProvider->loadUserById($message->visitorId);
-        $visitorCube = $this->cubeRepository->find(new CubeId($message->visitorCubeId));
         $game = $this->gameRepository->find(new GameId($message->gameId));
 
         //Check that the visitor exists
@@ -81,14 +92,17 @@ class JoinGameCommandHandler implements MessageBus
             throw new GameLogicException(GameLogicException::$VISITOR_ALREADY_SET_MESS, GameLogicException::$VISITOR_ALREADY_SET);
         }
 
-        //Check that visitor cube exists
-        if ($visitorCube === null) {
-            throw new GameLogicException(GameLogicException::$NO_VISITOR_CUBE_FOUND_MESS, GameLogicException::$NO_VISITOR_CUBE_FOUND);
-        }
+        if ($message->visitorCubeId) {
+            $visitorCube = $this->cubeRepository->find(new CubeId($message->visitorCubeId));
+            //Check that visitor cube exists
+            if ($visitorCube === null) {
+                throw new GameLogicException(GameLogicException::$NO_VISITOR_CUBE_FOUND_MESS, GameLogicException::$NO_VISITOR_CUBE_FOUND);
+            }
 
-        //Check that the user has the cube he wants to play with
-        if (!$visitorCube->isNative() && count($this->rewardRepository->findRewardByCubeAndUser($message->visitorId, $message->visitorCubeId)) < 1) {
-            throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);
+            //Check that the user has the cube he wants to play with
+            if (!$visitorCube->isNative() && count($this->rewardRepository->findRewardByCubeAndUser($message->visitorId, $message->visitorCubeId)) < 1) {
+                throw new GameLogicException(GameLogicException::$LOCAL_CUBE_NOT_OWNED_MESS, GameLogicException::$LOCAL_CUBE_NOT_OWNED);
+            }
         }
     }
 }

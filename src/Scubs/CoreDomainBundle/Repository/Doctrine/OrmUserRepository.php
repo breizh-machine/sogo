@@ -17,7 +17,7 @@ class OrmUserRepository extends OrmResourceRepository implements UserRepository
               SELECT o.id 
               FROM ScubsCoreDomainBundle:User o 
               JOIN ScubsCoreDomainBundle:Game g
-              WHERE (g.local = :user_id AND g.visitor = o.id) OR (g.local = o.id AND g.visitor = :user_id)
+              WHERE ((g.local = :user_id AND g.visitor = o.id) OR (g.local = o.id AND g.visitor = :user_id)) AND g.endDate IS NULL
             )'
         )
             ->setParameter('user_id', $userId)

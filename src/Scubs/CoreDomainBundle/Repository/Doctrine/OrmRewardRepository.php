@@ -63,4 +63,17 @@ class OrmRewardRepository extends OrmResourceRepository implements RewardReposit
         return $query->getResult();
     }
 
+    public function findAvailableRewardsByVisitorIdAndLocalCubeId($visitorId, $localCubeId)
+    {
+        $query = $this->getManager()->createQuery('
+            SELECT r
+            FROM ScubsCoreDomainBundle:Reward r
+            JOIN r.game g
+            WHERE g.winner = :user_id AND r.cube != :local_cube_id'
+        )
+            ->setParameter('user_id', $visitorId)
+            ->setParameter('local_cube_id', $localCubeId);
+        return $query->getResult();
+    }
+
 }

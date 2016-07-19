@@ -57,8 +57,8 @@ class GameViewRenderer implements ViewRenderer
         $view->nbTurnsPlayed = count($game->getTurns());
         $view->lastTurnPlayedDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format('d m Y') : '';
         $view->gameStartDate = $game->getLastTurn() !== null ? $game->getLastTurn()->getStartDate()->format('d m Y') : '';
-        $view->joinable = !$authenticatedPlayer->equals($game->getLocal()) && ($game->getVisitor() === null);
-        $view->playable = $game->isScubPlayerTurn($authenticatedPlayer);
+        $view->joinable = !$authenticatedPlayer->equals($game->getLocal()) && !$game->isVisitorJoined();
+        $view->playable = $game->isScubPlayerTurn($authenticatedPlayer) && $game->isVisitorJoined() && !$game->isGameEnded();
 
         return $view;
     }

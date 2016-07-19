@@ -28,4 +28,15 @@ class OrmCubeRepository extends OrmResourceRepository implements CubeRepository
         return $query->getResult();
     }
 
+    public function getAvailableNativeCubes($cubeId)
+    {
+        $query = $this->getManager()->createQuery('
+        SELECT c
+        FROM ScubsCoreDomainBundle:Cube c
+        WHERE c.native = TRUE AND c.id != :cube_id'
+        )->setParameter('cube_id', $cubeId);
+
+        return $query->getResult();
+    }
+
 }
