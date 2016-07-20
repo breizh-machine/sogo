@@ -77,7 +77,7 @@ function fetchPlayTurn(callParams, position) {
         [CALL_API]: {
             types: [ PLAY_TURN_SUCCESS, PLAY_TURN_FAILURE ],
             callParams: callParams,
-            additionalData: {
+            context: {
                 position: position
             }
         }
