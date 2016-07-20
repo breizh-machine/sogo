@@ -80,7 +80,8 @@ function gameScene(state = {
         case PLAY_TURN_REQUEST:
             return Object.assign({}, state, {
                 playTurnLoading: true,
-                displayPlayTurnErrorMessage: false
+                displayPlayTurnErrorMessage: false,
+                cursorPosition: action.position
             });
 
         case PLAY_TURN_FAILURE:
@@ -91,9 +92,12 @@ function gameScene(state = {
             });
 
         case PLAY_TURN_SUCCESS:
+            var newCursorPosition = action.context.position;
+            newCursorPosition.y = 4;
             return Object.assign({}, state, {
                 playTurnLoading: false,
-                displayPlayTurnErrorMessage: false
+                displayPlayTurnErrorMessage: false,
+                cursorPosition: newCursorPosition
             });
 
         case HIDE_PLAY_TURN_ERROR_MESSAGE:

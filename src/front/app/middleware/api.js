@@ -35,7 +35,7 @@ export default store => next => action => {
         return next(action)
     }
 
-    const { types } = callAPI;
+    const { types, context } = callAPI;
     const { method, params } = callAPI.callParams;
     let { url } = callAPI.callParams;
 
@@ -68,11 +68,13 @@ export default store => next => action => {
     return callApi(url, method, params).then(
         response => next(actionWith({
             response,
-            type: successType
+            type: successType,
+            context: context
         })),
         error => next(actionWith({
             type: failureType,
-            error: error
+            error: error,
+            context: context
         }))
     )
 }

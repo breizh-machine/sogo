@@ -65,17 +65,21 @@ export function hidePlayTurnErrorMessage() {
 export const PLAY_TURN_FAILURE = 'PLAY_TURN_FAILURE'
 export const PLAY_TURN_REQUEST= 'PLAY_TURN_REQUEST'
 export const PLAY_TURN_SUCCESS= 'PLAY_TURN_SUCCESS'
-export function requestPlayTurn() {
+export function requestPlayTurn(position) {
     return {
-        type: PLAY_TURN_REQUEST
+        type: PLAY_TURN_REQUEST,
+        position: position
     }
 }
 
-function fetchPlayTurn(callParams) {
+function fetchPlayTurn(callParams, position) {
     return {
         [CALL_API]: {
             types: [ PLAY_TURN_SUCCESS, PLAY_TURN_FAILURE ],
-            callParams: callParams
+            callParams: callParams,
+            additionalData: {
+                position: position
+            }
         }
     }
 }
@@ -94,7 +98,7 @@ export function doPlayTurn(userId, gameId, position)
     const callParams = { url, method, params };
 
     return ( dispatch ) => {
-        dispatch(requestPlayTurn());
-        return dispatch(fetchPlayTurn(callParams));
+        dispatch(requestPlayTurn(position));
+        return dispatch(fetchPlayTurn(callParams, position));
     }
 }

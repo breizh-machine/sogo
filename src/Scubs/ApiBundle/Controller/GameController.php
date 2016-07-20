@@ -98,7 +98,7 @@ class GameController extends Controller
         $handler = $this->get('scubs.api.handler.command.game.play');
         $handler->handle($command);
 
-        return new Response('', Response::HTTP_CREATED);
+        return new JsonResponse(null, Response::HTTP_CREATED);
     }
 
 
