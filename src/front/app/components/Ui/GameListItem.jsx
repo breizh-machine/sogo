@@ -24,7 +24,7 @@ class GameListItem extends Component {
     render() {
         return  <li>
             <div>
-                {this.props.gameItem.bet} -> {this.props.gameItem.opponent_name}
+                {this.props.gameItem.bet} -> {this.props.gameItem.opponentName}
             </div>
             <If condition={this.props.gameItem.joinable}>
                 <Then>

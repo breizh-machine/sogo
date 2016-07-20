@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Scubs\CoreDomain\User\User;
 use Symfony\Component\Routing\Annotation\Route;
+use Scubs\ApiBundle\Query\GamesQuery;
+use Scubs\ApiBundle\Query\CubesByUserQuery;
 
 /**
  * @Route("/scubs")
@@ -26,8 +28,28 @@ class AppController extends Controller
         return $format == 'json' ? json_encode($userView) : $userView;
     }
 
+    private function getAppEntities(User $user, $format = 'json')
+    {
+        $gamesQuery = new GamesQuery();
+        $gamesQuery->userId = (string) $user->getId();
+        $gamesQueryHandler = $this->get('scubs.api.handler.query.games');
+        $gameEntities = $gamesQueryHandler->handle($gamesQuery);
+
+        $cubesByUserQuery = new CubesByUserQuery();
+        $cubesByUserQuery->userId = (string) $user->getId();
+        $cubesHandler = $this->get('scubs.api.handler.query.cubes_by_user');
+        $cubeEntities = $cubesHandler->handle($cubesByUserQuery);
+
+        $entities = [
+            'games' => $gameEntities->toArray(),
+            'cubes' => $cubeEntities->toArray()
+        ];
+
+        return $format == 'json' ? json_encode($entities) : $entities;
+    }
+
     /**
-     * @Route("/profile", name="scoresPage")
+     * @Route("/scores", name="scoresPage")
      */
     public function scoresAction(Request $request)
     {
@@ -54,8 +76,10 @@ class AppController extends Controller
     public function gamesAction(Request $request)
     {
         //TODO Add games and cubes
+        $user = $this->getUser();
         return $this->render('home/games.html.twig', [
-            'user' => $this->getUserView()
+            'user' => $this->getUserView($user),
+            'entities' => $this->getAppEntities($user)
         ]);
     }
 

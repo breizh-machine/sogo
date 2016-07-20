@@ -9,9 +9,10 @@
     {{ parent() }}
     <script type="text/babel">
         let user = JSON.parse("{{ user|e('js') }}");
+        let entities = JSON.parse("{{ entities|e('js') }}");
         render(
             <Provider store={store}>
-                <Scubs appState={'GAMES_PAGE_STATE'} user={user}/>
+                <Scubs appState={'GAMES_PAGE_STATE'} user={user} entities={entities}/>
             </Provider>,
             document.getElementById('games-page-container')
         )

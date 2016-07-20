@@ -17,9 +17,10 @@ class GamesPage extends Component {
     }
 
     render() {
+        const { entities, user } = this.props;
         return  <div className="games-page">
-            <GameCreation user={this.props.user} />
-            <GameList user={this.props.user} joinGameHandler={this.joinGameHandler}/>
+            <GameCreation entities={entities} user={user} />
+            <GameList entities={entities} user={user} joinGameHandler={this.joinGameHandler}/>
         </div>;
     }
 }

@@ -11,9 +11,10 @@ class Scubs extends Component {
     }
 
     _renderApp() {
+        const { entities, user } = this.props;
         switch (this.props.appState) {
             case GAMES_PAGE_STATE:
-                return <GamesPage user={this.props.user}/>;
+                return <GamesPage user={user} entities={entities} />;
             case PLAY_PAGE_STATE:
                 return <PlayPage user={this.props.user} currentGame={this.props.currentGame}/>;
             default:
