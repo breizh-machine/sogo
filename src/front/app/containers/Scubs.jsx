@@ -10,13 +10,20 @@ class Scubs extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        const { sc } = this.props;
+        sc.subscribe('gameCreation', function(topic, data) {
+            console.log('New game created "' + topic + '" : ' + data);
+        });
+    }
+
     _renderApp() {
         const { entities, user } = this.props;
         switch (this.props.appState) {
             case GAMES_PAGE_STATE:
                 return <GamesPage user={user} entities={entities} />;
             case PLAY_PAGE_STATE:
-                return <PlayPage user={this.props.user} currentGame={this.props.currentGame}/>;
+                return <PlayPage user={user} currentGame={this.props.currentGame}/>;
             default:
                 return <div>
                     Unknown state
