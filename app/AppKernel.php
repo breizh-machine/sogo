@@ -26,6 +26,7 @@ class AppKernel extends Kernel
 
             new Scubs\ApiBundle\ScubsApiBundle(),
             new Scubs\CoreDomainBundle\ScubsCoreDomainBundle(),
+            new Scubs\PushBundle\ScubsPushBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

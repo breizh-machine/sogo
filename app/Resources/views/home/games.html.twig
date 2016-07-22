@@ -5,16 +5,17 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script type="text/babel">
-        let user = JSON.parse("{{ user|e('js') }}");
-        let entities = JSON.parse("{{ entities|e('js') }}");
-        render(
-            <Provider store={store}>
-                <Scubs appState={'GAMES_PAGE_STATE'} user={user} entities={entities}/>
-            </Provider>,
-            document.getElementById('games-page-container')
-        )
-    </script>
-{% endblock %}
+{% block react_app %}
+    conn.subscribe('gameCreation', function(topic, data) {
+        // This is where you would add the new article to the DOM (beyond the scope of this tutorial)
+        console.log('New game created "' + topic + '" : ' + data);
+    });
+    let user = JSON.parse("{{ user|e('js') }}");
+    let entities = JSON.parse("{{ entities|e('js') }}");
+    render(
+        <Provider store={store}>
+            <Scubs appState={'GAMES_PAGE_STATE'} user={user} entities={entities}/>
+        </Provider>,
+        document.getElementById('games-page-container')
+    )
+{% endblock react_app %}
