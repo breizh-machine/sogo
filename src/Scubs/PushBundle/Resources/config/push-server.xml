@@ -5,5 +5,9 @@
     <services>
         <service id="scubs.push.server" class="Scubs\PushBundle\Server\Pusher">
         </service>
+        <service id="scubs.push.message_dispatcher" class="Scubs\PushBundle\Server\MessageDispatcher">
+            <argument>%scubs.push.pusher_name%</argument>
+            <argument>%scubs.push.server_url%</argument>
+        </service>
     </services>
 </container>

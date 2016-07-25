@@ -56,6 +56,7 @@ class Pusher implements WampServerInterface
      * @param string JSON'ified string we'll receive from ZeroMQ
      */
     public function onMessageReceived($entry) {
+        echo 'Receiving';
         $entryData = json_decode($entry, true);
 
         echo 'Received message : ' . $entry;

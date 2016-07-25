@@ -7,6 +7,8 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    scubs.push.server_url: 'tcp://localhost:5555'
+    scubs.push.pusher_name: 'ScubsPushServer'
 
 framework:
     #esi:             ~

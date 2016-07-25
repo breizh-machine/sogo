@@ -10,6 +10,7 @@
             <argument type="service" id="scubs.security.user_provider.username" />
             <argument type="service" id="router" />
             <argument type="service" id="reward_repository" />
+            <argument type="service" id="scubs.push.message_dispatcher" />
         </service>
 
         <service id="scubs.api.handler.command.game.join" class="Scubs\ApiBundle\Handler\Command\JoinGameCommandHandler">

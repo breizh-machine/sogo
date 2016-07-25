@@ -3,7 +3,9 @@
 namespace Scubs\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Scubs\PushBundle\Message\PushMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use FOS\RestBundle\View;
@@ -17,9 +19,29 @@ class CubeController extends Controller
      */
     public function allAction()
     {
+        /*
         $query = new CubesQuery();
         $handler = $this->get('scubs.api.handler.query.cubes');
         return $handler->handle($query);
+        */
+
+        /*
+        $pushMessage = new PushMessage('gameCreation', [
+            'gameId' => '123'
+        ]);
+        $this->get('scubs.push.message_dispatcher')->dispatchMessage($pushMessage);
+        */
+
+        $context = new \ZMQContext();
+        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH);
+        var_dump($socket);
+        var_dump($socket->getEndpoints());
+        $socket->connect("tcp://localhost:5555");
+        echo "Connected";
+        $socket->sendmulti(['test']);
+        echo "Sent";
+        return new JsonResponse(['response' => 'OK']);
+
     }
 
     /**

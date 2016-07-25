@@ -9,9 +9,11 @@ use Scubs\CoreDomainBundle\Entity\Game;
 use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Game\GameRepository;
 use Scubs\CoreDomainBundle\Security\Core\User\UserProvider;
+use Scubs\PushBundle\Message\PushMessage;
 use SimpleBus\Message\Bus\MessageBus;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Scubs\CoreDomain\Cube\CubeId;
+use Scubs\PushBundle\Server\MessageDispatcher;
 
 class CreateGameCommandHandler implements MessageBus
 {
@@ -20,14 +22,16 @@ class CreateGameCommandHandler implements MessageBus
     private $userProvider;
     private $router;
     private $rewardRepository;
+    private $pushMessageDispatcher;
     
-    public function __construct(GameRepository $gameRepository, CubeRepository $cubeRepository, UserProvider $userProvider, Router $router, RewardRepository $rewardRepository)
+    public function __construct(GameRepository $gameRepository, CubeRepository $cubeRepository, UserProvider $userProvider, Router $router, RewardRepository $rewardRepository, MessageDispatcher $zqmMessageDispatcher)
     {
         $this->gameRepository = $gameRepository;
         $this->cubeRepository = $cubeRepository;
         $this->userProvider = $userProvider;
         $this->rewardRepository = $rewardRepository;
         $this->router = $router;
+        $this->pushMessageDispatcher = $zqmMessageDispatcher;
     }
 
     public function handle($message)
@@ -47,6 +51,12 @@ class CreateGameCommandHandler implements MessageBus
             'userId' => (string) $local->getId(),
             'gameId' => (string) $game->getId()
         ]));
+
+        $pushMessage = new PushMessage('gameCreation', [
+            'gameId' => (string) $game->getId()
+        ]);
+        $this->pushMessageDispatcher->dispatchMessage($pushMessage);
+
     }
 
     private function validate($message)
