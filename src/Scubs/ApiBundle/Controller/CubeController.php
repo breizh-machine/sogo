@@ -19,7 +19,6 @@ class CubeController extends Controller
      */
     public function allAction()
     {
-        /*
         $query = new CubesQuery();
         $handler = $this->get('scubs.api.handler.query.cubes');
 
@@ -27,27 +26,9 @@ class CubeController extends Controller
         $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
         $socket->connect("tcp://localhost:5555");
 
-        $socket->send(json_encode(['response' => 'OK']));
+        $socket->send(json_encode(['channel' => 'gameCreation']));
 
         return $handler->handle($query);
-        */
-
-        /*
-        $pushMessage = new PushMessage('gameCreation', [
-            'gameId' => '123'
-        ]);
-        $this->get('scubs.push.message_dispatcher')->dispatchMessage($pushMessage);
-        */
-
-        $context = new \ZMQContext();
-        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH);
-        var_dump($socket);
-        var_dump($socket->getEndpoints());
-        $socket->connect("tcp://localhost:5555");
-        echo "Connected";
-        $socket->sendmulti(['test']);
-        echo "Sent";
-        return new JsonResponse(['response' => 'OK']);
 
     }
 

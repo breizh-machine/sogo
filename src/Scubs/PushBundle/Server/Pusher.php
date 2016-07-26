@@ -11,10 +11,12 @@ class Pusher implements WampServerInterface
     protected $clients;
 
     public function __construct() {
+        echo "Intanciating new Push Server\n";
         $this->clients = new \SplObjectStorage;
     }
 
     public function onSubscribe(ConnectionInterface $conn, $topic) {
+        echo "Connection ".$conn->resourceId . " subscribed to topic ". $topic;
         $this->subscribedTopics[$topic->getId()] = $topic;
     }
 
@@ -52,11 +54,16 @@ class Pusher implements WampServerInterface
         $conn->close();
     }
 
+    public function onZMQ($str) {
+        $data = json_decode($str, true);
+        echo "data : " . print_r($data, true) . "\n";
+    }
+
     /**
      * @param string JSON'ified string we'll receive from ZeroMQ
      */
     public function onMessageReceived($entry) {
-        echo 'Receiving';
+        echo "Currently " . count($this->subscribedTopics) . " subscribed topics\n";
         $entryData = json_decode($entry, true);
 
         echo 'Received message : ' . $entry . "\n";

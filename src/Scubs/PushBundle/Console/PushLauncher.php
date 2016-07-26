@@ -8,8 +8,8 @@ use Ratchet\Wamp\WampServer;
 use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
 use React\Socket\Server;
-use React\ZMQ\Context;
 use Scubs\PushBundle\Server\Pusher;
+use Scubs\PushBundle\Server\SocketNotificationListener;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -47,6 +47,11 @@ class PushLauncher extends Command
             $webSock
         );
 
+        // Listen for the web server to make a ZeroMQ push after an ajax request
+        $socketNotificationListener = new SocketNotificationListener($this->pusher, $loop);
+        $socketNotificationListener->start();
+
         $loop->run();
+
     }
 }
