@@ -22,6 +22,13 @@ class CubeController extends Controller
         /*
         $query = new CubesQuery();
         $handler = $this->get('scubs.api.handler.query.cubes');
+
+        $context = new \ZMQContext();
+        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
+        $socket->connect("tcp://localhost:5555");
+
+        $socket->send(json_encode(['response' => 'OK']));
+
         return $handler->handle($query);
         */
 

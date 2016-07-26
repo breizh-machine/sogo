@@ -59,7 +59,7 @@ class Pusher implements WampServerInterface
         echo 'Receiving';
         $entryData = json_decode($entry, true);
 
-        echo 'Received message : ' . $entry;
+        echo 'Received message : ' . $entry . "\n";
         $topic = $this->subscribedTopics[$entryData['channel']];
         $topic->broadcast(['response' => 'broadcasted']);
 

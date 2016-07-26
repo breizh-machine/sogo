@@ -32,10 +32,6 @@ class PushLauncher extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $loop = Factory::create();
-        $context = new Context($loop);
-        $pull = $context->getSocket(\ZMQ::SOCKET_PULL);
-        $pull->bind('tcp://127.0.0.1:5555'); // Binding to 127.0.0.1 means the only client that can connect is itself
-        $pull->on('messages', array($this->pusher, 'onMessageReceived'));
 
         // Set up our WebSocket server for clients wanting real-time updates
         $webSock = new Server($loop);
@@ -51,11 +47,6 @@ class PushLauncher extends Command
             $webSock
         );
 
-        for (;;) {
-            echo "received : " . $pull->recv() . "\n";
-        }
-        echo 'Running loop' . "\n";
         $loop->run();
-
     }
 }

@@ -7,5 +7,9 @@
             <argument type="service" id="scubs.push.server" />
             <tag name="console.command" />
         </service>
+        <service id="scubs.push.commands.socket_notif_launcher" class="Scubs\PushBundle\Console\SocketNotificationLauncher">
+            <argument type="service" id="scubs.push.server" />
+            <tag name="console.command" />
+        </service>
     </services>
 </container>
