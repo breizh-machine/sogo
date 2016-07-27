@@ -21,12 +21,7 @@ class CubeController extends Controller
     {
         $query = new CubesQuery();
         $handler = $this->get('scubs.api.handler.query.cubes');
-
-        $message = new PushMessage('gameCreation', ['data' => 'Hello']);
-        $this->get('scubs.push.message_dispatcher')->dispatchMessage($message);
-
         return $handler->handle($query);
-
     }
 
     /**
