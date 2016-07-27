@@ -2,6 +2,7 @@
 
 namespace Scubs\ApiBundle\Handler\Command;
 
+use Scubs\ApiBundle\ViewRenderer\GameViewRenderer;
 use Scubs\CoreDomain\Cube\CubeRepository;
 use Scubs\CoreDomain\Game\GameLogicException;
 use Scubs\CoreDomain\Reward\RewardRepository;
@@ -23,15 +24,23 @@ class CreateGameCommandHandler implements MessageBus
     private $router;
     private $rewardRepository;
     private $pushMessageDispatcher;
+    private $gameViewRenderer;
     
-    public function __construct(GameRepository $gameRepository, CubeRepository $cubeRepository, UserProvider $userProvider, Router $router, RewardRepository $rewardRepository, PushMessageDispatcher $zqmMessageDispatcher)
+    public function __construct(GameRepository $gameRepository,
+                                CubeRepository $cubeRepository,
+                                UserProvider $userProvider,
+                                Router $router,
+                                RewardRepository $rewardRepository,
+                                PushMessageDispatcher $pushMessageDispatcher,
+                                GameViewRenderer $gameViewRenderer)
     {
         $this->gameRepository = $gameRepository;
         $this->cubeRepository = $cubeRepository;
         $this->userProvider = $userProvider;
         $this->rewardRepository = $rewardRepository;
         $this->router = $router;
-        $this->pushMessageDispatcher = $zqmMessageDispatcher;
+        $this->pushMessageDispatcher = $pushMessageDispatcher;
+        $this->gameViewRenderer = $gameViewRenderer;
     }
 
     public function handle($message)
@@ -42,6 +51,7 @@ class CreateGameCommandHandler implements MessageBus
         $local = $this->userProvider->loadUserById($message->local);
         $localCube = $this->cubeRepository->find(new CubeId($message->localCubeId));
         $game = new Game(new GameId(), $local, $message->bet, $localCube);
+        $guest = null;
         if ($message->guest) {
             $guest = $this->userProvider->loadUserById($message->guest);
             $game->inviteVisitor($guest);
@@ -52,11 +62,15 @@ class CreateGameCommandHandler implements MessageBus
             'gameId' => (string) $game->getId()
         ]));
 
-        $pushMessage = new PushMessage('gameCreation', [
-            'gameId' => (string) $game->getId()
-        ]);
+        $localGameView = $this->gameViewRenderer->renderView($game, $local);
+        $pushMessage = new PushMessage('gameCreation' . (string) $local->getId(), (array) $localGameView);
         $this->pushMessageDispatcher->dispatchMessage($pushMessage);
 
+        if ($message->guest && $guest) {
+            $guestGameView = $this->gameViewRenderer->renderView($game, $guest);
+            $pushMessage = new PushMessage('gameCreation' . (string) $guest->getId(), (array) $guestGameView);
+            $this->pushMessageDispatcher->dispatchMessage($pushMessage);
+        }
     }
 
     private function validate($message)

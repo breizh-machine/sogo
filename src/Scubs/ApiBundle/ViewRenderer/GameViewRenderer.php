@@ -112,9 +112,11 @@ class GameViewRenderer implements ViewRenderer
         if (!PathConfiguration::isFullUrl($gameView->localCubeTexture)) {
             $gameView->localCubeTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $game->getLocalCube()->getTexture()));
         }
-        $gameView->visitorCubeTexture = $game->getVisitorCube()->getTexture();
-        if (!PathConfiguration::isFullUrl($gameView->visitorCubeTexture)) {
-            $gameView->visitorCubeTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $game->getVisitorCube()->getTexture()));
+        if ($game->getVisitorCube() !== null) {
+            $gameView->visitorCubeTexture = $game->getVisitorCube()->getTexture();
+            if (!PathConfiguration::isFullUrl($gameView->visitorCubeTexture)) {
+                $gameView->visitorCubeTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $game->getVisitorCube()->getTexture()));
+            }
         }
 
         foreach ($game->getTurns() as $turn) {

@@ -11,8 +11,8 @@ class Scubs extends Component {
     }
 
     componentDidMount() {
-        const { sc } = this.props;
-        sc.subscribe('gameCreation', function(topic, data) {
+        const { sc, user } = this.props;
+        sc.subscribe('gameCreation'+user.id, function(topic, data) {
             console.log('New game created2 "' + topic + '" : ', data);
         });
     }

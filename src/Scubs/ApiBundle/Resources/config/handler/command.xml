@@ -11,6 +11,7 @@
             <argument type="service" id="router" />
             <argument type="service" id="reward_repository" />
             <argument type="service" id="scubs.push.message_dispatcher" />
+            <argument type="service" id="scubs.api.view_renderer.game" />
         </service>
 
         <service id="scubs.api.handler.command.game.join" class="Scubs\ApiBundle\Handler\Command\JoinGameCommandHandler">

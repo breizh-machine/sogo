@@ -7,7 +7,7 @@ class PushMessage
     protected $channel;
     protected $data;
 
-    public function __construct($channel, array $data)
+    public function __construct($channel, $data)
     {
         $this->channel = $channel;
         $this->data = $data;
