@@ -10,10 +10,10 @@ use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Game\GameRepository;
 use Scubs\CoreDomainBundle\Security\Core\User\UserProvider;
 use Scubs\PushBundle\Message\PushMessage;
+use Scubs\PushBundle\Server\PushMessageDispatcher;
 use SimpleBus\Message\Bus\MessageBus;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Scubs\CoreDomain\Cube\CubeId;
-use Scubs\PushBundle\Server\MessageDispatcher;
 
 class CreateGameCommandHandler implements MessageBus
 {
@@ -24,7 +24,7 @@ class CreateGameCommandHandler implements MessageBus
     private $rewardRepository;
     private $pushMessageDispatcher;
     
-    public function __construct(GameRepository $gameRepository, CubeRepository $cubeRepository, UserProvider $userProvider, Router $router, RewardRepository $rewardRepository, MessageDispatcher $zqmMessageDispatcher)
+    public function __construct(GameRepository $gameRepository, CubeRepository $cubeRepository, UserProvider $userProvider, Router $router, RewardRepository $rewardRepository, PushMessageDispatcher $zqmMessageDispatcher)
     {
         $this->gameRepository = $gameRepository;
         $this->cubeRepository = $cubeRepository;

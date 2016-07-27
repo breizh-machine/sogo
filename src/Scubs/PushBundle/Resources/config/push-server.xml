@@ -3,11 +3,15 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="scubs.push.server" class="Scubs\PushBundle\Server\Pusher" shared="true">
+        <service id="scubs.push.message_handler" class="Scubs\PushBundle\Server\PushMessageHandler">
         </service>
-        <service id="scubs.push.message_dispatcher" class="Scubs\PushBundle\Server\MessageDispatcher">
-            <argument>%scubs.push.pusher_name%</argument>
-            <argument>%scubs.push.server_url%</argument>
+        <service id="scubs.push.message_dispatcher" class="Scubs\PushBundle\Server\PushMessageDispatcher">
+            <argument>%scubs.push.socket_id%</argument>
+            <argument>%scubs.push.socket_url%</argument>
+        </service>
+        <service id="scubs.push.server" class="Scubs\PushBundle\Server\PushServer">
+            <argument type="service" id="scubs.push.message_handler" />
+            <argument>%scubs.push.socket_url%</argument>
         </service>
     </services>
 </container>

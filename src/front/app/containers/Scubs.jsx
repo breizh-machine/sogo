@@ -13,7 +13,7 @@ class Scubs extends Component {
     componentDidMount() {
         const { sc } = this.props;
         sc.subscribe('gameCreation', function(topic, data) {
-            console.log('New game created "' + topic + '" : ' + data);
+            console.log('New game created2 "' + topic + '" : ', data);
         });
     }
 

@@ -10,7 +10,7 @@ class ScubsPushBundle extends Bundle
 {
     public function registerCommands(Application $application)
     {
-        $launchPushService = $this->container->get('scubs.push.commands.push_launcher');
+        $launchPushService = $this->container->get('scubs.push.commands.launcher');
         $application->add($launchPushService);
     }
 

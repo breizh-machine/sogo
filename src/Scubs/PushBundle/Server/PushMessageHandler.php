@@ -5,13 +5,12 @@ namespace Scubs\PushBundle\Server;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\WampServerInterface;
 
-class Pusher implements WampServerInterface
+class PushMessageHandler implements WampServerInterface
 {
     protected $subscribedTopics = array();
     protected $clients;
 
     public function __construct() {
-        echo "Intanciating new Push Server\n";
         $this->clients = new \SplObjectStorage;
     }
 
@@ -54,33 +53,22 @@ class Pusher implements WampServerInterface
         $conn->close();
     }
 
-    public function onZMQ($str) {
-        $data = json_decode($str, true);
-        echo "data : " . print_r($data, true) . "\n";
-    }
-
     /**
      * @param string JSON'ified string we'll receive from ZeroMQ
      */
     public function onMessageReceived($entry) {
-        echo "Currently " . count($this->subscribedTopics) . " subscribed topics\n";
+        echo 'Received message : ' . $entry . "\n";
         $entryData = json_decode($entry, true);
 
-        echo 'Received message : ' . $entry . "\n";
-        $topic = $this->subscribedTopics[$entryData['channel']];
-        $topic->broadcast(['response' => 'broadcasted']);
-
-        /*
         // If the lookup topic object isn't set there is no one to publish to
-        if (!array_key_exists($entryData['category'], $this->subscribedTopics)) {
+        if (!array_key_exists($entryData['channel'], $this->subscribedTopics)) {
             return;
         }
 
-        $topic = $this->subscribedTopics[$entryData['category']];
+        $topic = $this->subscribedTopics[$entryData['channel']];
 
         // re-send the data to all the clients subscribed to that category
         $topic->broadcast($entryData);
-        */
     }
 
 }
