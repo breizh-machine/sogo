@@ -118,6 +118,8 @@ class GameViewRenderer implements ViewRenderer
                 $gameView->visitorCubeTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, $game->getVisitorCube()->getTexture()));
             }
         }
+        $gameView->joinable = !$authenticatedPlayer->equals($game->getLocal()) && !$game->isVisitorJoined();
+        $gameView->playable = $game->isScubPlayerTurn($authenticatedPlayer) && $game->isVisitorJoined() && !$game->isGameEnded();
 
         foreach ($game->getTurns() as $turn) {
             $turnView = new TurnView();

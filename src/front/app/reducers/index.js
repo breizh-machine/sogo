@@ -4,6 +4,7 @@ import gameCreation from './GameCreationReducer'
 import games from './GameListReducer'
 import players from './PlayersPickerReducer'
 import gamesPage from './GamesPageReducer'
+import scubs from './EntitiesReducer'
 import gameScene from './GameView/GameSceneReducer'
 
 const rootReducer = combineReducers({
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     games,
     players,
     gamesPage,
-    gameScene
+    gameScene,
+    scubs
 });
 
 export default rootReducer

@@ -22,18 +22,19 @@ class GameListItem extends Component {
     }
 
     render() {
+        const { gameItem } = this.props.gameItem;
         return  <li>
             <div>
-                {this.props.gameItem.bet} -> {this.props.gameItem.opponentName}
+                {gameItem.bet} -> {gameItem.opponentName}
             </div>
-            <If condition={this.props.gameItem.joinable}>
+            <If condition={gameItem.joinable}>
                 <Then>
                     <button onClick={this.onJoinButtonClicked}>Join</button>
                 </Then>
             </If>
-            <If condition={this.props.gameItem.playable}>
+            <If condition={gameItem.playable}>
                 <Then>
-                    <a href={this._getPlayGameRoute(this.props.gameItem.id)}>Play</a>
+                    <a href={this._getPlayGameRoute(gameItem.id)}>Play</a>
                 </Then>
             </If>
         </li>;

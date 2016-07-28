@@ -4,17 +4,20 @@ import { connect } from 'react-redux'
 import { GAMES_PAGE_STATE, PLAY_PAGE_STATE } from './Pages';
 import GamesPage from './GamesPage';
 import PlayPage from './PlayPage';
+import { updateGames, initEntities } from '../actions/EntitiesActions';
 
 class Scubs extends Component {
     constructor(props) {
         super(props);
     }
 
-    componentDidMount() {
-        const { sc, user } = this.props;
+    componentWillMount() {
+        const { sc, user, dispatch, initialEntities } = this.props;
+        dispatch(initEntities(initialEntities));
         sc.subscribe('gameCreation'+user.id, function(topic, data) {
-            console.log('New game created2 "' + topic + '" : ', data);
+            dispatch(updateGames(data));
         });
+        
     }
 
     _renderApp() {
@@ -41,5 +44,18 @@ Scubs.propTypes = {
     user: PropTypes.object.isRequired
 }
 
-export default Scubs
+
+function mapStateToProps(state) {
+    const entities = {
+        games: state.scubs.games,
+        cubes: state.scubs.cubes
+    };
+    console.log('Current games : ', entities.games);
+
+    return {
+        entities
+    }
+}
+
+export default connect(mapStateToProps)(Scubs)
 

@@ -28,4 +28,6 @@ class GameView
     public $localCubeTexture;
     public $visitorCubeTexture;
     public $gameboardTexture;
+    public $joinable;
+    public $playable;
 }

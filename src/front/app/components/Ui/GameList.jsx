@@ -9,8 +9,8 @@ class GameList extends Component {
     render() {
         const { entities, joinGameHandler } = this.props;
         return  <ul>
-            {entities.games.map(function(gameItem, key) {
-                return <GameListItem key={key} gameItem={gameItem} joinGameHandler={joinGameHandler} />;
+            {Object.keys(entities.games).map(function(keyValue) {
+                return <GameListItem key={keyValue} gameItem={entities.games[keyValue]} joinGameHandler={joinGameHandler} />;
             })}
         </ul>;
     }
