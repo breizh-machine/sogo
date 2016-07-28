@@ -3,16 +3,14 @@
 namespace Scubs\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Scubs\PushBundle\Message\PushMessage;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 
 use FOS\RestBundle\View;
 use Scubs\ApiBundle\Query\CubesQuery;
 use Scubs\ApiBundle\Query\CubesByUserQuery;
 
-class CubeController extends Controller
+class CubeController extends FOSRestController
 {
     /**
      * @Rest\View

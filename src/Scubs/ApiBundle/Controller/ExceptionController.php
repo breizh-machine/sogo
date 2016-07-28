@@ -12,13 +12,13 @@ class ExceptionController extends Controller
 {
     public function showAction(Request $request, $exception, DebugLoggerInterface $logger = null, $_format = 'html')
     {
-        if ($exception instanceof GameLogicException) {
+        //TODO
+        //if ($exception instanceof GameLogicException) {
             $jsonData = [
                 'message' => $exception->getMessage(),
                 'code' => $exception->getCode()
             ];
             return new JsonResponse($jsonData);
-        }
-
+        //}
     }
 }
