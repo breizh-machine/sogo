@@ -2,7 +2,7 @@
 
 namespace Scubs\ApiBundle\View;
 
-class TurnView
+class TurnView extends View
 {
     public $x;
     public $y;

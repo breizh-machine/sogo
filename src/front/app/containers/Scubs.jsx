@@ -50,8 +50,7 @@ function mapStateToProps(state) {
         games: state.scubs.games,
         cubes: state.scubs.cubes
     };
-    console.log('Current games : ', entities.games);
-
+    
     return {
         entities
     }

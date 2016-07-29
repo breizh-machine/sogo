@@ -2,7 +2,7 @@
 
 namespace Scubs\ApiBundle\View;
 
-class UserView
+class UserView extends View
 {
     public $id;
     public $username;

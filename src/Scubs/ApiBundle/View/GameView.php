@@ -2,7 +2,7 @@
 
 namespace Scubs\ApiBundle\View;
 
-class GameView
+class GameView extends View
 {
     public $id;
     public $opponentProfilePicture;

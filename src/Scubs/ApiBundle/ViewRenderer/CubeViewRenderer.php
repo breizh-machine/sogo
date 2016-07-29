@@ -2,9 +2,9 @@
 
 namespace Scubs\ApiBundle\ViewRenderer;
 
+use Scubs\ApiBundle\ViewDataAggregator\ViewDataAggregator;
 use Symfony\Component\Asset\Packages;
 use Scubs\ApiBundle\View\CubeView;
-use Scubs\CoreDomain\Cube\Cube;
 
 class CubeViewRenderer implements ViewRenderer
 {
@@ -17,9 +17,10 @@ class CubeViewRenderer implements ViewRenderer
         $this->cubeImagesBasePath = PathConfiguration::$CUBE_IMAGE_PATH;
     }
 
-    public function renderView(Cube $data)
+    public function renderView(ViewDataAggregator $data)
     {
         $cubeView = new CubeView();
+        $data = $data->getCube();
         $cubeView->id = (string) $data->getId();
         $cubeView->description = $data->getDescription();
         $cubeView->rarity = $data->getRarity();

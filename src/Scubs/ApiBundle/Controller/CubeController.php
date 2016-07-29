@@ -19,7 +19,8 @@ class CubeController extends FOSRestController
     {
         $query = new CubesQuery();
         $handler = $this->get('scubs.api.handler.query.cubes');
-        return $handler->handle($query);
+        $view = $handler->handle($query);
+        return $this->handleView($view);
     }
 
     /**
@@ -36,6 +37,7 @@ class CubeController extends FOSRestController
 
         $handler = $this->get('scubs.api.handler.query.cubes_by_user');
 
-        return $handler->handle($query);
+        $view = $handler->handle($query);
+        return $this->handleView($view);
     }
 }

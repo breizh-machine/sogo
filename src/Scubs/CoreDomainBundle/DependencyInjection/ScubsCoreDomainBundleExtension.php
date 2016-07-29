@@ -17,5 +17,6 @@ class ScubsCoreDomainBundleExtension extends Extension
         );
         $loader->load('repositories.xml');
         $loader->load('security.xml');
+        $loader->load('serializer.xml');
     }
 }

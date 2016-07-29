@@ -2,7 +2,7 @@
 
 namespace Scubs\ApiBundle\View;
 
-class CubeView
+class CubeView extends View
 {
     public $id;
     public $textureUrl;

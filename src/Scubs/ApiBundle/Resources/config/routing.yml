@@ -1,72 +1,63 @@
 scubs_api.cube_all:
     path:  /cubes.{_format}
     defaults: { _controller: ScubsApiBundle:Cube:all, _format: ~ }
-    requirements:
-        _method: GET
+    methods: [GET]
     options:
       expose: true
 
 scubs_api.cubes_by_player:
     path:  /users/{userId}/cubes.{_format}
     defaults: { _controller: ScubsApiBundle:Cube:byUser, _format: ~ }
-    requirements:
-        _method: GET
+    methods: [GET]
     options:
       expose: true
 
 scubs_api.game_all:
     path:  /users/{userId}/games.{_format}
     defaults: { _controller: ScubsApiBundle:Game:all, _format: ~ }
-    requirements:
-        _method: GET
+    methods: [GET]
     options:
       expose: true
 
 scubs_api.game:
     path:  /users/{userId}/games/{gameId}.{_format}
     defaults: { _controller: ScubsApiBundle:Game:game, _format: ~ }
-    requirements:
-        _method: GET
+    methods: [GET]
     options:
       expose: true
 
 scubs_api.game.new:
     path:  /users/{userId}
     defaults: { _controller: ScubsApiBundle:Game:createGame }
-    requirements:
-        _method: POST
+    methods: [POST]
     options:
       expose: true
 
 scubs_api.game.join:
     path:  /users/{userId}/games/{gameId}/join
     defaults: { _controller: ScubsApiBundle:Game:joinGame }
-    requirements:
-        _method: PUT
+    methods: [PUT]
     options:
       expose: true
 
 scubs_api.game.deny:
     path:  /users/{userId}/games/{gameId}/deny
     defaults: { _controller: ScubsApiBundle:Game:denyGame }
-    requirements:
-        _method: PUT
+    methods: [PUT]
     options:
       expose: true
 
 scubs_api.game.play:
     path:  /users/{userId}/games/{gameId}/turns/{x}/{y}/{z}
     defaults: { _controller: ScubsApiBundle:Game:playTurn }
-    requirements:
-        _method: POST
+    methods: [POST]
     options:
       expose: true
 
 scubs_api.players_by_user:
     path:  /users/{userId}/players.{_format}
     defaults: { _controller: ScubsApiBundle:User:byUser, _format: ~ }
-    requirements:
-        _method: GET
+    methods: [GET]
     options:
       expose: true
 

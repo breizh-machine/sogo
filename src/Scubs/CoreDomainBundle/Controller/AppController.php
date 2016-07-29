@@ -41,11 +41,11 @@ class AppController extends Controller
         $cubeEntities = $cubesHandler->handle($cubesByUserQuery);
 
         $entities = [
-            'games' => $gameEntities->toArray(),
-            'cubes' => $cubeEntities->toArray()
+            'games' => $gameEntities->getData()->toArray(),
+            'cubes' => $cubeEntities->getData()->toArray()
         ];
-
-        return $format == 'json' ? json_encode($entities) : $entities;
+        $serializer = $this->get('serializer.default');
+        return $serializer->encode($entities, $format);
     }
 
     /**

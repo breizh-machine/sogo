@@ -40,7 +40,7 @@ class GameViewRenderer implements ViewRenderer
         return $renderedData;
     }
 
-    private function renderGameListItemView(Game $game, ScubPlayer $authenticatedPlayer)
+    public function renderGameListItemView(Game $game, ScubPlayer $authenticatedPlayer)
     {
         $view = new GameListItemView();
         $opponent = $game->getLocal()->equals($authenticatedPlayer) ? $game->getVisitor() : $game->getLocal();
@@ -63,7 +63,7 @@ class GameViewRenderer implements ViewRenderer
         return $view;
     }
 
-    private function renderGameView(Game $game, ScubPlayer $authenticatedPlayer, Reward $reward = null)
+    public function renderGameView(Game $game, ScubPlayer $authenticatedPlayer, Reward $reward = null)
     {
         $gameView = new GameView();
         $gameView->gameboardTexture = $this->assetsHelper->getUrl(sprintf('%s/%s', $this->cubeImagesBasePath, 'gameboard.jpg'));

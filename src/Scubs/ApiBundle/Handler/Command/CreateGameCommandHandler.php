@@ -62,12 +62,12 @@ class CreateGameCommandHandler implements MessageBus
             'gameId' => (string) $game->getId()
         ]));
 
-        $localGameView = $this->gameViewRenderer->renderView($game, $local);
+        $localGameView = $this->gameViewRenderer->renderGameListItemView($game, $local);
         $pushMessage = new PushMessage('gameCreation' . (string) $local->getId(), (array) $localGameView);
         $this->pushMessageDispatcher->dispatchMessage($pushMessage);
 
         if ($message->guest && $guest) {
-            $guestGameView = $this->gameViewRenderer->renderView($game, $guest);
+            $guestGameView = $this->gameViewRenderer->renderGameListItemView($game, $guest);
             $pushMessage = new PushMessage('gameCreation' . (string) $guest->getId(), (array) $guestGameView);
             $this->pushMessageDispatcher->dispatchMessage($pushMessage);
         }

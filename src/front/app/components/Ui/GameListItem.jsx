@@ -22,7 +22,7 @@ class GameListItem extends Component {
     }
 
     render() {
-        const { gameItem } = this.props.gameItem;
+        const { gameItem } = this.props;
         return  <li>
             <div>
                 {gameItem.bet} -> {gameItem.opponentName}

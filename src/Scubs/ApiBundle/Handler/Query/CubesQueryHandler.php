@@ -2,6 +2,8 @@
 
 namespace Scubs\ApiBundle\Handler\Query;
 
+use FOS\RestBundle\View\View;
+use Scubs\ApiBundle\ViewDataAggregator\CubeViewDataAggregator;
 use Scubs\CoreDomain\Cube\CubeRepository;
 use Scubs\ApiBundle\Query\CubesQuery;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,9 +26,10 @@ class CubesQueryHandler
         $allCubeViews = new ArrayCollection();
         foreach ($allCubes as $cube)
         {
-            $allCubeViews->add($this->cubeViewRenderer->renderView($cube));
+            $data = new CubeViewDataAggregator($cube);
+            $allCubeViews->add($this->cubeViewRenderer->renderView($data));
         }
 
-        return $allCubeViews;
+        return new View($allCubeViews);
     }
 }

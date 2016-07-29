@@ -2,6 +2,7 @@
 
 namespace Scubs\ApiBundle\Handler\Query;
 
+use FOS\RestBundle\View\View;
 use Scubs\ApiBundle\Query\GamesQuery;
 use Scubs\ApiBundle\Query\Query;
 use Scubs\ApiBundle\ViewRenderer\GameViewRenderer;
@@ -32,11 +33,11 @@ class GamesQueryHandler implements QueryHandler
 
         if ($query instanceof GamesQuery) {
             $games = $this->gameRepository->findAllByUserIdOrderedByDate($query->userId);
-            return $this->gameViewRenderer->renderView($games, $authenticatedUser);
+            return new View($this->gameViewRenderer->renderView($games, $authenticatedUser));
         } else if ($query instanceof GameQuery) {
             $game = $this->gameRepository->find(new GameId($query->gameId));
             $view = $this->gameViewRenderer->renderView($game, $authenticatedUser);
-            return $view;
+            return new View($view);
         } else {
             //TODO
         }

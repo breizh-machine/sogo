@@ -2,7 +2,9 @@
 
 namespace Scubs\ApiBundle\Handler\Query;
 
+use FOS\RestBundle\View\View;
 use Scubs\ApiBundle\Query\CubesByUserQuery;
+use Scubs\ApiBundle\ViewDataAggregator\CubeViewDataAggregator;
 use Scubs\CoreDomain\Cube\CubeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Scubs\ApiBundle\ViewRenderer\ViewRenderer;
@@ -27,15 +29,17 @@ class CubesByUserQueryHandler
         $allNativeCubes = $this->cubeRepository->getAllNativeCubes();
         foreach ($allNativeCubes as $cube)
         {
-            $allCubeViews->add($this->cubeViewRenderer->renderView($cube));
+            $data = new CubeViewDataAggregator($cube);
+            $allCubeViews->add($this->cubeViewRenderer->renderView($data));
         }
 
         $allRewardedCubes = $this->rewardRepository->findRewardsByUser($query->userId, $query->q);
         foreach ($allRewardedCubes as $reward)
         {
-            $allCubeViews->add($this->cubeViewRenderer->renderView($reward->getCube()));
+            $data = new CubeViewDataAggregator($reward->getCube());
+            $allCubeViews->add($this->cubeViewRenderer->renderView($data));
         }
 
-        return $allCubeViews;
+        return new View($allCubeViews);
     }
 }
