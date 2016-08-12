@@ -22,6 +22,11 @@ class PushMessageDispatcher
 
     public function dispatchMessage(PushMessage $message)
     {
-        $this->socket->send(json_encode($message->getData()));
+        $socketMsg = [
+            'channel' => $message->getChannel(),
+            'data' => $message->getData(),
+            'type' => $message->getType()
+        ];
+        $this->socket->send(json_encode($socketMsg));
     }
 }

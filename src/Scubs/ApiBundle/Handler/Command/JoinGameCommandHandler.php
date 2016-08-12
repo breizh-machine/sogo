@@ -2,12 +2,14 @@
 
 namespace Scubs\ApiBundle\Handler\Command;
 
+use Scubs\ApiBundle\PushMessage\VisitorJoinedPushMessage;
 use Scubs\CoreDomain\Cube\CubeRepository;
 use Scubs\CoreDomain\Game\GameLogicException;
 use Scubs\CoreDomain\Reward\RewardRepository;
 use Scubs\CoreDomain\Game\GameId;
 use Scubs\CoreDomain\Game\GameRepository;
 use Scubs\CoreDomainBundle\Security\Core\User\UserProvider;
+use Scubs\PushBundle\Message\PushMessage;
 use SimpleBus\Message\Bus\MessageBus;
 use Scubs\CoreDomain\Cube\CubeId;
 
@@ -54,6 +56,17 @@ class JoinGameCommandHandler implements MessageBus
         $this->userProvider->updateUser($visitor);
 
         $this->gameRepository->update($game);
+
+
+        $pushMessage = new VisitorJoinedPushMessage();
+        $this->pushMessageDispatcher->dispatchMessage($pushMessage);
+
+        if ($message->guest && $guest) {
+            $guestGameView = $this->gameViewRenderer->renderGameListItemView($game, $guest);
+            $pushMessage = new PushMessage('gameCreation' . (string) $guest->getId(), (array) $guestGameView);
+            $this->pushMessageDispatcher->dispatchMessage($pushMessage);
+        }
+        */
 
     }
 

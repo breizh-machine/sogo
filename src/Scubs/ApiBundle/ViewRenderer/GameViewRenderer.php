@@ -45,7 +45,7 @@ class GameViewRenderer implements ViewRenderer
         $view = new GameListItemView();
         $opponent = $game->getLocal()->equals($authenticatedPlayer) ? $game->getVisitor() : $game->getLocal();
 
-        $view->id = $game->getId();
+        $view->id = (string) $game->getId();
         $view->opponentProfilePicture = $opponent !== null ? $opponent->getProfilePicture() : '';
         $view->opponentName = $opponent !== null ? $opponent->getUsername() : '';
         $view->hasVisitorJoined = $game->isVisitorJoined();

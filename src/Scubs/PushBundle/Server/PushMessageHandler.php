@@ -66,10 +66,9 @@ class PushMessageHandler implements WampServerInterface
         }
 
         $topic = $this->subscribedTopics[$entryData['channel']];
-        unset($entryData['channel']);
 
         // re-send the data to all the clients subscribed to that category
-        $topic->broadcast($entryData);
+        $topic->broadcast($entryData['data']);
     }
 
 }

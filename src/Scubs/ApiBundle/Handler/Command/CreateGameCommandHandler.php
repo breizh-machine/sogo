@@ -2,6 +2,8 @@
 
 namespace Scubs\ApiBundle\Handler\Command;
 
+use Scubs\ApiBundle\PushMessage\GameCreatedPushMessage;
+use Scubs\ApiBundle\PushMessage\GameInvitationPushMessage;
 use Scubs\ApiBundle\ViewRenderer\GameViewRenderer;
 use Scubs\CoreDomain\Cube\CubeRepository;
 use Scubs\CoreDomain\Game\GameLogicException;
@@ -63,12 +65,12 @@ class CreateGameCommandHandler implements MessageBus
         ]));
 
         $localGameView = $this->gameViewRenderer->renderGameListItemView($game, $local);
-        $pushMessage = new PushMessage('gameCreation' . (string) $local->getId(), (array) $localGameView);
+        $pushMessage = new GameCreatedPushMessage($localGameView, (string) $local->getId());
         $this->pushMessageDispatcher->dispatchMessage($pushMessage);
 
         if ($message->guest && $guest) {
             $guestGameView = $this->gameViewRenderer->renderGameListItemView($game, $guest);
-            $pushMessage = new PushMessage('gameCreation' . (string) $guest->getId(), (array) $guestGameView);
+            $pushMessage = new GameInvitationPushMessage($guestGameView, (string) $guest->getId());
             $this->pushMessageDispatcher->dispatchMessage($pushMessage);
         }
     }

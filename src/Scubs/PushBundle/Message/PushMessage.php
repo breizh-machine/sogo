@@ -6,11 +6,13 @@ class PushMessage
 {
     protected $channel;
     protected $data;
+    protected $type;
 
-    public function __construct($channel, $data)
+    public function __construct($channel, array $data, $type)
     {
         $this->channel = $channel;
         $this->data = $data;
+        $this->type = $type;
     }
 
     public function getChannel()
@@ -20,7 +22,11 @@ class PushMessage
 
     public function getData()
     {
-        $this->data['channel'] = $this->channel;
         return $this->data;
+    }
+
+    public function getType()
+    {
+        return $this->type;
     }
 }

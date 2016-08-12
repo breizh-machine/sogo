@@ -4,6 +4,7 @@ namespace Scubs\ApiBundle\Controller;
 
 use Scubs\CoreDomain\Game\GameLogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,9 +20,8 @@ class ExceptionController extends Controller
                 'code' => $exception->getCode()
             ];
             return new JsonResponse($jsonData);
-        } else {
-            throw $exception;
+        } else if ($exception instanceof FlattenException) {
+            throw new \Exception($exception->getMessage(), $exception->getCode());
         }
-
     }
 }
