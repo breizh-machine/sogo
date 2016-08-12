@@ -13,17 +13,24 @@ class Scubs extends Component {
 
     componentWillMount() {
         const { sc, user, dispatch, initialEntities } = this.props;
-        dispatch(initEntities(initialEntities));
-        sc.subscribe('GAMES_CHANNEL'+user.id, function(topic, msg) {
-            console.log('dispatching game : ', topic, msg);
-            switch (msg.type)
-            {
-                case 'GAME_CREATED_TYPE':
-                case 'GAME_INVITATION_TYPE':
-                    dispatch(updateGames(msg.data));
-                    break;
-            }
-        });
+        switch (this.props.appState) {
+            case GAMES_PAGE_STATE:
+                dispatch(initEntities(initialEntities));
+                sc.subscribe('GAMES_CHANNEL'+user.id, function(topic, msg) {
+                    console.log('dispatching game : ', topic, msg);
+                    switch (msg.type)
+                    {
+                        case 'GAME_CREATED_TYPE':
+                        case 'GAME_INVITATION_TYPE':
+                            dispatch(updateGames(msg.data));
+                            break;
+                    }
+                });
+                break;
+            case PLAY_PAGE_STATE:
+            default:
+                break;
+        }
     }
 
     _renderApp() {
